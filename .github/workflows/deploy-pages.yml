@@ -21,17 +21,25 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      # Debug to verify structure
+      - name: Debug workspace
+        run: |
+          echo "Workspace:"
+          pwd
+          ls -al
+          echo "Checking for package files:"
+          ls -al | grep -E "(package|yarn)"
+
       - name: Detect package manager
         id: detect-package-manager
         run: |
-          if [ -f "${{ github.workspace }}/yarn.lock" ]; then
+          # Check in current directory (root)
+          if [ -f "yarn.lock" ]; then
             echo "manager=yarn" >> $GITHUB_OUTPUT
             echo "command=install" >> $GITHUB_OUTPUT
-            exit 0
-          elif [ -f "${{ github.workspace }}/package-lock.json" ]; then
+          elif [ -f "package-lock.json" ]; then
             echo "manager=npm" >> $GITHUB_OUTPUT
             echo "command=ci" >> $GITHUB_OUTPUT
-            exit 0
           else
             echo "Unable to determine package manager"
             exit 1
@@ -42,11 +50,6 @@ jobs:
         with:
           node-version: '20'
           cache: ${{ steps.detect-package-manager.outputs.manager }}
-
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-        with:
-          static_site_generator: vite
 
       - name: Restore cache
         uses: actions/cache@v4
@@ -59,7 +62,8 @@ jobs:
             ${{ runner.os }}-vite-
 
       - name: Install dependencies
-        run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
+        run: |
+          ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
 
       - name: Build
         run: |
@@ -72,7 +76,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./dist
+          path: dist
 
   deploy:
     needs: build
