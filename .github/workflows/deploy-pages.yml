@@ -72,6 +72,11 @@ jobs:
           else
             npm run build
           fi
+      - name: Add .nojekyll for GitHub Pages
+        run: |
+          touch dist/.nojekyll
+          echo "Adding .nojekyll file for SPA routing"
+
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

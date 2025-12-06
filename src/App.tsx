@@ -37,7 +37,19 @@ import { AdminLabManagement } from "./pages/admin/AdminLabManagement";
 // Profile Page
 import { Profile } from "./pages/profile/Profile";
 
+import { useEffect, useState } from 'react';
+
 function App() {
+  const [, setBasePath] = useState('');
+
+  useEffect(() => {
+    // Handle GitHub Pages base path
+    const path = window.location.pathname;
+    const repoMatch = path.match(/^\/([^\/]+)\//);
+    if (repoMatch && repoMatch[1] && !repoMatch[1].includes('.')) {
+      setBasePath(`/${repoMatch[1]}`);
+    }
+  }, []);
   return (
     <AuthProvider>
       <BrowserRouter>
