@@ -1,0 +1,306 @@
+import React, { useEffect, useState } from "react";
+import { Layout } from "../../components/Layout";
+import { DataTable, type Column } from "../../components/common/DataTable";
+import { ErrorMessage } from "../../components/common/ErrorMessage";
+import { Modal } from "../../components/common/Modal";
+import { useAuth } from "../../contexts/AuthContext";
+// import { labService } from '../../services/labService';
+import type { LabReport, TestResult } from "../../types";
+import {
+  Activity,
+  FileText,
+  Calendar,
+  TrendingUp,
+  Users,
+  Heart,
+} from "lucide-react";
+import { formatDate, getStatusColor } from "../../utils/formatters";
+import { usePagination, useError, useLoading } from "../../utils/hooks";
+
+const patientNavItems = [
+  {
+    path: "/patient/dashboard",
+    label: "Dashboard",
+    icon: <Activity size={20} />,
+  },
+  {
+    path: "/patient/lab-reports",
+    label: "Lab Reports",
+    icon: <FileText size={20} />,
+  },
+  {
+    path: "/patient/visits",
+    label: "Visit History",
+    icon: <Calendar size={20} />,
+  },
+  {
+    path: "/patient/timeline",
+    label: "Disease Timeline",
+    icon: <TrendingUp size={20} />,
+  },
+  {
+    path: "/patient/family-history",
+    label: "Family History",
+    icon: <Users size={20} />,
+  },
+  {
+    path: "/patient/predictions",
+    label: "Health Predictions",
+    icon: <TrendingUp size={20} />,
+  },
+  {
+    path: "/patient/recommendations",
+    label: "AI Recommendations",
+    icon: <Heart size={20} />,
+  },
+];
+
+export const PatientLabReports: React.FC = () => {
+  const { user } = useAuth();
+  const [reports, setReports] = useState<LabReport[]>([]);
+  const [selectedReport, setSelectedReport] = useState<LabReport | null>(null);
+  const [testResults, setTestResults] = useState<TestResult[]>([]);
+  const { isLoading } = useLoading();
+  const { error, setError, clearError } = useError();
+  const pagination = usePagination();
+
+  // Function to fetch lab name by lab_id
+  const fetchLabName = async (labId: string) => {
+    try {
+      const response = await fetch(
+        `http://localhost:8001/api/v1/labs/${labId}`,
+        {
+          method: "GET",
+          headers: {
+            accept: "application/json",
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch lab name");
+      }
+
+      const labData = await response.json();
+      return labData.lab_name || "Unknown Lab";
+    } catch (err) {
+      console.error("Error fetching lab name:", err);
+      return "Unknown Lab";
+    }
+  };
+
+  // Function to fetch reports data
+  const fetchReportsData = async () => {
+    try {
+      clearError();
+      
+      const response = await fetch(
+        `http://localhost:8001/api/v1/labs/reports?skip=0&limit=100&patient_id=73b9d154-669f-4628-ad05-dae65207d12e&lang=en`,
+        {
+          method: "GET",
+          headers: {
+            accept: "application/json",
+          },
+        }
+      );
+      
+      if (!response.ok) {
+        throw new Error("Failed to fetch lab reports");
+      }
+      
+      const reportsData = await response.json();
+      console.log("Fetching Reports Data:..............................", reportsData); 
+      
+
+      // Enhance reports with lab names
+      const enhancedReports = await Promise.all(
+        reportsData.map(async (report: Omit<LabReport, 'lab'>) => {
+          console.log("LAB ID: ", report.lab_id);
+          const labName = await fetchLabName(report.lab_id);
+          return {
+            ...report,
+            lab: { name: labName },
+            report_date: report.report_date,
+            report_type: report.report_type,
+            status: report.status,
+          };
+        })
+      );
+
+      setReports(enhancedReports);
+      pagination.setTotal(enhancedReports.length);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message || "Failed to load lab reports");
+      } else {
+        setError("Failed to load lab reports");
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (user?.entity_id) {
+      
+      fetchReportsData();
+    }
+  }, [user, pagination.skip, pagination.limit]);
+
+  const handleViewReport = async (report: LabReport) => {
+    try {
+      setSelectedReport(report);
+      // For now, using empty test results since we don't have that API
+      setTestResults([]);
+    } catch (err: any) {
+      setError(err.response?.data?.detail || "Failed to load test results");
+    }
+  };
+
+  const columns: Column<LabReport>[] = [
+    {
+      key: "report_date",
+      label: "Date",
+      render: (report) => formatDate(report.report_date),
+    },
+    {
+      key: "report_type",
+      label: "Type",
+      render: (report) => (
+        <span className="capitalize">{report.report_type}</span>
+      ),
+    },
+    {
+      key: "lab",
+      label: "Lab",
+      render: (report) => report.lab?.name || "N/A",
+    },
+    {
+      key: "status",
+      label: "Status",
+      render: (report) => (
+        <span
+          className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(
+            report.status
+          )}`}
+        >
+          {report.status}
+        </span>
+      ),
+    },
+  ];
+
+  // Calculate paginated data
+  const paginatedReports = reports.slice(pagination.skip, pagination.skip + pagination.limit);
+
+  return (
+    <Layout navItems={patientNavItems} title="Patient Portal">
+      <div className="space-y-6">
+        <div>
+          <h2 className="text-2xl font-bold text-gray-900">Lab Reports</h2>
+          <p className="text-gray-600 mt-1">
+            View your laboratory test results
+          </p>
+        </div>
+
+        {error && <ErrorMessage message={error} onClose={clearError} />}
+
+        <DataTable
+          data={paginatedReports}
+          columns={columns}
+          isLoading={isLoading}
+          emptyMessage="No lab reports found"
+          onRowClick={handleViewReport}
+          pagination={{
+            currentPage: pagination.currentPage,
+            totalPages: pagination.totalPages,
+            onNextPage: pagination.nextPage,
+            onPrevPage: pagination.prevPage,
+          }}
+        />
+
+        {/* Test Results Modal */}
+        <Modal
+          isOpen={!!selectedReport}
+          onClose={() => setSelectedReport(null)}
+          title={`Lab Report - ${selectedReport?.report_type}`}
+          size="lg"
+        >
+          {selectedReport && (
+            <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-4 text-sm">
+                <div>
+                  <p className="text-gray-600">Date</p>
+                  <p className="font-medium">
+                    {formatDate(selectedReport.report_date)}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-gray-600">Lab</p>
+                  <p className="font-medium">
+                    {selectedReport.lab?.name || "N/A"}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-gray-600">Status</p>
+                  <span
+                    className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(
+                      selectedReport.status
+                    )}`}
+                  >
+                    {selectedReport.status}
+                  </span>
+                </div>
+              </div>
+
+              <div className="border-t pt-4">
+                <h4 className="font-semibold mb-3">Test Results</h4>
+                {testResults.length > 0 ? (
+                  <div className="space-y-3">
+                    {testResults.map((test) => (
+                      <div
+                        key={test.test_id}
+                        className={`p-3 rounded-lg border ${
+                          test.is_abnormal
+                            ? "border-red-300 bg-red-50"
+                            : "border-gray-200"
+                        }`}
+                      >
+                        <div className="flex justify-between items-start">
+                          <div>
+                            <p className="font-medium">{test.test_name}</p>
+                            <p className="text-sm text-gray-600 mt-1">
+                              Reference: {test.reference_range || "N/A"}
+                            </p>
+                          </div>
+                          <div className="text-right">
+                            <p
+                              className={`font-semibold ${
+                                test.is_abnormal
+                                  ? "text-red-600"
+                                  : "text-gray-900"
+                              }`}
+                            >
+                              {test.test_value} {test.unit}
+                            </p>
+                            {test.is_abnormal && (
+                              <span className="text-xs text-red-600 font-medium">
+                                Abnormal
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-gray-600 text-sm">
+                    No test results available yet
+                  </p>
+                )}
+              </div>
+            </div>
+          )}
+        </Modal>
+      </div>
+    </Layout>
+  );
+};
