@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Layout } from '../../components/Layout';
-import { StatCard } from '../../components/common/StatCard';
+// import { StatCard } from '../../components/common/StatCard';
 import { ErrorMessage } from '../../components/common/ErrorMessage';
 import { LoadingSpinner } from '../../components/common/LoadingSpinner';
 import { useAuth } from '../../contexts/AuthContext';
-import { patientService } from '../../services/patientService';
-import { visitService } from '../../services/visitService';
-import { labService } from '../../services/labService';
+// import { patientService } from '../../services/patientService';
+// import { visitService } from '../../services/visitService';
+// import { labService } from '../../services/labService';
 import { Activity, FileText, Calendar, TrendingUp, Users, Heart, Mail, Phone, MapPin, Droplet, UserCircle, Edit } from 'lucide-react';
 import type { Recommendation } from '../../types';
 import { format } from 'date-fns';
