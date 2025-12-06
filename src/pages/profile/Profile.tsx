@@ -8,7 +8,7 @@ import { useAuth } from '../../contexts/AuthContext';
 // import { visitService } from '../../services/visitService';
 // import { labService } from '../../services/labService';
 import { Activity, FileText, Calendar, TrendingUp, Users, Heart, Mail, Phone, MapPin, Droplet, UserCircle, Edit } from 'lucide-react';
-import type { Recommendation } from '../../types';
+// import type { Recommendation } from '../../types';
 import { format } from 'date-fns';
 
 const patientNavItems = [
