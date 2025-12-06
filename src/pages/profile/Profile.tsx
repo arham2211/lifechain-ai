@@ -41,12 +41,12 @@ export const Profile: React.FC = () => {
     created_at: '',
     updated_at: '',
   });
-  const [stats, setStats] = useState({
-    totalVisits: 0,
-    totalReports: 0,
-    pendingReports: 0,
-    recentRecommendations: [] as Recommendation[],
-  });
+  // const [stats, setStats] = useState({
+  //   totalVisits: 0,
+  //   totalReports: 0,
+  //   pendingReports: 0,
+  //   recentRecommendations: [] as Recommendation[],
+  // });
   const [activeTab, setActiveTab] = useState('personal');
 
   useEffect(() => {
