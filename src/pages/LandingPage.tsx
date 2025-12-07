@@ -360,7 +360,7 @@ import {
 } from "lucide-react";
 import { motion } from "framer-motion";
 
-export const LandingPage: React.FC = () => {
+export const LandingPage: React.FC<{}> = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const features = [
@@ -444,7 +444,7 @@ export const LandingPage: React.FC = () => {
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white overflow-hidden">
       {/* Enhanced Header with Glass Effect */}
       <nav className="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-xl border-b border-gray-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-1">
           <div className="flex items-center justify-between h-20">
             {/* Logo */}
             <div className="flex items-center space-x-3 group cursor-pointer">
@@ -677,8 +677,6 @@ export const LandingPage: React.FC = () => {
                   delay: 1,
                 }}
                 className="absolute bottom-20 left-4 lg:-left-12 z-20"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
               >
                 <div className="glass-card rounded-2xl p-4 shadow-xl shadow-secondary-500/10 flex items-center space-x-4">
                   <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-secondary-500 to-primary-400 flex items-center justify-center shadow-lg">
