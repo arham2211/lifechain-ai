@@ -56,7 +56,7 @@ jobs:
         with:
           path: |
             node_modules
-            .vite
+            node_modules/.vite
           key: ${{ runner.os }}-vite-${{ hashFiles('**/package-lock.json', '**/yarn.lock') }}-${{ hashFiles('**/*.{js,ts,jsx,tsx,html,css}') }}
           restore-keys: |
             ${{ runner.os }}-vite-

@@ -1,5 +1,5 @@
 import "./index.css";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { HashRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "./contexts/AuthContext";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { LandingPage } from "./pages/LandingPage";
@@ -52,7 +52,7 @@ function App() {
   }, []);
   return (
     <AuthProvider>
-      <BrowserRouter>
+      <HashRouter>
         <Routes>
           {/* Public Routes */}
           <Route path="/" element={<LandingPage />} />
@@ -249,7 +249,7 @@ function App() {
           {/* Default Route */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
-      </BrowserRouter>
+      </HashRouter>
     </AuthProvider>
   );
 }

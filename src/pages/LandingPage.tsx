@@ -333,12 +333,15 @@
 //     </div>
 //   );
 // };
+
 import React, { useState } from "react";
 import {
   Activity,
   X,
   Menu,
-  Users,
+  MessageSquare,
+  MapPin,
+  Mail,
   Send,
   ArrowRight,
   ChevronRight,
@@ -355,46 +358,85 @@ import {
   Lock,
   Zap,
 } from "lucide-react";
+import { motion } from "framer-motion";
 
 export const LandingPage: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  
+
   const features = [
     {
-      icon: <Fingerprint className="w-10 h-10" />,
+      icon: <Fingerprint className="w-8 h-8" />,
       title: "Unique Patient ID",
-      description: "Universal identifier linking all medical records from birth throughout life.",
-      gradient: "from-blue-500 to-cyan-400"
+      description:
+        "Universal identifier linking all medical records from birth throughout life securely.",
+      color: "bg-blue-50 text-blue-600",
+      delay: 0,
     },
     {
-      icon: <Brain className="w-10 h-10" />,
-      title: "AI Data Extraction",
-      description: "Advanced OCR & NLP models extract structured data from medical reports.",
-      gradient: "from-purple-500 to-pink-500"
+      icon: <Brain className="w-8 h-8" />,
+      title: "AI Extraction",
+      description:
+        "Advanced OCR & NLP models instantly extract structured data from messy medical reports.",
+      color: "bg-purple-50 text-purple-600",
+      delay: 0.1,
     },
     {
-      icon: <GitBranch className="w-10 h-10" />,
+      icon: <GitBranch className="w-8 h-8" />,
       title: "Family Genetics",
-      description: "Identify hereditary risks through comprehensive family tree analysis.",
-      gradient: "from-green-500 to-emerald-400"
+      description:
+        "Identify hereditary risks through automated, comprehensive family tree analysis.",
+      color: "bg-emerald-50 text-emerald-600",
+      delay: 0.2,
     },
     {
-      icon: <Globe className="w-10 h-10" />,
+      icon: <Globe className="w-8 h-8" />,
       title: "Global Access",
-      description: "Access records worldwide with real-time medical translation.",
-      gradient: "from-orange-500 to-amber-400"
+      description:
+        "Travel with confidence. Access records worldwide with real-time medical translation.",
+      color: "bg-orange-50 text-orange-600",
+      delay: 0.3,
     },
     {
-      icon: <Activity className="w-10 h-10" />,
-      title: "Health Monitoring",
-      description: "AI-powered tracking for chronic conditions with predictive insights.",
-      gradient: "from-red-500 to-rose-400"
+      icon: <Activity className="w-8 h-8" />,
+      title: "Vitals Monitoring",
+      description:
+        "AI-powered tracking for chronic conditions with predictive health insights.",
+      color: "bg-rose-50 text-rose-600",
+      delay: 0.4,
     },
     {
-      icon: <Heart className="w-10 h-10" />,
-      title: "Dental Detection",
-      description: "Deep learning models for dental disease identification from imaging.",
-      gradient: "from-indigo-500 to-violet-400"
+      icon: <Heart className="w-8 h-8" />,
+      title: "Dental AI",
+      description:
+        "Early detection deep learning models for dental diseases from standard imaging.",
+      color: "bg-indigo-50 text-indigo-600",
+      delay: 0.5,
+    },
+  ];
+  const testimonials = [
+    {
+      quote:
+        "LifeChain AI saved my life during an emergency abroad. Doctors accessed my complete medical history instantly despite the language barrier.",
+      name: "Maria Johnson",
+      role: "Diabetes Patient",
+      initials: "MJ",
+      gradient: "from-blue-500 to-cyan-400",
+    },
+    {
+      quote:
+        "The family tree analysis revealed hereditary heart conditions we never knew about. Early detection made all the difference for my children.",
+      name: "Robert Chen",
+      role: "Parent",
+      initials: "RC",
+      gradient: "from-purple-500 to-pink-400",
+    },
+    {
+      quote:
+        "Finally, a system that makes sense. No more carrying stacks of paper reports. Everything is digitized, secure, and always with me.",
+      name: "Sarah Ahmed",
+      role: "Frequent Traveler",
+      initials: "SA",
+      gradient: "from-emerald-500 to-teal-400",
     },
   ];
 
@@ -409,14 +451,16 @@ export const LandingPage: React.FC = () => {
               <div className="relative">
                 <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-cyan-500 rounded-xl blur opacity-70 group-hover:opacity-100 transition-opacity"></div>
                 <div className="relative w-12 h-12 bg-white rounded-xl flex items-center justify-center shadow-lg">
-                  <Activity className="w-7 h-7 text-gradient-to-r from-blue-600 to-cyan-500" />
+                  <Activity className="w-6 h-6 text-primary-600" />
                 </div>
               </div>
               <div>
-                <h1 className="text-2xl font-bold bg-gradient-to-r from-gray-900 to-blue-600 bg-clip-text text-transparent">
+                <h1 className="text-2xl font-bold bg-gradient-to-r from-gray-900 to-primary-600 bg-clip-text text-transparent">
                   LifeChain AI
                 </h1>
-                <p className="text-xs text-gray-500 font-medium">Healthcare Ecosystem</p>
+                <p className="text-xs text-gray-500 font-medium">
+                  Healthcare Ecosystem
+                </p>
               </div>
             </div>
 
@@ -426,7 +470,7 @@ export const LandingPage: React.FC = () => {
                 <a
                   key={item}
                   href={`#${item.toLowerCase()}`}
-                  className="px-4 py-2.5 font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all duration-200"
+                  className="px-4 py-2 font-semibold text-slate-600 hover:text-primary-600 hover:bg-primary-50 rounded-full transition-all duration-200"
                 >
                   {item}
                 </a>
@@ -435,11 +479,11 @@ export const LandingPage: React.FC = () => {
 
             {/* CTA Button */}
             <div className="hidden lg:flex items-center space-x-4">
-              <button className="group relative px-6 py-3 bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-semibold rounded-xl hover:shadow-xl hover:shadow-blue-500/25 transition-all duration-300 overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-r from-cyan-500 to-blue-600 translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-300"></div>
+              <button className="group relative px-5 py-2.5 bg-slate-900 text-white text-sm font-semibold rounded-full hover:shadow-lg hover:shadow-primary-500/30 transition-all duration-300 overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-r from-primary-500 to-secondary-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 <span className="relative flex items-center space-x-2">
                   <span>Get Started</span>
-                  <ArrowRight className="w-4 h-4 transform group-hover:translate-x-1 transition-transform" />
+                  <ArrowRight className="w-3.5 h-3.5 transform group-hover:translate-x-0.5 transition-transform" />
                 </span>
               </button>
             </div>
@@ -459,530 +503,646 @@ export const LandingPage: React.FC = () => {
         </div>
 
         {/* Mobile Menu */}
-        {mobileMenuOpen && (
-          <div className="lg:hidden bg-white border-t border-gray-100 shadow-xl">
-            <div className="px-4 py-6 space-y-1">
-              {["Home", "Features", "About", "Team", "Contact"].map((item) => (
-                <a
-                  key={item}
-                  href={`#${item.toLowerCase()}`}
-                  className="block px-4 py-3 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg font-medium transition-colors"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  {item}
-                </a>
-              ))}
-              <div className="pt-4 px-4">
-                <button className="w-full px-6 py-3 bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-semibold rounded-xl hover:shadow-lg transition-all duration-300">
-                  Get Started
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
+       {mobileMenuOpen && (
+  <div className="lg:hidden bg-white/80 backdrop-blur-xl border-t border-gray-100 shadow-2xl">
+    <div className="px-4 py-6 space-y-2">
+
+      {["Home", "Features", "About", "Team", "Contact"].map((item) => (
+        <a
+          key={item}
+          href={`#${item.toLowerCase()}`}
+          onClick={() => setMobileMenuOpen(false)}
+          className="group flex items-center px-4 py-3 text-slate-700 font-semibold rounded-xl transition-all duration-300 relative overflow-hidden"
+        >
+          {/* Hover gradient background */}
+          <div className="absolute inset-0 bg-gradient-to-r from-primary-500/10 to-secondary-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+
+          {/* Text */}
+          <span className="relative z-10 group-hover:text-primary-600 transition-colors">
+            {item}
+          </span>
+        </a>
+      ))}
+
+      {/* Divider */}
+      <div className="h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent my-4"></div>
+
+      {/* CTA Button */}
+      <div className="pt-2 px-1">
+        <button className="w-full group relative px-6 py-3 bg-slate-900 text-white font-semibold rounded-xl overflow-hidden shadow-lg hover:shadow-primary-500/30 transition-all duration-300">
+          <div className="absolute inset-0 bg-gradient-to-r from-primary-500 to-secondary-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+          <span className="relative flex items-center justify-center gap-2">
+            <span>Get Started</span>
+            <ArrowRight className="w-4 h-4 transform group-hover:translate-x-0.5 transition-transform" />
+          </span>
+        </button>
+      </div>
+
+    </div>
+  </div>
+)}
       </nav>
 
       {/* Hero Section with Floating Elements */}
-      <section className="relative pt-32 pb-20 overflow-hidden">
-        {/* Background Elements */}
-        <div className="absolute top-20 left-1/4 w-72 h-72 bg-blue-500/10 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-20 right-1/4 w-96 h-96 bg-cyan-500/5 rounded-full blur-3xl"></div>
-        
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            {/* Left Content */}
-            <div className="space-y-8">
-              <div className="inline-flex items-center space-x-3 px-4 py-2 bg-gradient-to-r from-blue-50 to-cyan-50 rounded-full border border-blue-100">
-                <div className="w-2 h-2 bg-gradient-to-r from-blue-500 to-cyan-400 rounded-full animate-pulse"></div>
-                <span className="text-sm font-semibold bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
-                  AI-Powered Healthcare Revolution
-                </span>
-              </div>
+      <section
+        id="home"
+        className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden"
+      >
+        {/* Dynamic Background */}
+        <div className="absolute inset-0 -z-10 overflow-hidden">
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[500px] bg-gradient-to-r from-primary-200/40 to-secondary-200/40 rounded-full blur-[100px] opacity-70 animate-blob"></div>
+          <div className="absolute bottom-0 right-0 w-[800px] h-[600px] bg-gradient-to-l from-purple-200/30 to-blue-200/30 rounded-full blur-[100px] opacity-50 animate-blob animation-delay-2000"></div>
+          <div className="absolute top-1/2 left-0 w-[600px] h-[600px] bg-gradient-to-tr from-emerald-200/30 to-teal-200/30 rounded-full blur-[100px] opacity-40 animate-blob animation-delay-4000"></div>
+          <div className="absolute inset-0 bg-grid-pattern opacity-[0.03]"></div>
+        </div>
 
-              <h1 className="text-5xl lg:text-6xl xl:text-7xl font-bold tracking-tight">
-                <span className="block text-gray-900">Your Lifelong</span>
-                <span className="block bg-gradient-to-r from-blue-600 via-cyan-500 to-blue-600 bg-clip-text text-transparent animate-gradient">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+          <div className="grid lg:grid-cols-2 gap-16 lg:gap-8 items-center">
+            {/* Left Content */}
+            <motion.div
+              initial={{ opacity: 0, x: -50 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
+              className="space-y-8 text-center lg:text-left"
+            >
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+                className="inline-flex items-center space-x-2.5 px-4 py-2 bg-white/60 backdrop-blur-md rounded-full border border-primary-100 shadow-sm"
+              >
+                <div className="relative flex h-2.5 w-2.5">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-primary-500"></span>
+                </div>
+                <span className="text-sm font-semibold bg-gradient-to-r from-primary-700 to-primary-500 bg-clip-text text-transparent">
+                  Revolutionizing Patient Care
+                </span>
+              </motion.div>
+
+              <h1 className="text-5xl lg:text-7xl font-bold tracking-tight text-slate-900 leading-[1.1]">
+                Your Lifelong
+                <span className="block mt-2 bg-gradient-to-r from-primary-600 via-secondary-500 to-primary-600 bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient">
                   Health Companion
                 </span>
               </h1>
 
-              <p className="text-xl text-gray-600 leading-relaxed max-w-2xl">
-                Unifying your entire medical journey into a single, secure, and intelligent 
-                digital ecosystem—from birth to beyond.
+              <p className="text-lg text-slate-600 leading-relaxed max-w-2xl mx-auto lg:mx-0">
+                Unified medical records, AI-powered diagnostics, and genetic
+                insights in one secure ecosystem. From birth to beyond,
+                LifeChain AI travels with you.
               </p>
 
-              <div className="flex flex-col sm:flex-row gap-4 pt-4">
-                <button className="group relative px-8 py-4 bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-semibold rounded-xl hover:shadow-2xl hover:shadow-blue-500/30 transition-all duration-300 overflow-hidden">
-                  <div className="absolute inset-0 bg-gradient-to-r from-cyan-500 to-blue-600 translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-500"></div>
+              <div className="flex flex-col sm:flex-row gap-4 pt-4 justify-center lg:justify-start">
+                <button className="group relative px-8 py-4 bg-slate-900 text-white font-semibold rounded-2xl hover:shadow-2xl hover:shadow-primary-500/20 transition-all duration-300 overflow-hidden ring-1 ring-slate-900">
+                  <div className="absolute inset-0 bg-gradient-to-r from-primary-600 to-secondary-500 translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-500"></div>
                   <span className="relative flex items-center justify-center space-x-3">
                     <span>Start Your Journey</span>
-                    <ChevronRight className="w-5 h-5 transform group-hover:translate-x-1 transition-transform" />
+                    <ChevronRight className="w-5 h-5" />
                   </span>
                 </button>
-                
-                <button className="px-8 py-4 bg-white text-gray-700 font-semibold rounded-xl border-2 border-gray-200 hover:border-blue-300 hover:bg-blue-50 hover:text-blue-600 transition-all duration-300 flex items-center justify-center space-x-3 group">
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-r from-blue-100 to-cyan-100 flex items-center justify-center group-hover:scale-110 transition-transform">
-                    <Play className="w-5 h-5 text-blue-600" />
+
+                <button className="px-8 py-4 bg-white/50 backdrop-blur-sm text-slate-700 font-semibold rounded-2xl border border-white hover:border-primary-200 hover:bg-white shadow-sm hover:shadow-xl hover:shadow-primary-500/10 transition-all duration-300 flex items-center justify-center space-x-3 group">
+                  <div className="w-8 h-8 rounded-full bg-primary-50 flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <Play className="w-3.5 h-3.5 text-primary-600 fill-current" />
                   </div>
                   <span>Watch Demo</span>
                 </button>
               </div>
-            </div>
 
-            {/* Right Side - Interactive Preview */}
-            <div className="relative">
-              {/* Floating Elements */}
-              <div className="absolute -top-6 -right-6 animate-float z-20">
-                <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-5 shadow-2xl shadow-blue-500/10 border border-gray-100">
-                  <div className="flex items-center space-x-4">
-                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-400 flex items-center justify-center shadow-lg">
-                      <Zap className="w-6 h-6 text-white" />
+              {/* Trust Indicators */}
+              <div className="pt-8 flex items-center justify-center lg:justify-start space-x-6 text-sm font-medium text-slate-500">
+                <div className="flex -space-x-3">
+                  {[1, 2, 3, 4].map((i) => (
+                    <div
+                      key={i}
+                      className="w-10 h-10 rounded-full border-2 border-white bg-slate-200 overflow-hidden"
+                    >
+                      <img
+                        src={`https://picsum.photos/100/100?random=${i}`}
+                        alt="User"
+                        className="w-full h-full object-cover"
+                      />
                     </div>
-                    <div>
-                      <h4 className="font-bold text-gray-900">Smart AI</h4>
-                      <p className="text-sm text-gray-500">Real-time Analysis</p>
-                    </div>
+                  ))}
+                  <div className="w-10 h-10 rounded-full border-2 border-white bg-primary-50 flex items-center justify-center text-xs text-primary-700">
+                    +2k
                   </div>
                 </div>
+                <p>Trusted by doctors & patients.</p>
               </div>
+            </motion.div>
 
-              {/* Main Card */}
-              <div className="relative bg-gradient-to-br from-white to-gray-50 rounded-3xl shadow-2xl shadow-blue-500/5 border border-gray-100 p-8 transform hover:scale-[1.02] transition-transform duration-500">
-                <div className="aspect-square rounded-2xl bg-gradient-to-br from-blue-500/10 via-cyan-500/10 to-blue-500/10 flex items-center justify-center">
-                  <div className="text-center space-y-6">
-                    <div className="w-24 h-24 mx-auto rounded-full bg-gradient-to-r from-blue-600 to-cyan-500 flex items-center justify-center shadow-2xl">
-                      <Activity className="w-12 h-12 text-white" />
+            {/* Right Visual */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="relative lg:h-[600px] flex items-center justify-center"
+            >
+              {/* Floating Elements */}
+              <motion.div
+                animate={{ y: [-10, 10, -10] }}
+                transition={{
+                  duration: 4,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+                className="absolute top-10 right-10 lg:right-0 z-20"
+              >
+                <div className="glass-card rounded-2xl p-4 shadow-xl shadow-primary-500/10 max-w-[200px]">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary-500 to-secondary-400 flex items-center justify-center shadow-md">
+                      <Zap className="w-5 h-5 text-white" />
                     </div>
                     <div>
-                      <h2 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
+                      <h4 className="font-bold text-slate-900 text-sm">
+                        AI Analysis
+                      </h4>
+                      <p className="text-xs text-slate-500">
+                        Processing vitals...
+                      </p>
+                    </div>
+                  </div>
+                  <div className="mt-3 w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
+                    <div className="w-[70%] h-full bg-gradient-to-r from-primary-500 to-secondary-400 rounded-full"></div>
+                  </div>
+                </div>
+              </motion.div>
+
+              <motion.div
+                animate={{ y: [15, -15, 15] }}
+                transition={{
+                  duration: 5,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                  delay: 1,
+                }}
+                className="absolute bottom-20 left-4 lg:-left-12 z-20"
+              >
+                <div className="glass-card rounded-2xl p-4 shadow-xl shadow-secondary-500/10 flex items-center space-x-4">
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-secondary-500 to-primary-400 flex items-center justify-center shadow-lg">
+                    <Lock className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-slate-900">HIPAA Secure</h4>
+                    <p className="text-xs text-green-600 font-semibold flex items-center mt-0.5">
+                      <span className="w-1.5 h-1.5 rounded-full bg-green-500 mr-1.5"></span>
+                      Verified Protection
+                    </p>
+                  </div>
+                </div>
+              </motion.div>
+
+              {/* Main Centerpiece */}
+              <div className="relative w-full aspect-square max-w-[500px]">
+                <div className="absolute inset-0 bg-gradient-to-br from-primary-500/20 to-secondary-500/20 rounded-full blur-3xl transform rotate-12"></div>
+                <div className="relative h-full w-full bg-white rounded-[3rem] shadow-2xl shadow-primary-900/10 border border-slate-100 overflow-hidden">
+                  <div className="absolute top-0 w-full h-full bg-[url('https://picsum.photos/800/800?grayscale')] bg-cover opacity-5"></div>
+                  <div className="relative h-full flex flex-col items-center justify-center p-8 text-center space-y-8">
+                    <div className="w-32 h-32 rounded-3xl bg-gradient-to-tr from-primary-600 to-secondary-500 flex items-center justify-center shadow-2xl shadow-primary-500/30 transform rotate-3 hover:rotate-6 transition-transform duration-500">
+                      <Activity className="w-16 h-16 text-white" />
+                    </div>
+                    <div>
+                      <h2 className="text-3xl font-bold text-slate-900">
                         LifeChain AI
                       </h2>
-                      <p className="text-gray-600 mt-2">Secure • Intelligent • Unified</p>
+                      <p className="text-slate-500 mt-2 font-medium">
+                        Universal Health Identity
+                      </p>
+                    </div>
+                    <div className="flex gap-2">
+                      <span className="h-1.5 w-1.5 rounded-full bg-slate-300"></span>
+                      <span className="h-1.5 w-1.5 rounded-full bg-slate-300"></span>
+                      <span className="h-1.5 w-8 rounded-full bg-primary-500"></span>
                     </div>
                   </div>
                 </div>
               </div>
-
-              {/* Bottom Floating Element */}
-              <div className="absolute -bottom-6 -left-6 animate-float-delayed z-20">
-                <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-5 shadow-2xl shadow-cyan-500/10 border border-gray-100">
-                  <div className="flex items-center space-x-4">
-                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-500 to-blue-400 flex items-center justify-center shadow-lg">
-                      <Lock className="w-6 h-6 text-white" />
-                    </div>
-                    <div>
-                      <h4 className="font-bold text-gray-900">Secure</h4>
-                      <p className="text-sm text-gray-500">HIPAA Compliant</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            </motion.div>
           </div>
         </div>
       </section>
 
       {/* Features Section */}
-      <section className="py-24 bg-gradient-to-b from-white to-gray-50">
+      <section id="features" className="py-24 bg-slate-50/50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto mb-20">
-            <div className="inline-flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-blue-50 to-cyan-50 rounded-full mb-6">
-              <Sparkles className="w-4 h-4 text-blue-600" />
-              <span className="text-sm font-semibold bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
-                Revolutionary Features
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="inline-flex items-center space-x-2 px-3 py-1 bg-white rounded-full border border-slate-200 mb-6 shadow-sm"
+            >
+              <Sparkles className="w-4 h-4 text-amber-500" />
+              <span className="text-xs font-bold text-slate-800 uppercase tracking-wide">
+                Capabilities
               </span>
-            </div>
-            
-            <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
+            </motion.div>
+
+            <motion.h2
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.1 }}
+              className="text-4xl lg:text-5xl font-bold text-slate-900 mb-6"
+            >
               Unified Healthcare
-              <span className="block bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
-                Ecosystem
+              <span className="block text-transparent bg-clip-text bg-gradient-to-r from-primary-600 to-secondary-500">
+                Ecosystem Features
               </span>
-            </h2>
-            
-            <p className="text-xl text-gray-600 leading-relaxed">
-              A comprehensive platform connecting all your medical data into one intelligent, 
-              secure ecosystem powered by cutting-edge AI.
-            </p>
+            </motion.h2>
+
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2 }}
+              className="text-lg text-slate-600"
+            >
+              Connecting disparate medical data into one intelligent, secure,
+              and accessible platform.
+            </motion.p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {features.map((feature, index) => (
-              <div
+              <motion.div
                 key={index}
-                className="group relative bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl hover:shadow-blue-500/10 border border-gray-100 transition-all duration-300 hover:-translate-y-2"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: feature.delay, duration: 0.5 }}
+                className="group relative bg-white rounded-3xl p-8 hover:shadow-2xl hover:shadow-primary-900/5 border border-slate-100 transition-all duration-300 hover:-translate-y-1 overflow-hidden"
               >
-                {/* Gradient Border Effect */}
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-cyan-500 rounded-2xl opacity-0 group-hover:opacity-10 transition-opacity duration-300"></div>
-                
-                <div className={`relative w-16 h-16 rounded-2xl bg-gradient-to-br ${feature.gradient} mb-6 flex items-center justify-center shadow-lg`}>
-                  <div className="text-white">
-                    {feature.icon}
-                  </div>
+                <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity transform group-hover:scale-110 duration-500">
+                  {React.cloneElement(feature.icon as React.ReactElement, {
+                    className: "w-32 h-32",
+                  })}
                 </div>
 
-                <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors">
+                <div
+                  className={`relative w-14 h-14 rounded-2xl ${feature.color} flex items-center justify-center mb-6 shadow-sm group-hover:scale-110 transition-transform duration-300`}
+                >
+                  {feature.icon}
+                </div>
+
+                <h3 className="text-xl font-bold text-slate-900 mb-3 group-hover:text-primary-600 transition-colors">
                   {feature.title}
                 </h3>
 
-                <p className="text-gray-600 leading-relaxed">
+                <p className="text-slate-500 leading-relaxed mb-6">
                   {feature.description}
                 </p>
 
-                <div className="mt-6 pt-6 border-t border-gray-100">
-                  <button className="text-sm font-semibold text-blue-600 hover:text-cyan-500 flex items-center space-x-2 group/btn">
-                    <span>Learn more</span>
-                    <ArrowRight className="w-4 h-4 transform group-hover/btn:translate-x-1 transition-transform" />
-                  </button>
+                <div className="flex items-center text-sm font-semibold text-slate-900 group-hover:text-primary-600 transition-colors cursor-pointer">
+                  <span>Learn more</span>
+                  <ArrowRight className="w-4 h-4 ml-2 transform group-hover:translate-x-1 transition-transform" />
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
       </section>
 
       {/* About Section */}
-      <section className="py-24 bg-white">
+      <section id="about" className="py-24 bg-white relative overflow-hidden">
+        {/* Background Decorative */}
+        <div className="absolute top-0 right-0 w-1/3 h-full bg-gradient-to-l from-slate-50 to-transparent -z-10"></div>
+
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            {/* Left - Visual Card */}
-            <div className="relative">
-              <div className="bg-gradient-to-br from-blue-500/5 via-cyan-500/5 to-blue-500/5 rounded-3xl p-1">
-                <div className="bg-white rounded-3xl p-12 shadow-xl">
-                  <div className="text-center space-y-6">
-                    <div className="w-20 h-20 mx-auto rounded-full bg-gradient-to-r from-blue-600 to-cyan-500 flex items-center justify-center shadow-2xl">
-                      <Database className="w-10 h-10 text-white" />
+          <div className="grid lg:grid-cols-2 gap-20 items-center">
+            {/* Visual */}
+            <motion.div
+              initial={{ opacity: 0, x: -50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.7 }}
+              className="relative"
+            >
+              <div className="absolute -inset-4 bg-gradient-to-tr from-primary-500 to-secondary-400 rounded-[2.5rem] opacity-20 blur-2xl transform rotate-3"></div>
+              <div className="relative bg-white rounded-[2rem] p-2 shadow-2xl border border-slate-100">
+                <img
+                  src="https://picsum.photos/800/600?medical"
+                  alt="Medical Doctor using Tablet"
+                  className="rounded-[1.8rem] w-full object-cover h-[400px]"
+                />
+
+                {/* Floating Stats */}
+                <div className="absolute -bottom-10 -right-10 bg-white p-6 rounded-2xl shadow-xl border border-slate-50 max-w-xs animate-float-delayed hidden md:block">
+                  <div className="flex items-center gap-4">
+                    <div className="p-3 bg-green-100 rounded-xl">
+                      <Database className="w-6 h-6 text-green-600" />
                     </div>
                     <div>
-                      <h3 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
-                        LifeChain AI
-                      </h3>
-                      <p className="text-gray-600 mt-3">Final Year Project</p>
-                      <p className="text-sm text-gray-500">FAST University, Karachi</p>
+                      <p className="text-sm text-slate-500 font-medium">
+                        Data Points Processed
+                      </p>
+                      <h4 className="text-2xl font-bold text-slate-900">
+                        1.2M+
+                      </h4>
                     </div>
                   </div>
                 </div>
               </div>
-              
-              {/* Floating Badge */}
-              <div className="absolute -top-4 -right-4">
-                <div className="px-4 py-2 bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-semibold rounded-full shadow-lg">
-                  Research Project
-                </div>
-              </div>
-            </div>
+            </motion.div>
 
-            {/* Right Content */}
-            <div>
-              <div className="inline-flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-blue-50 to-cyan-50 rounded-full mb-6">
-                <Activity className="w-4 h-4 text-blue-600" />
-                <span className="text-sm font-semibold bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
-                  About Our Vision
+            {/* Content */}
+            <motion.div
+              initial={{ opacity: 0, x: 50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.7 }}
+            >
+              <div className="inline-flex items-center space-x-2 px-3 py-1 bg-primary-50 text-primary-600 rounded-full mb-6">
+                <Activity className="w-4 h-4" />
+                <span className="text-xs font-bold uppercase tracking-wide">
+                  Our Vision
                 </span>
               </div>
 
-              <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-8">
-                Redefining
-                <span className="block bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
-                  Healthcare Access
+              <h2 className="text-4xl font-bold text-slate-900 mb-6 leading-tight">
+                Redefining Healthcare <br />
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-600 to-secondary-500">
+                  Through Innovation
                 </span>
               </h2>
 
-              <p className="text-gray-600 text-lg leading-relaxed mb-8">
-                In today's fragmented healthcare landscape, critical medical information remains 
-                siloed across disparate systems. LifeChain AI bridges these gaps, creating a 
-                seamless, intelligent ecosystem for lifelong health management.
+              <p className="text-lg text-slate-600 mb-8 leading-relaxed">
+                In today's fragmented healthcare landscape, critical medical
+                information remains siloed. LifeChain AI bridges these gaps,
+                creating a seamless, intelligent ecosystem.
               </p>
 
-              <div className="space-y-6">
+              <div className="space-y-4">
                 {[
-                  "Consolidate lifelong medical records into one secure platform",
-                  "Enable global healthcare access with AI translation",
-                  "Identify hereditary risks through family analysis",
-                  "Monitor health with predictive AI insights"
-                ].map((goal, index) => (
-                  <div key={index} className="flex items-start space-x-4 group">
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-r from-green-100 to-emerald-100 flex items-center justify-center flex-shrink-0 mt-1">
-                      <CheckCircle className="w-5 h-5 text-green-600" />
-                    </div>
-                    <span className="text-gray-700 group-hover:text-gray-900 transition-colors">
-                      {goal}
-                    </span>
-                  </div>
+                  "Consolidated lifelong medical records",
+                  "Real-time AI translation for global access",
+                  "Hereditary risk identification",
+                  "Predictive health monitoring insights",
+                ].map((item, index) => (
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, x: 20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: index * 0.1 }}
+                    className="flex items-center space-x-3"
+                  >
+                    <CheckCircle className="w-5 h-5 text-primary-500 flex-shrink-0" />
+                    <span className="text-slate-700 font-medium">{item}</span>
+                  </motion.div>
                 ))}
               </div>
 
-              <div className="mt-12 p-6 bg-gradient-to-r from-blue-50 to-cyan-50 rounded-2xl border border-blue-100">
-                <p className="text-gray-700 italic">
-                  "Supervised by Dr. Shahbaz Siddiqui, Department of Computer Science"
-                </p>
+              <div className="mt-10 pt-8 border-t border-slate-100">
+                <div className="flex items-center space-x-4">
+                  <div className="h-12 w-1 border-l-4 border-primary-500 rounded-full"></div>
+                  <div>
+                    <p className="text-sm text-slate-500 uppercase tracking-widest font-semibold">
+                      Supervised By
+                    </p>
+                    <p className="text-lg font-bold text-slate-900">
+                      Dr. Shahbaz Siddiqui
+                    </p>
+                    <p className="text-sm text-slate-500">
+                      Department of Computer Science
+                    </p>
+                  </div>
+                </div>
               </div>
-            </div>
+            </motion.div>
           </div>
         </div>
       </section>
 
       {/* Testimonials Section */}
-      <section className="py-24 bg-gradient-to-b from-white to-gray-50">
+      <section className="py-24 bg-slate-50 relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto mb-20">
-            <div className="inline-flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-blue-50 to-cyan-50 rounded-full mb-6">
-              <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
-              <span className="text-sm font-semibold bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
-                Patient Stories
-              </span>
-            </div>
-            
-            <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
-              Trusted by
-              <span className="block bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
-                Patients Worldwide
-              </span>
+          <div className="text-center max-w-2xl mx-auto mb-16">
+            <h2 className="text-4xl font-bold text-slate-900 mb-4">
+              Trusted by Patients
             </h2>
+            <p className="text-lg text-slate-600">
+              Real stories from people whose lives have been transformed by our
+              unified ecosystem.
+            </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[
-              {
-                quote: "LifeChain AI saved my life during an emergency abroad. Doctors accessed my complete medical history instantly.",
-                name: "Maria Johnson",
-                role: "Chronic Diabetes Patient",
-                initials: "MJ",
-                color: "from-blue-500 to-cyan-400"
-              },
-              {
-                quote: "The family tree analysis revealed hereditary heart conditions we never knew about. Early detection made all the difference.",
-                name: "Robert Chen",
-                role: "Family History Analysis",
-                initials: "RC",
-                color: "from-purple-500 to-pink-400"
-              },
-              {
-                quote: "No more carrying stacks of medical reports. Everything is digitized and organized with complete health picture.",
-                name: "Sarah Ahmed",
-                role: "International Patient",
-                initials: "SA",
-                color: "from-green-500 to-emerald-400"
-              }
-            ].map((testimonial, index) => (
-              <div
-                key={index}
-                className="group bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl border border-gray-100 transition-all duration-300 hover:-translate-y-2"
+          <div className="grid md:grid-cols-3 gap-8">
+            {testimonials.map((t, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.2 }}
+                className="bg-white p-8 rounded-3xl shadow-lg shadow-slate-200/50 border border-slate-100 flex flex-col h-full"
               >
-                <div className="flex mb-6">
-                  {[...Array(5)].map((_, i) => (
+                <div className="flex gap-1 mb-6">
+                  {[...Array(5)].map((_, idx) => (
                     <Star
-                      key={i}
-                      className="w-5 h-5 fill-yellow-400 text-yellow-400"
+                      key={idx}
+                      className="w-4 h-4 text-amber-400 fill-amber-400"
                     />
                   ))}
                 </div>
-                
-                <p className="text-gray-600 italic text-lg leading-relaxed mb-8">
-                  "{testimonial.quote}"
-                </p>
-                
-                <div className="flex items-center pt-6 border-t border-gray-100">
-                  <div className={`w-14 h-14 rounded-full bg-gradient-to-r ${testimonial.color} flex items-center justify-center shadow-lg`}>
-                    <span className="font-bold text-white text-lg">
-                      {testimonial.initials}
-                    </span>
+
+                <blockquote className="flex-grow text-slate-700 leading-relaxed mb-8 italic">
+                  "{t.quote}"
+                </blockquote>
+
+                <div className="flex items-center gap-4 mt-auto pt-6 border-t border-slate-50">
+                  <div
+                    className={`w-12 h-12 rounded-full bg-gradient-to-br ${t.gradient} flex items-center justify-center text-white font-bold text-lg shadow-md`}
+                  >
+                    {t.initials}
                   </div>
-                  <div className="ml-4">
-                    <h4 className="font-bold text-gray-900">{testimonial.name}</h4>
-                    <p className="text-gray-500 text-sm">{testimonial.role}</p>
+                  <div>
+                    <div className="font-bold text-slate-900">{t.name}</div>
+                    <div className="text-sm text-slate-500">{t.role}</div>
                   </div>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
       </section>
 
       {/* Contact Section */}
-      <section className="py-24 bg-white">
+      <section id="contact" className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-16 items-start">
-            {/* Left Content */}
-            <div>
-              <div className="inline-flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-blue-50 to-cyan-50 rounded-full mb-6">
-                <Send className="w-4 h-4 text-blue-600" />
-                <span className="text-sm font-semibold bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
+          <div className="grid lg:grid-cols-2 gap-16">
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+            >
+              <div className="inline-flex items-center space-x-2 px-3 py-1 bg-blue-50 text-primary-600 rounded-full mb-6">
+                <MessageSquare className="w-4 h-4" />
+                <span className="text-xs font-bold uppercase tracking-wide">
                   Get in Touch
                 </span>
               </div>
-              
-              <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-8">
-                Let's Transform
-                <span className="block bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
+
+              <h2 className="text-4xl font-bold text-slate-900 mb-6 leading-tight">
+                Let's Transform {" "}
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-600 to-secondary-500">
                   Healthcare Together
                 </span>
               </h2>
-              
-              <p className="text-gray-600 text-lg leading-relaxed mb-12">
-                Whether you're a healthcare provider, researcher, or patient, 
-                we're here to help you revolutionize medical record management.
+
+              <p className="text-lg text-slate-600 mb-12">
+                Whether you're a healthcare provider, researcher, or patient,
+                we're here to answer your questions.
               </p>
 
-              {/* Contact Info Cards */}
-              <div className="space-y-6">
-                {[
-                  {
-                    icon: <Activity className="w-6 h-6" />,
-                    title: "Project Support",
-                    details: ["FAST National University", "Karachi, Pakistan"]
-                  },
-                  {
-                    icon: <Users className="w-6 h-6" />,
-                    title: "Supervisor Contact",
-                    details: ["Dr. Shahbaz Siddiqui", "Computer Science Department"]
-                  },
-                  {
-                    icon: <Globe className="w-6 h-6" />,
-                    title: "Email Us",
-                    details: ["support@lifechainai.com", "research@lifechainai.com"]
-                  }
-                ].map((info, index) => (
-                  <div
-                    key={index}
-                    className="group flex items-start space-x-4 p-6 bg-gradient-to-r from-blue-50 to-cyan-50 rounded-2xl hover:shadow-lg transition-all duration-300"
-                  >
-                    <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 flex items-center justify-center flex-shrink-0 shadow-lg group-hover:scale-110 transition-transform">
-                      <div className="text-white">{info.icon}</div>
-                    </div>
-                    <div>
-                      <h4 className="font-bold text-gray-900 mb-1">{info.title}</h4>
-                      {info.details.map((detail, i) => (
-                        <p key={i} className="text-gray-600">{detail}</p>
-                      ))}
-                    </div>
+              <div className="space-y-8">
+                <div className="flex items-start space-x-4">
+                  <div className="w-12 h-12 rounded-xl bg-primary-100 flex items-center justify-center text-primary-600 flex-shrink-0">
+                    <MapPin className="w-6 h-6" />
                   </div>
-                ))}
+                  <div>
+                    <h4 className="text-lg font-bold text-slate-900">
+                      Visit Us
+                    </h4>
+                    <p className="text-slate-600">
+                      FAST National University
+                      <br />
+                      Karachi, Pakistan
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-start space-x-4">
+                  <div className="w-12 h-12 rounded-xl bg-secondary-100 flex items-center justify-center text-secondary-600 flex-shrink-0">
+                    <Mail className="w-6 h-6" />
+                  </div>
+                  <div>
+                    <h4 className="text-lg font-bold text-slate-900">
+                      Email Us
+                    </h4>
+                    <p className="text-slate-600">research@lifechainai.com</p>
+                    <p className="text-slate-600">support@lifechainai.com</p>
+                  </div>
+                </div>
               </div>
-            </div>
+            </motion.div>
 
-            {/* Contact Form */}
-            <div className="bg-gradient-to-br from-white to-gray-50 rounded-3xl p-8 shadow-2xl shadow-blue-500/5 border border-gray-100">
-              <h3 className="text-3xl font-bold text-gray-900 mb-8">
-                Send us a Message
-              </h3>
-
+            <motion.div
+              initial={{ opacity: 0, x: 30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="bg-slate-50 rounded-3xl p-8 lg:p-10 shadow-lg border border-slate-100"
+            >
               <form className="space-y-6">
                 <div className="grid md:grid-cols-2 gap-6">
-                  <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  <div className="space-y-2">
+                    <label className="text-sm font-semibold text-slate-700">
                       First Name
                     </label>
                     <input
                       type="text"
-                      className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all"
+                      className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-200 outline-none transition-all"
                       placeholder="John"
                     />
                   </div>
-                  <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  <div className="space-y-2">
+                    <label className="text-sm font-semibold text-slate-700">
                       Last Name
                     </label>
                     <input
                       type="text"
-                      className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all"
+                      className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-200 outline-none transition-all"
                       placeholder="Doe"
                     />
                   </div>
                 </div>
 
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    Email Address
+                <div className="space-y-2">
+                  <label className="text-sm font-semibold text-slate-700">
+                    Email
                   </label>
                   <input
                     type="email"
-                    className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all"
+                    className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-200 outline-none transition-all"
                     placeholder="john@example.com"
                   />
                 </div>
 
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    Inquiry Type
-                  </label>
-                  <select className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all appearance-none">
-                    <option>General Information</option>
-                    <option>Technical Support</option>
-                    <option>Research Collaboration</option>
-                    <option>Healthcare Partnership</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                <div className="space-y-2">
+                  <label className="text-sm font-semibold text-slate-700">
                     Message
                   </label>
                   <textarea
                     rows={4}
-                    className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all resize-none"
-                    placeholder="Tell us about your inquiry..."
+                    className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-200 outline-none transition-all resize-none"
+                    placeholder="How can we help you?"
                   />
                 </div>
 
-                <button
-                  type="submit"
-                  className="group w-full px-8 py-4 bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-semibold rounded-xl hover:shadow-xl hover:shadow-blue-500/30 transition-all duration-300 flex items-center justify-center space-x-3"
-                >
-                  <Send className="w-5 h-5" />
+                <button className="w-full py-4 bg-slate-900 text-white font-bold rounded-xl hover:bg-slate-800 transition-colors flex items-center justify-center space-x-2">
                   <span>Send Message</span>
+                  <Send className="w-4 h-4" />
                 </button>
               </form>
-            </div>
+            </motion.div>
           </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="bg-gradient-to-br from-gray-900 to-gray-800 text-white pt-20 pb-10">
+      <footer className="bg-slate-900 text-slate-300 pt-20 pb-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12">
             {/* Logo + Description */}
             <div>
               <div className="flex items-center space-x-3 mb-6">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 flex items-center justify-center shadow-lg">
-                  <Activity className="w-7 h-7 text-white" />
-                </div>
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary-500 to-secondary-500 flex items-center justify-center text-white">
+                <Activity className="w-6 h-6" />
+              </div>
                 <div>
-                  <span className="text-2xl font-bold">LifeChain AI</span>
-                  <p className="text-xs text-gray-400">Healthcare Ecosystem</p>
+                  <span className="text-2xl font-bold text-white">LifeChain AI</span>
+                  <p className="text-xs text-slate-400">Healthcare Ecosystem</p>
                 </div>
               </div>
-              <p className="text-gray-400 leading-relaxed">
-                Unifying global healthcare through intelligent, secure medical 
+              <p className="text-slate-400 leading-relaxed">
+                Unifying global healthcare through intelligent, secure medical
                 record management and predictive analytics.
               </p>
             </div>
 
             {/* Quick Links */}
             <div>
-              <h3 className="text-lg font-semibold mb-6">Quick Links</h3>
+              <h3 className="text-white text-lg font-semibold mb-6">Quick Links</h3>
               <ul className="space-y-3">
-                {["Home", "Features", "About", "Team", "Contact"].map((item) => (
-                  <li key={item}>
-                    <a
-                      href={`#${item.toLowerCase()}`}
-                      className="text-gray-400 hover:text-cyan-400 transition-colors duration-200"
-                    >
-                      {item}
-                    </a>
-                  </li>
-                ))}
+                {["Home", "Features", "About", "Team", "Contact"].map(
+                  (item) => (
+                    <li key={item}>
+                      <a
+                        href={`#${item.toLowerCase()}`}
+                        className="text-gray-400 hover:text-primary-400 transition-colors duration-200"
+                      >
+                        {item}
+                      </a>
+                    </li>
+                  )
+                )}
               </ul>
             </div>
 
             {/* Resources */}
             <div>
-              <h3 className="text-lg font-semibold mb-6">Resources</h3>
+              <h3 className="text-white text-lg font-semibold mb-6">Resources</h3>
               <ul className="space-y-3">
-                {["Documentation", "Privacy Policy", "Terms of Service", "FAQ"].map((item) => (
+                {[
+                  "Documentation",
+                  "Privacy Policy",
+                  "Terms of Service",
+                  "FAQ",
+                ].map((item) => (
                   <li key={item}>
-                    <a className="text-gray-400 hover:text-cyan-400 transition-colors duration-200 cursor-pointer">
+                    <a className="text-slate-400 hover:text-cyan-400 transition-colors duration-200 cursor-pointer">
                       {item}
                     </a>
                   </li>
@@ -992,17 +1152,17 @@ export const LandingPage: React.FC = () => {
 
             {/* Newsletter */}
             <div>
-              <h3 className="text-lg font-semibold mb-6">Stay Updated</h3>
-              <p className="text-gray-400 leading-relaxed mb-4">
+              <h3 className="text-white text-lg font-semibold mb-6">Stay Updated</h3>
+              <p className="text-slate-400 leading-relaxed mb-4">
                 Subscribe for project updates and healthcare insights.
               </p>
               <div className="flex group">
                 <input
                   type="email"
                   placeholder="Your email"
-                  className="flex-1 px-4 py-3 bg-gray-800 text-white rounded-l-xl border border-gray-700 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
+                  className="flex-1 px-4 py-3 bg-slate-800 text-white rounded-l-xl border border-gray-700 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
                 />
-                <button className="px-6 bg-gradient-to-r from-blue-600 to-cyan-500 rounded-r-xl hover:shadow-lg transition-shadow duration-300">
+                <button className="px-6 bg-gradient-to-r from-primary-600 to-secondary-500 rounded-r-xl hover:shadow-lg transition-shadow duration-300">
                   <Send className="w-5 h-5" />
                 </button>
               </div>
@@ -1010,13 +1170,12 @@ export const LandingPage: React.FC = () => {
           </div>
 
           {/* Bottom Bar */}
-          <div className="border-t border-gray-800 mt-12 pt-8 text-center">
+          <div className="border-t border-slate-800 mt-12 pt-8 text-center">
             <p className="text-gray-400">
-              © {new Date().getFullYear()} LifeChain AI. Final Year Project — FAST National University.
+              © {new Date().getFullYear()} LifeChain AI. Final Year Project —
+              FAST National University.
             </p>
-            <p className="text-gray-500 text-sm mt-2">
-              Redefining healthcare, one record at a time.
-            </p>
+            
           </div>
         </div>
       </footer>
