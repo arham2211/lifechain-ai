@@ -669,16 +669,17 @@ export const LandingPage: React.FC = () => {
               </motion.div>
 
               <motion.div
-  animate={{ y: [15, -15, 15] }}
-  transition={{
-    duration: 5,
-    repeat: Infinity,
-    ease: "easeInOut",
-    delay: 1,
-  }}
-  style={{ position: 'absolute', bottom: '5rem', left: '1rem' }}
-  className="lg:-left-12 z-20"
->
+                animate={{ y: [15, -15, 15] }}
+                transition={{
+                  duration: 5,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                  delay: 1,
+                }}
+                className="absolute bottom-20 left-4 lg:-left-12 z-20"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
                 <div className="glass-card rounded-2xl p-4 shadow-xl shadow-secondary-500/10 flex items-center space-x-4">
                   <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-secondary-500 to-primary-400 flex items-center justify-center shadow-lg">
                     <Lock className="w-6 h-6 text-white" />
