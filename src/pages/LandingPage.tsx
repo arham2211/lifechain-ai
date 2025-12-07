@@ -360,10 +360,17 @@ import {
 } from "lucide-react";
 import { motion } from "framer-motion";
 
-export const LandingPage: React.FC<{}> = () => {
+export const LandingPage: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  interface Feature {
+    icon: React.ReactElement<React.SVGProps<SVGSVGElement>>;
+    color: string;
+    title: string;
+    description: string;
+    delay: number;
+  }
 
-  const features = [
+  const features: Feature[] = [
     {
       icon: <Fingerprint className="w-8 h-8" />,
       title: "Unique Patient ID",
@@ -774,7 +781,7 @@ export const LandingPage: React.FC<{}> = () => {
                 className="group relative bg-white rounded-3xl p-8 hover:shadow-2xl hover:shadow-primary-900/5 border border-slate-100 transition-all duration-300 hover:-translate-y-1 overflow-hidden"
               >
                 <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity transform group-hover:scale-110 duration-500">
-                  {React.cloneElement(feature.icon as React.ReactElement, {
+                  {React.cloneElement(feature.icon, {
                     className: "w-32 h-32",
                   })}
                 </div>
