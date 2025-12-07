@@ -109,13 +109,11 @@ export const PatientLabReports: React.FC = () => {
       }
       
       const reportsData = await response.json();
-      console.log("Fetching Reports Data:..............................", reportsData); 
-      
-
+     
       // Enhance reports with lab names
       const enhancedReports = await Promise.all(
         reportsData.map(async (report: Omit<LabReport, 'lab'>) => {
-          console.log("LAB ID: ", report.lab_id);
+      
           const labName = await fetchLabName(report.lab_id);
           return {
             ...report,
