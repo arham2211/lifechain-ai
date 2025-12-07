@@ -503,44 +503,42 @@ export const LandingPage: React.FC = () => {
         </div>
 
         {/* Mobile Menu */}
-       {mobileMenuOpen && (
-  <div className="lg:hidden bg-white/80 backdrop-blur-xl border-t border-gray-100 shadow-2xl">
-    <div className="px-4 py-6 space-y-2">
+        {mobileMenuOpen && (
+          <div className="lg:hidden bg-white/80 backdrop-blur-xl border-t border-gray-100 shadow-2xl">
+            <div className="px-4 py-6 space-y-2">
+              {["Home", "Features", "About", "Team", "Contact"].map((item) => (
+                <a
+                  key={item}
+                  href={`#${item.toLowerCase()}`}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="group flex items-center px-4 py-3 text-slate-700 font-semibold rounded-xl transition-all duration-300 relative overflow-hidden"
+                >
+                  {/* Hover gradient background */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-primary-500/10 to-secondary-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
 
-      {["Home", "Features", "About", "Team", "Contact"].map((item) => (
-        <a
-          key={item}
-          href={`#${item.toLowerCase()}`}
-          onClick={() => setMobileMenuOpen(false)}
-          className="group flex items-center px-4 py-3 text-slate-700 font-semibold rounded-xl transition-all duration-300 relative overflow-hidden"
-        >
-          {/* Hover gradient background */}
-          <div className="absolute inset-0 bg-gradient-to-r from-primary-500/10 to-secondary-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  {/* Text */}
+                  <span className="relative z-10 group-hover:text-primary-600 transition-colors">
+                    {item}
+                  </span>
+                </a>
+              ))}
 
-          {/* Text */}
-          <span className="relative z-10 group-hover:text-primary-600 transition-colors">
-            {item}
-          </span>
-        </a>
-      ))}
+              {/* Divider */}
+              <div className="h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent my-4"></div>
 
-      {/* Divider */}
-      <div className="h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent my-4"></div>
-
-      {/* CTA Button */}
-      <div className="pt-2 px-1">
-        <button className="w-full group relative px-6 py-3 bg-slate-900 text-white font-semibold rounded-xl overflow-hidden shadow-lg hover:shadow-primary-500/30 transition-all duration-300">
-          <div className="absolute inset-0 bg-gradient-to-r from-primary-500 to-secondary-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-          <span className="relative flex items-center justify-center gap-2">
-            <span>Get Started</span>
-            <ArrowRight className="w-4 h-4 transform group-hover:translate-x-0.5 transition-transform" />
-          </span>
-        </button>
-      </div>
-
-    </div>
-  </div>
-)}
+              {/* CTA Button */}
+              <div className="pt-2 px-1">
+                <button className="w-full group relative px-6 py-3 bg-slate-900 text-white font-semibold rounded-xl overflow-hidden shadow-lg hover:shadow-primary-500/30 transition-all duration-300">
+                  <div className="absolute inset-0 bg-gradient-to-r from-primary-500 to-secondary-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <span className="relative flex items-center justify-center gap-2">
+                    <span>Get Started</span>
+                    <ArrowRight className="w-4 h-4 transform group-hover:translate-x-0.5 transition-transform" />
+                  </span>
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </nav>
 
       {/* Hero Section with Floating Elements */}
@@ -671,15 +669,16 @@ export const LandingPage: React.FC = () => {
               </motion.div>
 
               <motion.div
-                animate={{ y: [15, -15, 15] }}
-                transition={{
-                  duration: 5,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                  delay: 1,
-                }}
-                className="absolute bottom-20 left-4 lg:-left-12 z-20"
-              >
+  animate={{ y: [15, -15, 15] }}
+  transition={{
+    duration: 5,
+    repeat: Infinity,
+    ease: "easeInOut",
+    delay: 1,
+  }}
+  style={{ position: 'absolute', bottom: '5rem', left: '1rem' }}
+  className="lg:-left-12 z-20"
+>
                 <div className="glass-card rounded-2xl p-4 shadow-xl shadow-secondary-500/10 flex items-center space-x-4">
                   <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-secondary-500 to-primary-400 flex items-center justify-center shadow-lg">
                     <Lock className="w-6 h-6 text-white" />
@@ -1099,10 +1098,12 @@ export const LandingPage: React.FC = () => {
             <div>
               <div className="flex items-center space-x-3 mb-6">
                 <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary-500 to-secondary-500 flex items-center justify-center text-white">
-                <Activity className="w-6 h-6" />
-              </div>
+                  <Activity className="w-6 h-6" />
+                </div>
                 <div>
-                  <span className="text-2xl font-bold text-white">LifeChain AI</span>
+                  <span className="text-2xl font-bold text-white">
+                    LifeChain AI
+                  </span>
                   <p className="text-xs text-slate-400">Healthcare Ecosystem</p>
                 </div>
               </div>
@@ -1114,7 +1115,9 @@ export const LandingPage: React.FC = () => {
 
             {/* Quick Links */}
             <div>
-              <h3 className="text-white text-lg font-semibold mb-6">Quick Links</h3>
+              <h3 className="text-white text-lg font-semibold mb-6">
+                Quick Links
+              </h3>
               <ul className="space-y-3">
                 {["Home", "Features", "About", "Team", "Contact"].map(
                   (item) => (
@@ -1133,7 +1136,9 @@ export const LandingPage: React.FC = () => {
 
             {/* Resources */}
             <div>
-              <h3 className="text-white text-lg font-semibold mb-6">Resources</h3>
+              <h3 className="text-white text-lg font-semibold mb-6">
+                Resources
+              </h3>
               <ul className="space-y-3">
                 {[
                   "Documentation",
@@ -1152,7 +1157,9 @@ export const LandingPage: React.FC = () => {
 
             {/* Newsletter */}
             <div>
-              <h3 className="text-white text-lg font-semibold mb-6">Stay Updated</h3>
+              <h3 className="text-white text-lg font-semibold mb-6">
+                Stay Updated
+              </h3>
               <p className="text-slate-400 leading-relaxed mb-4">
                 Subscribe for project updates and healthcare insights.
               </p>
@@ -1175,7 +1182,6 @@ export const LandingPage: React.FC = () => {
               © {new Date().getFullYear()} LifeChain AI. Final Year Project —
               FAST National University.
             </p>
-            
           </div>
         </div>
       </footer>
