@@ -15,6 +15,7 @@ import { PatientPredictions } from "./pages/patient/PatientPredictions";
 import { PatientRecommendations } from "./pages/patient/PatientRecommendations";
 import { PatientFamilyHistory } from "./pages/patient/PatientFamilyHistory";
 import { PatientTimeline } from "./pages/patient/PatientTimeline";
+import { PatientReportDetails } from "./pages/patient/PatientReportDetails";
 
 // Doctor Pages
 import { DoctorDashboard } from "./pages/doctor/DoctorDashboard";
@@ -74,6 +75,14 @@ function App() {
             element={
               <ProtectedRoute allowedRoles={["patient"]}>
                 <PatientLabReports />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/patient/lab-reports/:report_id"
+            element={
+              <ProtectedRoute allowedRoles={["patient"]}>
+                <PatientReportDetails />
               </ProtectedRoute>
             }
           />

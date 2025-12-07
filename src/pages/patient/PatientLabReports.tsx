@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Layout } from "../../components/Layout";
-import { DataTable, type Column } from "../../components/common/DataTable";
+import { DataTable, type Column } from "./PatientDataTable";
 import { ErrorMessage } from "../../components/common/ErrorMessage";
-import { Modal } from "../../components/common/Modal";
 import { useAuth } from "../../contexts/AuthContext";
 // import { labService } from '../../services/labService';
 import type { LabReport, TestResult } from "../../types";
@@ -16,6 +15,7 @@ import {
 } from "lucide-react";
 import { formatDate, getStatusColor } from "../../utils/formatters";
 import { usePagination, useError, useLoading } from "../../utils/hooks";
+import { useNavigate } from "react-router-dom";
 
 const patientNavItems = [
   {
@@ -63,6 +63,7 @@ export const PatientLabReports: React.FC = () => {
   const { isLoading } = useLoading();
   const { error, setError, clearError } = useError();
   const pagination = usePagination();
+  const navigate = useNavigate();
 
   // Function to fetch lab name by lab_id
   const fetchLabName = async (labId: string) => {
@@ -146,8 +147,8 @@ export const PatientLabReports: React.FC = () => {
   const handleViewReport = async (report: LabReport) => {
     try {
       setSelectedReport(report);
-      // For now, using empty test results since we don't have that API
-      setTestResults([]);
+      console.log("Selected Report:", report.report_id);
+      navigate(`/patient/lab-reports/${report.report_id}`);
     } catch (err: any) {
       setError(err.response?.data?.detail || "Failed to load test results");
     }
@@ -214,90 +215,7 @@ export const PatientLabReports: React.FC = () => {
             onPrevPage: pagination.prevPage,
           }}
         />
-
-        {/* Test Results Modal */}
-        <Modal
-          isOpen={!!selectedReport}
-          onClose={() => setSelectedReport(null)}
-          title={`Lab Report - ${selectedReport?.report_type}`}
-          size="lg"
-        >
-          {selectedReport && (
-            <div className="space-y-4">
-              <div className="grid grid-cols-2 gap-4 text-sm">
-                <div>
-                  <p className="text-gray-600">Date</p>
-                  <p className="font-medium">
-                    {formatDate(selectedReport.report_date)}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-gray-600">Lab</p>
-                  <p className="font-medium">
-                    {selectedReport.lab?.name || "N/A"}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-gray-600">Status</p>
-                  <span
-                    className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(
-                      selectedReport.status
-                    )}`}
-                  >
-                    {selectedReport.status}
-                  </span>
-                </div>
-              </div>
-
-              <div className="border-t pt-4">
-                <h4 className="font-semibold mb-3">Test Results</h4>
-                {testResults.length > 0 ? (
-                  <div className="space-y-3">
-                    {testResults.map((test) => (
-                      <div
-                        key={test.test_id}
-                        className={`p-3 rounded-lg border ${
-                          test.is_abnormal
-                            ? "border-red-300 bg-red-50"
-                            : "border-gray-200"
-                        }`}
-                      >
-                        <div className="flex justify-between items-start">
-                          <div>
-                            <p className="font-medium">{test.test_name}</p>
-                            <p className="text-sm text-gray-600 mt-1">
-                              Reference: {test.reference_range || "N/A"}
-                            </p>
-                          </div>
-                          <div className="text-right">
-                            <p
-                              className={`font-semibold ${
-                                test.is_abnormal
-                                  ? "text-red-600"
-                                  : "text-gray-900"
-                              }`}
-                            >
-                              {test.test_value} {test.unit}
-                            </p>
-                            {test.is_abnormal && (
-                              <span className="text-xs text-red-600 font-medium">
-                                Abnormal
-                              </span>
-                            )}
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <p className="text-gray-600 text-sm">
-                    No test results available yet
-                  </p>
-                )}
-              </div>
-            </div>
-          )}
-        </Modal>
+      
       </div>
     </Layout>
   );
