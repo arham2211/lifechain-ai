@@ -4,14 +4,7 @@ import { DataTable, type Column } from "./PatientDataTable";
 import { ErrorMessage } from "../../components/common/ErrorMessage";
 import { useAuth } from "../../contexts/AuthContext";
 import type { LabReport } from "../../types";
-import {
-  Activity,
-  FileText,
-  Calendar,
-  TrendingUp,
-  Users,
-  Heart,
-} from "lucide-react";
+import { Activity, FileText, Calendar, TrendingUp, Users } from "lucide-react";
 import { formatDate, getStatusColor } from "../../utils/formatters";
 import { usePagination, useError, useLoading } from "../../utils/hooks";
 import { useNavigate } from "react-router-dom";
@@ -41,16 +34,6 @@ const patientNavItems = [
     path: "/patient/family-history",
     label: "Family History",
     icon: <Users size={20} />,
-  },
-  {
-    path: "/patient/predictions",
-    label: "Health Predictions",
-    icon: <TrendingUp size={20} />,
-  },
-  {
-    path: "/patient/recommendations",
-    label: "AI Recommendations",
-    icon: <Heart size={20} />,
   },
 ];
 
@@ -92,7 +75,7 @@ export const PatientLabReports: React.FC = () => {
   const fetchReportsData = async () => {
     try {
       clearError();
-      
+
       const response = await fetch(
         `http://localhost:8001/api/v1/labs/reports?skip=0&limit=100&patient_id=73b9d154-669f-4628-ad05-dae65207d12e&lang=en`,
         {
@@ -102,16 +85,16 @@ export const PatientLabReports: React.FC = () => {
           },
         }
       );
-      
+
       if (!response.ok) {
         throw new Error("Failed to fetch lab reports");
       }
-      
+
       const reportsData = await response.json();
-     
+
       // Enhance reports with lab names
       const enhancedReports = await Promise.all(
-        reportsData.map(async (report: Omit<LabReport, 'lab'>) => {
+        reportsData.map(async (report: Omit<LabReport, "lab">) => {
           const labName = await fetchLabName(report.lab_id);
           return {
             ...report,
@@ -184,7 +167,10 @@ export const PatientLabReports: React.FC = () => {
   ];
 
   // Calculate paginated data
-  const paginatedReports = reports.slice(pagination.skip, pagination.skip + pagination.limit);
+  const paginatedReports = reports.slice(
+    pagination.skip,
+    pagination.skip + pagination.limit
+  );
 
   return (
     <Layout navItems={patientNavItems} title="Patient Portal">
@@ -211,7 +197,6 @@ export const PatientLabReports: React.FC = () => {
             onPrevPage: pagination.prevPage,
           }}
         />
-      
       </div>
     </Layout>
   );

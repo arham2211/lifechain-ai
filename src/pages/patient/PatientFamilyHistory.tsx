@@ -68,7 +68,7 @@
 //     try {
 //       setIsLoading(true);
 //       setError('');
-      
+
 //       if (!user?.entity_id) {
 //         throw new Error('User not authenticated');
 //       }
@@ -82,14 +82,14 @@
 //           },
 //         }
 //       );
-      
+
 //       if (!response.ok) {
 //         throw new Error('Failed to fetch family history');
 //       }
-      
+
 //       const data: CompleteFamilyTree = await response.json();
 //       setFamilyTree(data);
-      
+
 //       // Auto-expand the first few members
 //       if (data.family_tree.length > 0) {
 //         const initialExpanded = new Set<string>();
@@ -129,7 +129,7 @@
 //   };
 
 //   const getGenderColor = (gender: string) => {
-//     return gender.toLowerCase() === 'male' 
+//     return gender.toLowerCase() === 'male'
 //       ? 'bg-blue-50 text-blue-700 border border-blue-200'
 //       : 'bg-pink-50 text-pink-700 border border-pink-200';
 //   };
@@ -373,7 +373,7 @@
 //                           <div>
 //                             <p className="text-sm font-medium text-slate-700">Date of Birth</p>
 //                             <p className="text-sm text-slate-900">
-//                               {formatDate(selectedMember.date_of_birth)} 
+//                               {formatDate(selectedMember.date_of_birth)}
 //                               <span className="ml-2 text-blue-600">
 //                                 ({calculateAge(selectedMember.date_of_birth)} years)
 //                               </span>
@@ -441,7 +441,7 @@
 //                           </span>
 //                         </div>
 //                         <div className="w-full bg-slate-200 rounded-full h-2">
-//                           <div 
+//                           <div
 //                             className="bg-red-600 h-2 rounded-full"
 //                             style={{ width: `${(familyTree.relatives_with_diseases / familyTree.total_blood_relatives) * 100}%` }}
 //                           />
@@ -455,14 +455,14 @@
 //                           </span>
 //                         </div>
 //                         <div className="w-full bg-slate-200 rounded-full h-2">
-//                           <div 
+//                           <div
 //                             className="bg-green-600 h-2 rounded-full"
 //                             style={{ width: `${(familyTree.relatives_without_diseases / familyTree.total_blood_relatives) * 100}%` }}
 //                           />
 //                         </div>
 //                       </div>
 //                     </div>
-                    
+
 //                     {/* Genetic Risk Assessment */}
 //                     {familyTree.relatives_with_diseases > 0 && (
 //                       <div className="mt-6 pt-6 border-t border-gray-200">
@@ -489,23 +489,54 @@
 //   );
 // };
 
-
-import React, { useEffect, useState } from 'react';
-import { Layout } from '../../components/Layout';
-import { ErrorMessage } from '../../components/common/ErrorMessage';
-import { LoadingSpinner } from '../../components/common/LoadingSpinner';
-import { useAuth } from '../../contexts/AuthContext';
-import { Activity, FileText, Calendar, TrendingUp, Users, Heart, AlertTriangle, Network, PieChart, User, Stethoscope, ChevronRight, Clock, Layers } from 'lucide-react';
-import { formatDate } from '../../utils/formatters';
+import React, { useEffect, useState } from "react";
+import { Layout } from "../../components/Layout";
+import { ErrorMessage } from "../../components/common/ErrorMessage";
+import { LoadingSpinner } from "../../components/common/LoadingSpinner";
+import { useAuth } from "../../contexts/AuthContext";
+import {
+  Activity,
+  FileText,
+  Calendar,
+  TrendingUp,
+  Users,
+  AlertTriangle,
+  Network,
+  PieChart,
+  User,
+  Stethoscope,
+  ChevronRight,
+  Clock,
+  Layers,
+} from "lucide-react";
+import { formatDate } from "../../utils/formatters";
 
 const patientNavItems = [
-  { path: '/patient/dashboard', label: 'Dashboard', icon: <Activity size={20} /> },
-  { path: '/patient/lab-reports', label: 'Lab Reports', icon: <FileText size={20} /> },
-  { path: '/patient/visits', label: 'Visit History', icon: <Calendar size={20} /> },
-  { path: '/patient/timeline', label: 'Disease Timeline', icon: <TrendingUp size={20} /> },
-  { path: '/patient/family-history', label: 'Family History', icon: <Users size={20} /> },
-  { path: '/patient/predictions', label: 'Health Predictions', icon: <TrendingUp size={20} /> },
-  { path: '/patient/recommendations', label: 'AI Recommendations', icon: <Heart size={20} /> },
+  {
+    path: "/patient/dashboard",
+    label: "Dashboard",
+    icon: <Activity size={20} />,
+  },
+  {
+    path: "/patient/lab-reports",
+    label: "Lab Reports",
+    icon: <FileText size={20} />,
+  },
+  {
+    path: "/patient/visits",
+    label: "Visit History",
+    icon: <Calendar size={20} />,
+  },
+  {
+    path: "/patient/timeline",
+    label: "Disease Timeline",
+    icon: <TrendingUp size={20} />,
+  },
+  {
+    path: "/patient/family-history",
+    label: "Family History",
+    icon: <Users size={20} />,
+  },
 ];
 
 interface FamilyMemberDiagnosis {
@@ -574,9 +605,9 @@ const dummyFamilyData: CompleteFamilyTree = {
           status: "confirmed",
           notes: "Type 2 diabetes diagnosed with high blood sugar levels",
           diagnosed_at: "2025-08-08T22:59:53",
-          source: "diagnosis"
-        }
-      ]
+          source: "diagnosis",
+        },
+      ],
     },
     {
       patient_id: "78e1b9c3-2a45-4d89-b6f1-9c3b7a8d4e5f",
@@ -590,7 +621,7 @@ const dummyFamilyData: CompleteFamilyTree = {
       relationship_type: "parent",
       total_diseases: 0,
       disease_names: [],
-      diagnoses: []
+      diagnoses: [],
     },
     {
       patient_id: "92c3a7d1-5b68-4f29-a3e7-8c1b2d9e4f6a",
@@ -613,7 +644,7 @@ const dummyFamilyData: CompleteFamilyTree = {
           status: "confirmed",
           notes: "Stage 2 hypertension with consistent high readings",
           diagnosed_at: "2020-06-15T10:30:00",
-          source: "diagnosis"
+          source: "diagnosis",
         },
         {
           disease_name: "heart_disease",
@@ -623,9 +654,9 @@ const dummyFamilyData: CompleteFamilyTree = {
           status: "confirmed",
           notes: "Coronary artery disease detected",
           diagnosed_at: "2021-11-20T14:45:00",
-          source: "diagnosis"
-        }
-      ]
+          source: "diagnosis",
+        },
+      ],
     },
     {
       patient_id: "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
@@ -639,7 +670,7 @@ const dummyFamilyData: CompleteFamilyTree = {
       relationship_type: "grandparent",
       total_diseases: 0,
       disease_names: [],
-      diagnoses: []
+      diagnoses: [],
     },
     {
       patient_id: "b2c3d4e5-f6a7-8901-bcde-f23456789012",
@@ -653,7 +684,7 @@ const dummyFamilyData: CompleteFamilyTree = {
       relationship_type: "sibling",
       total_diseases: 0,
       disease_names: [],
-      diagnoses: []
+      diagnoses: [],
     },
     {
       patient_id: "c3d4e5f6-a7b8-9012-cdef-345678901234",
@@ -667,7 +698,7 @@ const dummyFamilyData: CompleteFamilyTree = {
       relationship_type: "sibling",
       total_diseases: 0,
       disease_names: [],
-      diagnoses: []
+      diagnoses: [],
     },
     {
       patient_id: "d4e5f6a7-b8c9-0123-defg-456789012345",
@@ -681,7 +712,7 @@ const dummyFamilyData: CompleteFamilyTree = {
       relationship_type: "child",
       total_diseases: 0,
       disease_names: [],
-      diagnoses: []
+      diagnoses: [],
     },
     {
       patient_id: "e5f6a7b8-c9d0-1234-efgh-567890123456",
@@ -695,18 +726,22 @@ const dummyFamilyData: CompleteFamilyTree = {
       relationship_type: "great-grandparent",
       total_diseases: 0,
       disease_names: [],
-      diagnoses: []
-    }
-  ]
+      diagnoses: [],
+    },
+  ],
 };
 
 export const PatientFamilyHistory: React.FC = () => {
   const { user } = useAuth();
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [familyTree, setFamilyTree] = useState<CompleteFamilyTree | null>(null);
-  const [expandedMembers, setExpandedMembers] = useState<Set<string>>(new Set());
-  const [selectedMember, setSelectedMember] = useState<FamilyMember | null>(null);
+  const [expandedMembers, setExpandedMembers] = useState<Set<string>>(
+    new Set()
+  );
+  const [selectedMember, setSelectedMember] = useState<FamilyMember | null>(
+    null
+  );
 
   useEffect(() => {
     fetchFamilyTree();
@@ -715,35 +750,38 @@ export const PatientFamilyHistory: React.FC = () => {
   const fetchFamilyTree = async () => {
     try {
       setIsLoading(true);
-      setError('');
-      
+      setError("");
+
       if (!user?.entity_id) {
-        throw new Error('User not authenticated');
+        throw new Error("User not authenticated");
       }
 
       // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 800));
-      
+      await new Promise((resolve) => setTimeout(resolve, 800));
+
       // Use dummy data instead of API call for now
       setFamilyTree(dummyFamilyData);
-      
+
       // Auto-expand the first few members
       if (dummyFamilyData.family_tree.length > 0) {
         const initialExpanded = new Set<string>();
         // Expand members with diseases by default
         dummyFamilyData.family_tree
-          .filter(member => member.total_diseases > 0)
+          .filter((member) => member.total_diseases > 0)
           .slice(0, 2)
-          .forEach(member => {
+          .forEach((member) => {
             initialExpanded.add(member.patient_id);
           });
         setExpandedMembers(initialExpanded);
         // Select the first member with diseases, or first member if none
-        const firstMemberWithDisease = dummyFamilyData.family_tree.find(member => member.total_diseases > 0) || dummyFamilyData.family_tree[0];
+        const firstMemberWithDisease =
+          dummyFamilyData.family_tree.find(
+            (member) => member.total_diseases > 0
+          ) || dummyFamilyData.family_tree[0];
         setSelectedMember(firstMemberWithDisease);
       }
     } catch (err: any) {
-      setError(err.message || 'Failed to load family history');
+      setError(err.message || "Failed to load family history");
     } finally {
       setIsLoading(false);
     }
@@ -761,20 +799,27 @@ export const PatientFamilyHistory: React.FC = () => {
 
   const getRelationshipColor = (relationshipType: string) => {
     switch (relationshipType.toLowerCase()) {
-      case 'parent': return 'bg-blue-100 text-blue-800';
-      case 'child': return 'bg-green-100 text-green-800';
-      case 'sibling': return 'bg-purple-100 text-purple-800';
-      case 'spouse': return 'bg-pink-100 text-pink-800';
-      case 'grandparent': return 'bg-indigo-100 text-indigo-800';
-      case 'great-grandparent': return 'bg-amber-100 text-amber-800';
-      default: return 'bg-slate-100 text-slate-800';
+      case "parent":
+        return "bg-blue-100 text-blue-800";
+      case "child":
+        return "bg-green-100 text-green-800";
+      case "sibling":
+        return "bg-purple-100 text-purple-800";
+      case "spouse":
+        return "bg-pink-100 text-pink-800";
+      case "grandparent":
+        return "bg-indigo-100 text-indigo-800";
+      case "great-grandparent":
+        return "bg-amber-100 text-amber-800";
+      default:
+        return "bg-slate-100 text-slate-800";
     }
   };
 
   const getGenderColor = (gender: string) => {
-    return gender.toLowerCase() === 'male' 
-      ? 'bg-blue-50 text-blue-700 border border-blue-200'
-      : 'bg-pink-50 text-pink-700 border border-pink-200';
+    return gender.toLowerCase() === "male"
+      ? "bg-blue-50 text-blue-700 border border-blue-200"
+      : "bg-pink-50 text-pink-700 border border-pink-200";
   };
 
   const getDepthStyle = (depth: number) => {
@@ -782,8 +827,8 @@ export const PatientFamilyHistory: React.FC = () => {
     const margin = depth * baseMargin;
     return {
       marginLeft: `${margin}px`,
-      borderLeft: depth > 0 ? '2px solid #e5e7eb' : 'none',
-      paddingLeft: depth > 0 ? '1rem' : '0',
+      borderLeft: depth > 0 ? "2px solid #e5e7eb" : "none",
+      paddingLeft: depth > 0 ? "1rem" : "0",
     };
   };
 
@@ -792,7 +837,10 @@ export const PatientFamilyHistory: React.FC = () => {
     const today = new Date();
     let age = today.getFullYear() - birthDate.getFullYear();
     const monthDiff = today.getMonth() - birthDate.getMonth();
-    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+    if (
+      monthDiff < 0 ||
+      (monthDiff === 0 && today.getDate() < birthDate.getDate())
+    ) {
       age--;
     }
     return age;
@@ -814,11 +862,15 @@ export const PatientFamilyHistory: React.FC = () => {
     <Layout navItems={patientNavItems} title="Patient Portal">
       <div className="space-y-6">
         <div>
-          <h2 className="text-2xl font-bold text-slate-900">Family Medical History</h2>
-          <p className="text-slate-600 mt-1">View your family tree and genetic risk assessment</p>
+          <h2 className="text-2xl font-bold text-slate-900">
+            Family Medical History
+          </h2>
+          <p className="text-slate-600 mt-1">
+            View your family tree and genetic risk assessment
+          </p>
         </div>
 
-        {error && <ErrorMessage message={error} onClose={() => setError('')} />}
+        {error && <ErrorMessage message={error} onClose={() => setError("")} />}
 
         {familyTree && (
           <>
@@ -831,7 +883,9 @@ export const PatientFamilyHistory: React.FC = () => {
                   </div>
                   <div className="ml-3">
                     <p className="text-sm text-slate-600">Total Relatives</p>
-                    <p className="text-2xl font-bold text-slate-900">{familyTree.total_blood_relatives}</p>
+                    <p className="text-2xl font-bold text-slate-900">
+                      {familyTree.total_blood_relatives}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -842,7 +896,9 @@ export const PatientFamilyHistory: React.FC = () => {
                   </div>
                   <div className="ml-3">
                     <p className="text-sm text-slate-600">With Diseases</p>
-                    <p className="text-2xl font-bold text-slate-900">{familyTree.relatives_with_diseases}</p>
+                    <p className="text-2xl font-bold text-slate-900">
+                      {familyTree.relatives_with_diseases}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -853,7 +909,9 @@ export const PatientFamilyHistory: React.FC = () => {
                   </div>
                   <div className="ml-3">
                     <p className="text-sm text-slate-600">Healthy Relatives</p>
-                    <p className="text-2xl font-bold text-slate-900">{familyTree.relatives_without_diseases}</p>
+                    <p className="text-2xl font-bold text-slate-900">
+                      {familyTree.relatives_without_diseases}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -864,7 +922,9 @@ export const PatientFamilyHistory: React.FC = () => {
                   </div>
                   <div className="ml-3">
                     <p className="text-sm text-slate-600">Family Depth</p>
-                    <p className="text-2xl font-bold text-slate-900">{familyTree.max_depth} levels</p>
+                    <p className="text-2xl font-bold text-slate-900">
+                      {familyTree.max_depth} levels
+                    </p>
                   </div>
                 </div>
               </div>
@@ -889,8 +949,8 @@ export const PatientFamilyHistory: React.FC = () => {
                         key={member.patient_id}
                         className={`border rounded-lg transition-all duration-200 ${
                           selectedMember?.patient_id === member.patient_id
-                            ? 'border-blue-300 bg-blue-50'
-                            : 'border-gray-200 hover:bg-slate-50'
+                            ? "border-blue-300 bg-blue-50"
+                            : "border-gray-200 hover:bg-slate-50"
                         }`}
                         style={getDepthStyle(member.depth)}
                       >
@@ -903,16 +963,35 @@ export const PatientFamilyHistory: React.FC = () => {
                         >
                           <div className="flex items-center justify-between">
                             <div className="flex items-center gap-3">
-                              <div className={`p-2 rounded-lg ${getRelationshipColor(member.relationship_type)}`}>
+                              <div
+                                className={`p-2 rounded-lg ${getRelationshipColor(
+                                  member.relationship_type
+                                )}`}
+                              >
                                 <Users size={16} />
                               </div>
                               <div>
-                                <h4 className="font-medium text-slate-900">{member.name}</h4>
+                                <h4 className="font-medium text-slate-900">
+                                  {member.name}
+                                </h4>
                                 <div className="flex flex-wrap items-center gap-2 mt-1">
-                                  <span className={`px-2 py-0.5 rounded text-xs font-medium ${getRelationshipColor(member.relationship_type)}`}>
-                                    {member.relationship_type.charAt(0).toUpperCase() + member.relationship_type.slice(1).replace('-', ' ')}
+                                  <span
+                                    className={`px-2 py-0.5 rounded text-xs font-medium ${getRelationshipColor(
+                                      member.relationship_type
+                                    )}`}
+                                  >
+                                    {member.relationship_type
+                                      .charAt(0)
+                                      .toUpperCase() +
+                                      member.relationship_type
+                                        .slice(1)
+                                        .replace("-", " ")}
                                   </span>
-                                  <span className={`px-2 py-0.5 rounded text-xs font-medium ${getGenderColor(member.gender)}`}>
+                                  <span
+                                    className={`px-2 py-0.5 rounded text-xs font-medium ${getGenderColor(
+                                      member.gender
+                                    )}`}
+                                  >
                                     {member.gender}
                                   </span>
                                   {member.date_of_birth && (
@@ -930,61 +1009,83 @@ export const PatientFamilyHistory: React.FC = () => {
                             <div className="flex items-center gap-2">
                               {member.total_diseases > 0 ? (
                                 <span className="px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">
-                                  {member.total_diseases} disease{member.total_diseases > 1 ? 's' : ''}
+                                  {member.total_diseases} disease
+                                  {member.total_diseases > 1 ? "s" : ""}
                                 </span>
                               ) : (
                                 <span className="px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
                                   Healthy
                                 </span>
                               )}
-                              <ChevronRight className={`h-4 w-4 text-slate-400 transition-transform ${
-                                expandedMembers.has(member.patient_id) ? 'rotate-90' : ''
-                              }`} />
+                              <ChevronRight
+                                className={`h-4 w-4 text-slate-400 transition-transform ${
+                                  expandedMembers.has(member.patient_id)
+                                    ? "rotate-90"
+                                    : ""
+                                }`}
+                              />
                             </div>
                           </div>
                         </div>
 
-                        {expandedMembers.has(member.patient_id) && member.total_diseases > 0 && (
-                          <div className="px-4 pb-4 border-t border-gray-200">
-                            <div className="mt-3">
-                              <h5 className="text-sm font-medium text-slate-700 mb-2">Diagnosed Conditions:</h5>
-                              <div className="space-y-2">
-                                {member.diagnoses.map((diagnosis, idx) => (
-                                  <div key={idx} className="bg-slate-50 rounded p-3">
-                                    <div className="flex justify-between items-start">
-                                      <div>
-                                        <span className="font-medium text-slate-900 capitalize">
-                                          {diagnosis.disease_name.replace('_', ' ')}
-                                        </span>
-                                        {diagnosis.diagnosis_date && (
-                                          <p className="text-xs text-slate-600 mt-1">
-                                            Diagnosed: {formatDate(diagnosis.diagnosis_date)}
+                        {expandedMembers.has(member.patient_id) &&
+                          member.total_diseases > 0 && (
+                            <div className="px-4 pb-4 border-t border-gray-200">
+                              <div className="mt-3">
+                                <h5 className="text-sm font-medium text-slate-700 mb-2">
+                                  Diagnosed Conditions:
+                                </h5>
+                                <div className="space-y-2">
+                                  {member.diagnoses.map((diagnosis, idx) => (
+                                    <div
+                                      key={idx}
+                                      className="bg-slate-50 rounded p-3"
+                                    >
+                                      <div className="flex justify-between items-start">
+                                        <div>
+                                          <span className="font-medium text-slate-900 capitalize">
+                                            {diagnosis.disease_name.replace(
+                                              "_",
+                                              " "
+                                            )}
+                                          </span>
+                                          {diagnosis.diagnosis_date && (
+                                            <p className="text-xs text-slate-600 mt-1">
+                                              Diagnosed:{" "}
+                                              {formatDate(
+                                                diagnosis.diagnosis_date
+                                              )}
+                                            </p>
+                                          )}
+                                          {diagnosis.notes && (
+                                            <p className="text-xs text-slate-500 mt-1">
+                                              {diagnosis.notes}
+                                            </p>
+                                          )}
+                                        </div>
+                                        <div className="text-right">
+                                          <span className="px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                            Confidence:{" "}
+                                            {formatConfidenceScore(
+                                              diagnosis.confidence_score
+                                            )}
+                                          </span>
+                                          <p className="text-xs text-slate-600 mt-1 capitalize">
+                                            Status: {diagnosis.status}
                                           </p>
-                                        )}
-                                        {diagnosis.notes && (
-                                          <p className="text-xs text-slate-500 mt-1">{diagnosis.notes}</p>
-                                        )}
+                                        </div>
                                       </div>
-                                      <div className="text-right">
-                                        <span className="px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                                          Confidence: {formatConfidenceScore(diagnosis.confidence_score)}
-                                        </span>
-                                        <p className="text-xs text-slate-600 mt-1 capitalize">
-                                          Status: {diagnosis.status}
+                                      {diagnosis.ml_model_used && (
+                                        <p className="text-xs text-slate-500 mt-2">
+                                          AI Model: {diagnosis.ml_model_used}
                                         </p>
-                                      </div>
+                                      )}
                                     </div>
-                                    {diagnosis.ml_model_used && (
-                                      <p className="text-xs text-slate-500 mt-2">
-                                        AI Model: {diagnosis.ml_model_used}
-                                      </p>
-                                    )}
-                                  </div>
-                                ))}
+                                  ))}
+                                </div>
                               </div>
                             </div>
-                          </div>
-                        )}
+                          )}
                       </div>
                     ))}
                   </div>
@@ -1001,37 +1102,61 @@ export const PatientFamilyHistory: React.FC = () => {
                   {selectedMember ? (
                     <div className="space-y-4">
                       <div className="flex items-center gap-3">
-                        <div className={`p-3 rounded-lg ${getRelationshipColor(selectedMember.relationship_type)}`}>
+                        <div
+                          className={`p-3 rounded-lg ${getRelationshipColor(
+                            selectedMember.relationship_type
+                          )}`}
+                        >
                           <Users size={20} />
                         </div>
                         <div>
-                          <h4 className="font-bold text-lg text-slate-900">{selectedMember.name}</h4>
-                          <p className="text-sm text-slate-600">ID: {selectedMember.patient_id}</p>
+                          <h4 className="font-bold text-lg text-slate-900">
+                            {selectedMember.name}
+                          </h4>
+                          <p className="text-sm text-slate-600">
+                            ID: {selectedMember.patient_id}
+                          </p>
                         </div>
                       </div>
 
                       <div className="space-y-3">
                         <div>
-                          <p className="text-sm font-medium text-slate-700">Relationship</p>
+                          <p className="text-sm font-medium text-slate-700">
+                            Relationship
+                          </p>
                           <p className="text-sm text-slate-900 capitalize">
-                            {selectedMember.relationship_type.charAt(0).toUpperCase() + selectedMember.relationship_type.slice(1).replace('-', ' ')}
+                            {selectedMember.relationship_type
+                              .charAt(0)
+                              .toUpperCase() +
+                              selectedMember.relationship_type
+                                .slice(1)
+                                .replace("-", " ")}
                           </p>
                         </div>
 
                         <div>
-                          <p className="text-sm font-medium text-slate-700">Gender</p>
-                          <span className={`px-2 py-1 rounded text-xs font-medium ${getGenderColor(selectedMember.gender)}`}>
+                          <p className="text-sm font-medium text-slate-700">
+                            Gender
+                          </p>
+                          <span
+                            className={`px-2 py-1 rounded text-xs font-medium ${getGenderColor(
+                              selectedMember.gender
+                            )}`}
+                          >
                             {selectedMember.gender}
                           </span>
                         </div>
 
                         {selectedMember.date_of_birth && (
                           <div>
-                            <p className="text-sm font-medium text-slate-700">Date of Birth</p>
+                            <p className="text-sm font-medium text-slate-700">
+                              Date of Birth
+                            </p>
                             <p className="text-sm text-slate-900">
-                              {formatDate(selectedMember.date_of_birth)} 
+                              {formatDate(selectedMember.date_of_birth)}
                               <span className="ml-2 text-blue-600">
-                                ({calculateAge(selectedMember.date_of_birth)} years)
+                                ({calculateAge(selectedMember.date_of_birth)}{" "}
+                                years)
                               </span>
                             </p>
                           </div>
@@ -1039,30 +1164,48 @@ export const PatientFamilyHistory: React.FC = () => {
 
                         {selectedMember.cnic && (
                           <div>
-                            <p className="text-sm font-medium text-slate-700">CNIC</p>
-                            <p className="text-sm text-slate-900 font-mono">{selectedMember.cnic}</p>
+                            <p className="text-sm font-medium text-slate-700">
+                              CNIC
+                            </p>
+                            <p className="text-sm text-slate-900 font-mono">
+                              {selectedMember.cnic}
+                            </p>
                           </div>
                         )}
 
                         <div>
-                          <p className="text-sm font-medium text-slate-700">Family Depth</p>
-                          <p className="text-sm text-slate-900">Level {selectedMember.depth}</p>
+                          <p className="text-sm font-medium text-slate-700">
+                            Family Depth
+                          </p>
+                          <p className="text-sm text-slate-900">
+                            Level {selectedMember.depth}
+                          </p>
                         </div>
 
                         <div>
-                          <p className="text-sm font-medium text-slate-700">Health Status</p>
+                          <p className="text-sm font-medium text-slate-700">
+                            Health Status
+                          </p>
                           {selectedMember.total_diseases > 0 ? (
                             <div>
                               <span className="px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">
-                                {selectedMember.total_diseases} condition{selectedMember.total_diseases > 1 ? 's' : ''}
+                                {selectedMember.total_diseases} condition
+                                {selectedMember.total_diseases > 1 ? "s" : ""}
                               </span>
                               <div className="mt-2 space-y-1">
-                                {selectedMember.disease_names.map((disease, idx) => (
-                                  <div key={idx} className="flex items-center">
-                                    <AlertTriangle className="h-3 w-3 text-red-500 mr-2" />
-                                    <span className="text-sm text-slate-900 capitalize">{disease.replace('_', ' ')}</span>
-                                  </div>
-                                ))}
+                                {selectedMember.disease_names.map(
+                                  (disease, idx) => (
+                                    <div
+                                      key={idx}
+                                      className="flex items-center"
+                                    >
+                                      <AlertTriangle className="h-3 w-3 text-red-500 mr-2" />
+                                      <span className="text-sm text-slate-900 capitalize">
+                                        {disease.replace("_", " ")}
+                                      </span>
+                                    </div>
+                                  )
+                                )}
                               </div>
                             </div>
                           ) : (
@@ -1092,48 +1235,84 @@ export const PatientFamilyHistory: React.FC = () => {
                       <div className="flex justify-between text-sm mb-1">
                         <span className="text-slate-700">With Diseases:</span>
                         <span className="font-medium text-red-600">
-                          {familyTree.relatives_with_diseases} ({Math.round((familyTree.relatives_with_diseases / familyTree.total_blood_relatives) * 100)}%)
+                          {familyTree.relatives_with_diseases} (
+                          {Math.round(
+                            (familyTree.relatives_with_diseases /
+                              familyTree.total_blood_relatives) *
+                              100
+                          )}
+                          %)
                         </span>
                       </div>
                       <div className="w-full bg-slate-200 rounded-full h-2">
-                        <div 
+                        <div
                           className="bg-red-600 h-2 rounded-full"
-                          style={{ width: `${(familyTree.relatives_with_diseases / familyTree.total_blood_relatives) * 100}%` }}
+                          style={{
+                            width: `${
+                              (familyTree.relatives_with_diseases /
+                                familyTree.total_blood_relatives) *
+                              100
+                            }%`,
+                          }}
                         />
                       </div>
                     </div>
                     <div>
                       <div className="flex justify-between text-sm mb-1">
-                        <span className="text-slate-700">Healthy Relatives:</span>
+                        <span className="text-slate-700">
+                          Healthy Relatives:
+                        </span>
                         <span className="font-medium text-green-600">
-                          {familyTree.relatives_without_diseases} ({Math.round((familyTree.relatives_without_diseases / familyTree.total_blood_relatives) * 100)}%)
+                          {familyTree.relatives_without_diseases} (
+                          {Math.round(
+                            (familyTree.relatives_without_diseases /
+                              familyTree.total_blood_relatives) *
+                              100
+                          )}
+                          %)
                         </span>
                       </div>
                       <div className="w-full bg-slate-200 rounded-full h-2">
-                        <div 
+                        <div
                           className="bg-green-600 h-2 rounded-full"
-                          style={{ width: `${(familyTree.relatives_without_diseases / familyTree.total_blood_relatives) * 100}%` }}
+                          style={{
+                            width: `${
+                              (familyTree.relatives_without_diseases /
+                                familyTree.total_blood_relatives) *
+                              100
+                            }%`,
+                          }}
                         />
                       </div>
                     </div>
                   </div>
-                  
+
                   {/* Genetic Risk Assessment */}
                   <div className="mt-6 pt-6 border-t border-gray-200">
-                    <h4 className="font-medium text-slate-900 mb-3">Genetic Risk Insight</h4>
+                    <h4 className="font-medium text-slate-900 mb-3">
+                      Genetic Risk Insight
+                    </h4>
                     <div className="p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
                       <div className="flex items-start gap-2">
-                        <AlertTriangle className="text-yellow-600 mt-0.5" size={16} />
+                        <AlertTriangle
+                          className="text-yellow-600 mt-0.5"
+                          size={16}
+                        />
                         <div>
                           <p className="text-sm text-yellow-800">
-                            <strong>Family History Alert:</strong> {familyTree.relatives_with_diseases} out of {familyTree.total_blood_relatives} 
+                            <strong>Family History Alert:</strong>{" "}
+                            {familyTree.relatives_with_diseases} out of{" "}
+                            {familyTree.total_blood_relatives}
                             blood relatives have medical conditions.
                           </p>
                           <p className="text-sm text-yellow-700 mt-1">
-                            <strong>Conditions Detected:</strong> Diabetes (parent), Hypertension & Heart Disease (grandparent)
+                            <strong>Conditions Detected:</strong> Diabetes
+                            (parent), Hypertension & Heart Disease (grandparent)
                           </p>
                           <p className="text-sm text-yellow-600 mt-2">
-                            <strong>Recommendation:</strong> Regular screening for diabetes and cardiovascular health is recommended for early detection.
+                            <strong>Recommendation:</strong> Regular screening
+                            for diabetes and cardiovascular health is
+                            recommended for early detection.
                           </p>
                         </div>
                       </div>

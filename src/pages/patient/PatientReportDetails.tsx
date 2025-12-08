@@ -14,7 +14,7 @@ import {
   ArrowLeft,
   Activity,
   TrendingUp,
-  Users, Heart,
+  Users,
 } from "lucide-react";
 import { formatDate, getStatusColor } from "../../utils/formatters";
 import { useError, useLoading } from "../../utils/hooks";
@@ -46,16 +46,6 @@ const patientNavItems = [
     label: "Family History",
     icon: <Users size={20} />,
   },
-  {
-    path: "/patient/predictions",
-    label: "Health Predictions",
-    icon: <TrendingUp size={20} />,
-  },
-  {
-    path: "/patient/recommendations",
-    label: "AI Recommendations",
-    icon: <Heart size={20} />,
-  },
 ];
 
 export const PatientReportDetails: React.FC = () => {
@@ -70,25 +60,23 @@ export const PatientReportDetails: React.FC = () => {
 
   // Alternative method to extract report ID from hash URL
   const extractReportIdFromUrl = (): string | null => {
-    
     // Fallback: Extract from hash URL
     const hash = location.pathname;
-    if (hash.includes('/lab-reports/')) {
-      const parts = hash.split('/');
-      const reportIndex = parts.indexOf('lab-reports') + 1;
+    if (hash.includes("/lab-reports/")) {
+      const parts = hash.split("/");
+      const reportIndex = parts.indexOf("lab-reports") + 1;
       if (reportIndex < parts.length) {
         const id = parts[reportIndex];
         // Remove any query parameters or fragments
-        return id.split('?')[0].split('#')[0];
+        return id.split("?")[0].split("#")[0];
       }
     }
-    
+
     return null;
   };
 
   const reportId = extractReportIdFromUrl();
-  console.log('Extracted Report ID:', reportId);
-
+  console.log("Extracted Report ID:", reportId);
 
   // Function to fetch lab name by lab_id
   const fetchLabName = async (labId: string) => {
@@ -118,11 +106,11 @@ export const PatientReportDetails: React.FC = () => {
   // Function to fetch test results for the specific report
   const fetchTestResults = async () => {
     if (!reportId) return;
-    
+
     try {
       setLoadingTestResults(true);
       clearError();
-      
+
       const response = await fetch(
         `http://localhost:8001/api/v1/labs/reports/${reportId}/test-results?lang=en`,
         {
@@ -132,13 +120,13 @@ export const PatientReportDetails: React.FC = () => {
           },
         }
       );
-      
+
       if (!response.ok) {
         throw new Error("Failed to fetch test results");
       }
-      
+
       const resultsData = await response.json();
-      
+
       setTestResults(resultsData);
     } catch (err: unknown) {
       if (err instanceof Error) {
@@ -154,11 +142,11 @@ export const PatientReportDetails: React.FC = () => {
   // Function to fetch specific report data
   const fetchReportData = async () => {
     if (!reportId) return;
-    
+
     try {
       setIsLoading(true);
       clearError();
-      
+
       const response = await fetch(
         `http://localhost:8001/api/v1/labs/reports/${reportId}?lang=en`,
         {
@@ -168,13 +156,13 @@ export const PatientReportDetails: React.FC = () => {
           },
         }
       );
-      
+
       if (!response.ok) {
         throw new Error("Failed to fetch lab report");
       }
-      
+
       const reportData = await response.json();
-      
+
       // Enhance report with lab name
       const labName = await fetchLabName(reportData.lab_id);
       const enhancedReport = {
@@ -186,7 +174,7 @@ export const PatientReportDetails: React.FC = () => {
       };
 
       setReport(enhancedReport);
-      
+
       // Automatically fetch test results for this report
       await fetchTestResults();
     } catch (err: unknown) {
@@ -228,7 +216,10 @@ export const PatientReportDetails: React.FC = () => {
     return (
       <Layout navItems={patientNavItems} title="Patient Portal">
         <div className="container mx-auto px-4 py-8">
-          <ErrorMessage message="Report ID is missing" onClose={() => navigate("/patient/lab-reports")} />
+          <ErrorMessage
+            message="Report ID is missing"
+            onClose={() => navigate("/patient/lab-reports")}
+          />
         </div>
       </Layout>
     );
@@ -271,7 +262,7 @@ export const PatientReportDetails: React.FC = () => {
     );
   }
 
-  const abnormalCount = testResults.filter(r => r.is_abnormal).length;
+  const abnormalCount = testResults.filter((r) => r.is_abnormal).length;
 
   return (
     <Layout navItems={patientNavItems} title="Patient Portal">
@@ -284,7 +275,9 @@ export const PatientReportDetails: React.FC = () => {
             <ArrowLeft className="h-4 w-4 mr-1" />
             Back to Reports
           </button>
-          <h1 className="text-3xl font-bold text-slate-900">Lab Report Details</h1>
+          <h1 className="text-3xl font-bold text-slate-900">
+            Lab Report Details
+          </h1>
           <p className="text-slate-600 mt-2">
             Detailed view of your laboratory test report
           </p>
@@ -315,7 +308,11 @@ export const PatientReportDetails: React.FC = () => {
                       <span className="text-slate-400">•</span>
                       <span>{report.lab?.name || "Unknown Lab"}</span>
                       <span className="text-slate-400">•</span>
-                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(report.status)}`}>
+                      <span
+                        className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(
+                          report.status
+                        )}`}
+                      >
                         {report.status || "Unknown"}
                       </span>
                       {abnormalCount > 0 && (
@@ -323,7 +320,8 @@ export const PatientReportDetails: React.FC = () => {
                           <span className="text-slate-400">•</span>
                           <span className="inline-flex items-center text-red-600">
                             <AlertCircle className="h-4 w-4 mr-1" />
-                            {abnormalCount} abnormal result{abnormalCount > 1 ? 's' : ''}
+                            {abnormalCount} abnormal result
+                            {abnormalCount > 1 ? "s" : ""}
                           </span>
                         </>
                       )}
@@ -347,7 +345,7 @@ export const PatientReportDetails: React.FC = () => {
                   )}
                 </div>
               </div>
-              
+
               <div className="flex items-center space-x-2 ml-4">
                 <button
                   onClick={downloadReport}
@@ -385,7 +383,7 @@ export const PatientReportDetails: React.FC = () => {
                 <h4 className="text-md font-semibold text-slate-900 mb-4">
                   Test Results
                 </h4>
-                
+
                 {loadingTestResults ? (
                   <div className="flex justify-center py-8">
                     <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
@@ -418,38 +416,53 @@ export const PatientReportDetails: React.FC = () => {
                       </thead>
                       <tbody className="bg-white divide-y divide-gray-200">
                         {testResults.map((result) => (
-                          <tr 
+                          <tr
                             key={result.result_id}
-                            className={result.is_abnormal ? "bg-red-50" : "hover:bg-slate-50"}
+                            className={
+                              result.is_abnormal
+                                ? "bg-red-50"
+                                : "hover:bg-slate-50"
+                            }
                           >
                             <td className="px-6 py-4 whitespace-nowrap">
                               <div className="text-sm font-medium text-slate-900">
-                                {result.test_name?.replace(/_/g, ' ').toLowerCase().replace(/\b\w/g, l => l.toUpperCase())}
+                                {result.test_name
+                                  ?.replace(/_/g, " ")
+                                  .toLowerCase()
+                                  .replace(/\b\w/g, (l) => l.toUpperCase())}
                               </div>
                               <div className="text-xs text-slate-500">
                                 ID: {result.result_id}
-                                
                               </div>
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap">
-                              <div className={`text-sm font-semibold ${result.is_abnormal ? 'text-red-700' : 'text-slate-900'}`}>
+                              <div
+                                className={`text-sm font-semibold ${
+                                  result.is_abnormal
+                                    ? "text-red-700"
+                                    : "text-slate-900"
+                                }`}
+                              >
                                 {result.test_value}
                               </div>
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap">
                               <div className="text-sm text-slate-900">
-                                {result.reference_range_min} - {result.reference_range_max}
+                                {result.reference_range_min} -{" "}
+                                {result.reference_range_max}
                               </div>
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-900">
                               {result.unit}
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap">
-                              <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                                result.is_abnormal 
-                                  ? 'bg-red-100 text-red-800' 
-                                  : 'bg-green-100 text-green-800'
-                              }`}>
+                              <span
+                                className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                                  result.is_abnormal
+                                    ? "bg-red-100 text-red-800"
+                                    : "bg-green-100 text-green-800"
+                                }`}
+                              >
                                 {result.is_abnormal ? (
                                   <>
                                     <AlertCircle className="h-3 w-3 mr-1" />
@@ -469,15 +482,17 @@ export const PatientReportDetails: React.FC = () => {
                     </table>
                   </div>
                 )}
-                
+
                 {testResults.length > 0 && (
                   <div className="mt-6 pt-4 border-t border-gray-200">
                     <div className="flex justify-between items-center">
                       <div className="text-sm text-slate-600">
-                        <span className="font-medium">Total Tests:</span> {testResults.length}
+                        <span className="font-medium">Total Tests:</span>{" "}
+                        {testResults.length}
                         {abnormalCount > 0 && (
                           <span className="ml-4 text-red-600">
-                            <span className="font-medium">Abnormal:</span> {abnormalCount}
+                            <span className="font-medium">Abnormal:</span>{" "}
+                            {abnormalCount}
                           </span>
                         )}
                       </div>

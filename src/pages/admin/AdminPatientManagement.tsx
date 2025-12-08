@@ -105,9 +105,9 @@ export const AdminPatientManagement: React.FC = () => {
       render: (patient) => patient.phone || 'N/A',
     },
     {
-      key: 'blood_type',
+      key: 'blood_group',
       label: 'Blood Type',
-      render: (patient) => patient.blood_type || 'N/A',
+      render: (patient) => patient.blood_group || 'N/A',
     },
     {
       key: 'actions',

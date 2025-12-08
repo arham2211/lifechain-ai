@@ -11,8 +11,6 @@ import { Unauthorized } from "./pages/Unauthorized";
 import { PatientDashboard } from "./pages/patient/PatientDashboard";
 import { PatientLabReports } from "./pages/patient/PatientLabReports";
 import { PatientVisits } from "./pages/patient/PatientVisits";
-import { PatientPredictions } from "./pages/patient/PatientPredictions";
-import { PatientRecommendations } from "./pages/patient/PatientRecommendations";
 import { PatientFamilyHistory } from "./pages/patient/PatientFamilyHistory";
 import { PatientTimeline } from "./pages/patient/PatientTimeline";
 import { PatientReportDetails } from "./pages/patient/PatientReportDetails";
@@ -120,23 +118,7 @@ function App() {
               </ProtectedRoute>
             }
           />
-          <Route
-            path="/patient/predictions"
-            element={
-              <ProtectedRoute allowedRoles={["patient"]}>
-                <PatientPredictions />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/patient/recommendations"
-            element={
-              <ProtectedRoute allowedRoles={["patient"]}>
-                <PatientRecommendations />
-              </ProtectedRoute>
-            }
-          />
-
+      
           {/* Doctor Routes */}
           <Route
             path="/doctor/dashboard"

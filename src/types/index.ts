@@ -25,7 +25,7 @@ export interface Patient {
   phone?: string;
   address?: string;
   email?: string;
-  blood_type?: string;
+  blood_group?: string;
   father_id?: string;
   mother_id?: string;
   created_at: string;

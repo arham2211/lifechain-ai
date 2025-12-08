@@ -3,7 +3,7 @@ import { Layout } from '../../components/Layout';
 import { ErrorMessage } from '../../components/common/ErrorMessage';
 import { LoadingSpinner } from '../../components/common/LoadingSpinner';
 import { useAuth } from '../../contexts/AuthContext';
-import { Activity, TrendingUp, AlertCircle, CheckCircle, Info, Clock, BarChart3 } from 'lucide-react';
+import { Activity, TrendingUp, AlertCircle, CheckCircle, Info, Clock, FileText, Calendar, Users } from 'lucide-react';
 import { 
   Line, 
   XAxis, 
@@ -19,10 +19,10 @@ import {
 
 const patientNavItems = [
   { path: '/patient/dashboard', label: 'Dashboard', icon: <Activity size={20} /> },
-  { path: '/patient/lab-reports', label: 'Lab Reports', icon: <BarChart3 size={20} /> },
-  { path: '/patient/visits', label: 'Visit History', icon: <Clock size={20} /> },
+  { path: '/patient/lab-reports', label: 'Lab Reports', icon: <FileText size={20} /> },
+  { path: '/patient/visits', label: 'Visit History', icon: <Calendar size={20} /> },
   { path: '/patient/timeline', label: 'Disease Timeline', icon: <TrendingUp size={20} /> },
-  { path: '/patient/predictions', label: 'Health Predictions', icon: <TrendingUp size={20} /> },
+  { path: '/patient/family-history', label: 'Family History', icon: <Users size={20} /> },
 ];
 
 interface ProgressionEntry {

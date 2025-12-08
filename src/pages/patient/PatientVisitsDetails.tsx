@@ -10,7 +10,6 @@ import {
   Activity,
   TrendingUp,
   Users,
-  Heart,
   Clock,
 } from "lucide-react";
 import { formatDate } from "../../utils/formatters";
@@ -42,16 +41,6 @@ const patientNavItems = [
     path: "/patient/family-history",
     label: "Family History",
     icon: <Users size={20} />,
-  },
-  {
-    path: "/patient/predictions",
-    label: "Health Predictions",
-    icon: <TrendingUp size={20} />,
-  },
-  {
-    path: "/patient/recommendations",
-    label: "AI Recommendations",
-    icon: <Heart size={20} />,
   },
 ];
 

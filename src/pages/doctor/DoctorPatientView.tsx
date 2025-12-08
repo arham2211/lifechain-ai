@@ -144,7 +144,7 @@ export const DoctorPatientView: React.FC = () => {
                   <span className="opacity-75">DOB:</span> {formatDate(patient.date_of_birth)}
                 </div>
                 <div>
-                  <span className="opacity-75">Blood Type:</span> {patient.blood_type || 'N/A'}
+                  <span className="opacity-75">Blood Type:</span> {patient.blood_group || 'N/A'}
                 </div>
               </div>
             </div>

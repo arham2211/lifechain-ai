@@ -1,5 +1,5 @@
-import React from 'react';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import React from "react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 export interface Column<T> {
   key: string;
@@ -21,13 +21,14 @@ interface DataTableProps<T> {
   };
 }
 
-const glassContainer = 'glass-card rounded-3xl shadow-lg border border-slate-100 overflow-hidden';
+const glassContainer =
+  "glass-card rounded-3xl shadow-lg border border-slate-100 overflow-hidden";
 
 export function DataTable<T extends Record<string, any>>({
   data,
   columns,
   isLoading,
-  emptyMessage = 'No data available',
+  emptyMessage = "No data available",
   onRowClick,
   pagination,
 }: DataTableProps<T>) {
@@ -54,7 +55,7 @@ export function DataTable<T extends Record<string, any>>({
       <div className="overflow-x-auto">
         <table className="min-w-full divide-y divide-slate-200 text-sm text-slate-900">
           <thead className="bg-slate-50">
-            <tr >
+            <tr>
               {columns.map((column) => (
                 <th
                   key={column.key}
@@ -70,10 +71,15 @@ export function DataTable<T extends Record<string, any>>({
               <tr
                 key={index}
                 onClick={() => onRowClick?.(item)}
-                className={`${onRowClick ? 'cursor-pointer hover:bg-slate-50' : ''} transition-colors`}
+                className={`${
+                  onRowClick ? "cursor-pointer hover:bg-slate-50" : ""
+                } transition-colors`}
               >
                 {columns.map((column) => (
-                  <td key={column.key} className="px-6 py-4 whitespace-nowrap text-slate-700">
+                  <td
+                    key={column.key}
+                    className="px-6 py-4 whitespace-nowrap text-slate-700"
+                  >
                     {column.render ? column.render(item) : item[column.key]}
                   </td>
                 ))}
@@ -108,4 +114,3 @@ export function DataTable<T extends Record<string, any>>({
     </div>
   );
 }
-
