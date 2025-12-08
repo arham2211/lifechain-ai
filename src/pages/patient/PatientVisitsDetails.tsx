@@ -267,7 +267,7 @@ export const PatientVisitDetails: React.FC = () => {
       case "pending":
         return "bg-yellow-100 text-yellow-800";
       case "ruled_out":
-        return "bg-gray-100 text-gray-800";
+        return "bg-slate-100 text-slate-800";
       default:
         return "bg-blue-100 text-blue-800";
     }
@@ -317,11 +317,11 @@ export const PatientVisitDetails: React.FC = () => {
       <Layout navItems={patientNavItems} title="Patient Portal">
         <div className="container mx-auto px-4 py-8">
           <div className="text-center py-12">
-            <Calendar className="mx-auto h-12 w-12 text-gray-400" />
-            <h3 className="mt-2 text-lg font-medium text-gray-900">
+            <Calendar className="mx-auto h-12 w-12 text-slate-400" />
+            <h3 className="mt-2 text-lg font-medium text-slate-900">
               Visit not found
             </h3>
-            <p className="mt-1 text-gray-500">
+            <p className="mt-1 text-slate-500">
               The requested visit could not be found.
             </p>
             <button
@@ -348,8 +348,8 @@ export const PatientVisitDetails: React.FC = () => {
             <ArrowLeft className="h-4 w-4 mr-1" />
             Back to Visits
           </button>
-          <h1 className="text-3xl font-bold text-gray-900">Visit Details</h1>
-          <p className="text-gray-600 mt-2">
+          <h1 className="text-3xl font-bold text-slate-900">Visit Details</h1>
+          <p className="text-slate-600 mt-2">
             Detailed information about your medical visit
           </p>
         </div>
@@ -367,35 +367,35 @@ export const PatientVisitDetails: React.FC = () => {
                   </div>
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-lg font-semibold text-gray-900">
+                  <h3 className="text-lg font-semibold text-slate-900">
                     {formatVisitType(visit.visit_type)}
                   </h3>
                   <div className="mt-2 grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <p className="text-sm font-medium text-gray-700">Date & Time</p>
-                      <p className="text-sm text-gray-900">{formatDate(visit.visit_date)}</p>
+                      <p className="text-sm font-medium text-slate-700">Date & Time</p>
+                      <p className="text-sm text-slate-900">{formatDate(visit.visit_date)}</p>
                     </div>
                     <div>
-                      <p className="text-sm font-medium text-gray-700">Doctor</p>
-                      <p className="text-sm text-gray-900">
+                      <p className="text-sm font-medium text-slate-700">Doctor</p>
+                      <p className="text-sm text-slate-900">
                         {doctorInfo ? `Dr. ${doctorInfo.first_name} ${doctorInfo.last_name}` : "Loading..."}
                       </p>
                     </div>
                     <div>
-                      <p className="text-sm font-medium text-gray-700">Visit Type</p>
-                      <p className="text-sm text-gray-900">{formatVisitType(visit.visit_type)}</p>
+                      <p className="text-sm font-medium text-slate-700">Visit Type</p>
+                      <p className="text-sm text-slate-900">{formatVisitType(visit.visit_type)}</p>
                     </div>
                     <div>
-                      <p className="text-sm font-medium text-gray-700">Chief Complaint</p>
-                      <p className="text-sm text-gray-900">
+                      <p className="text-sm font-medium text-slate-700">Chief Complaint</p>
+                      <p className="text-sm text-slate-900">
                         {visit.chief_complaint || "Routine checkup"}
                       </p>
                     </div>
                   </div>
                   {visit.doctor_notes && (
                     <div className="mt-4">
-                      <p className="text-sm font-medium text-gray-700">Doctor's Notes</p>
-                      <p className="text-sm text-gray-900 mt-1">{visit.doctor_notes}</p>
+                      <p className="text-sm font-medium text-slate-700">Doctor's Notes</p>
+                      <p className="text-sm text-slate-900 mt-1">{visit.doctor_notes}</p>
                     </div>
                   )}
                 </div>
@@ -412,40 +412,40 @@ export const PatientVisitDetails: React.FC = () => {
                     <AlertCircle className="h-5 w-5 text-red-600" />
                   </div>
                 </div>
-                <h3 className="ml-3 text-lg font-semibold text-gray-900">Reported Symptoms</h3>
-                <span className="ml-auto px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                <h3 className="ml-3 text-lg font-semibold text-slate-900">Reported Symptoms</h3>
+                <span className="ml-auto px-3 py-1 rounded-full text-xs font-medium bg-slate-100 text-slate-800">
                   {symptoms.length} symptoms
                 </span>
               </div>
 
               {symptoms.length === 0 ? (
-                <div className="text-center py-6 text-gray-500">
+                <div className="text-center py-6 text-slate-500">
                   No symptoms recorded for this visit
                 </div>
               ) : (
                 <div className="overflow-x-auto">
                   <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-gray-50">
+                    <thead className="bg-slate-50">
                       <tr>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
+                        <th className="px-6 py-3 text-left text-xs font-medium text-slate-700 uppercase tracking-wider">
                           Symptom
                         </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
+                        <th className="px-6 py-3 text-left text-xs font-medium text-slate-700 uppercase tracking-wider">
                           Severity
                         </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
+                        <th className="px-6 py-3 text-left text-xs font-medium text-slate-700 uppercase tracking-wider">
                           Duration
                         </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
+                        <th className="px-6 py-3 text-left text-xs font-medium text-slate-700 uppercase tracking-wider">
                           Notes
                         </th>
                       </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
                       {symptoms.map((symptom) => (
-                        <tr key={symptom.id} className="hover:bg-gray-50">
+                        <tr key={symptom.id} className="hover:bg-slate-50">
                           <td className="px-6 py-4 whitespace-nowrap">
-                            <div className="text-sm font-medium text-gray-900">
+                            <div className="text-sm font-medium text-slate-900">
                               {symptom.symptom_name}
                             </div>
                           </td>
@@ -454,7 +454,7 @@ export const PatientVisitDetails: React.FC = () => {
                               <div className={`px-3 py-1 rounded-full text-xs font-medium ${getSeverityColor(symptom.severity)}`}>
                                 {getSeverityLabel(symptom.severity)} ({symptom.severity}/10)
                               </div>
-                              <div className="ml-3 w-32 bg-gray-200 rounded-full h-2">
+                              <div className="ml-3 w-32 bg-slate-200 rounded-full h-2">
                                 <div 
                                   className="bg-blue-600 h-2 rounded-full"
                                   style={{ width: `${symptom.severity * 10}%` }}
@@ -463,13 +463,13 @@ export const PatientVisitDetails: React.FC = () => {
                             </div>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
-                            <div className="text-sm text-gray-900 flex items-center">
-                              <Clock className="h-4 w-4 mr-1 text-gray-400" />
+                            <div className="text-sm text-slate-900 flex items-center">
+                              <Clock className="h-4 w-4 mr-1 text-slate-400" />
                               {symptom.duration_days} days
                             </div>
                           </td>
                           <td className="px-6 py-4">
-                            <div className="text-sm text-gray-900 max-w-xs">
+                            <div className="text-sm text-slate-900 max-w-xs">
                               {symptom.notes || "No additional notes"}
                             </div>
                           </td>
@@ -491,38 +491,38 @@ export const PatientVisitDetails: React.FC = () => {
                     <Stethoscope className="h-5 w-5 text-green-600" />
                   </div>
                 </div>
-                <h3 className="ml-3 text-lg font-semibold text-gray-900">Diagnoses</h3>
-                <span className="ml-auto px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                <h3 className="ml-3 text-lg font-semibold text-slate-900">Diagnoses</h3>
+                <span className="ml-auto px-3 py-1 rounded-full text-xs font-medium bg-slate-100 text-slate-800">
                   {diagnoses.length} diagnoses
                 </span>
               </div>
 
               {diagnoses.length === 0 ? (
-                <div className="text-center py-6 text-gray-500">
+                <div className="text-center py-6 text-slate-500">
                   No diagnoses recorded for this visit
                 </div>
               ) : (
                 <div className="space-y-4">
                   {diagnoses.map((diagnosis) => (
-                    <div key={diagnosis.diagnosis_id} className="border border-gray-200 rounded-lg p-4 hover:bg-gray-50">
+                    <div key={diagnosis.diagnosis_id} className="border border-gray-200 rounded-lg p-4 hover:bg-slate-50">
                       <div className="flex justify-between items-start">
                         <div>
-                          <h4 className="text-md font-semibold text-gray-900">
+                          <h4 className="text-md font-semibold text-slate-900">
                             {diagnosis.disease_name}
                           </h4>
                           <div className="mt-2 grid grid-cols-1 md:grid-cols-3 gap-4">
                             <div>
-                              <p className="text-sm font-medium text-gray-700">Diagnosis Date</p>
-                              <p className="text-sm text-gray-900">{formatDate(diagnosis.diagnosis_date)}</p>
+                              <p className="text-sm font-medium text-slate-700">Diagnosis Date</p>
+                              <p className="text-sm text-slate-900">{formatDate(diagnosis.diagnosis_date)}</p>
                             </div>
                             <div>
-                              <p className="text-sm font-medium text-gray-700">Confidence Score</p>
-                              <p className="text-sm font-semibold text-gray-900">
+                              <p className="text-sm font-medium text-slate-700">Confidence Score</p>
+                              <p className="text-sm font-semibold text-slate-900">
                                 {formatConfidenceScore(diagnosis.confidence_score)}
                               </p>
                             </div>
                             <div>
-                              <p className="text-sm font-medium text-gray-700">Status</p>
+                              <p className="text-sm font-medium text-slate-700">Status</p>
                               <span className={`px-2 py-1 rounded-full text-xs font-medium ${getDiagnosisStatusColor(diagnosis.status)}`}>
                                 {diagnosis.status.charAt(0).toUpperCase() + diagnosis.status.slice(1)}
                               </span>
@@ -530,14 +530,14 @@ export const PatientVisitDetails: React.FC = () => {
                           </div>
                           {diagnosis.ml_model_used && (
                             <div className="mt-3">
-                              <p className="text-sm font-medium text-gray-700">AI Model Used</p>
-                              <p className="text-sm text-gray-900">{diagnosis.ml_model_used}</p>
+                              <p className="text-sm font-medium text-slate-700">AI Model Used</p>
+                              <p className="text-sm text-slate-900">{diagnosis.ml_model_used}</p>
                             </div>
                           )}
                           {diagnosis.notes && (
                             <div className="mt-3">
-                              <p className="text-sm font-medium text-gray-700">Notes</p>
-                              <p className="text-sm text-gray-900">{diagnosis.notes}</p>
+                              <p className="text-sm font-medium text-slate-700">Notes</p>
+                              <p className="text-sm text-slate-900">{diagnosis.notes}</p>
                             </div>
                           )}
                         </div>

@@ -56,11 +56,11 @@ export const PatientPredictions: React.FC = () => {
       <div className="space-y-6">
         <div className="flex justify-between items-center">
           <div>
-            <h2 className="text-2xl font-bold text-gray-900">Health Predictions</h2>
-            <p className="text-gray-600 mt-1">AI-powered progression forecasts</p>
+            <h2 className="text-2xl font-bold text-slate-900">Health Predictions</h2>
+            <p className="text-slate-600 mt-1">AI-powered progression forecasts</p>
           </div>
           <div>
-            <label className="text-sm text-gray-600 mr-2">Forecast Period:</label>
+            <label className="text-sm text-slate-600 mr-2">Forecast Period:</label>
             <select
               value={selectedMonths}
               onChange={(e) => setSelectedMonths(Number(e.target.value))}
@@ -78,7 +78,7 @@ export const PatientPredictions: React.FC = () => {
 
         {predictions.length === 0 && !error ? (
           <div className="bg-white rounded-lg shadow p-8 text-center">
-            <p className="text-gray-600">No prediction data available. Please check back after you have more medical history.</p>
+            <p className="text-slate-600">No prediction data available. Please check back after you have more medical history.</p>
           </div>
         ) : (
           <div className="space-y-6">
@@ -93,8 +93,8 @@ export const PatientPredictions: React.FC = () => {
                 <div key={index} className="bg-white rounded-lg shadow p-6">
                   <div className="flex justify-between items-start mb-4">
                     <div>
-                      <h3 className="text-lg font-semibold text-gray-900">{prediction.disease_name}</h3>
-                      <p className="text-sm text-gray-600 mt-1">Current Status: {prediction.current_status}</p>
+                      <h3 className="text-lg font-semibold text-slate-900">{prediction.disease_name}</h3>
+                      <p className="text-sm text-slate-600 mt-1">Current Status: {prediction.current_status}</p>
                     </div>
                     <span className={`px-3 py-1 rounded-full text-sm font-medium ${getRiskLevelColor(prediction.risk_level)}`}>
                       {prediction.risk_level} Risk

@@ -268,7 +268,7 @@ export const PatientTimeline: React.FC = () => {
     if (stage.toLowerCase().includes('improving')) return <CheckCircle className="text-green-500" />;
     if (stage.toLowerCase().includes('worsening') || stage.includes('ESRD')) return <AlertCircle className="text-red-500" />;
     if (stage.toLowerCase().includes('stable')) return <Info className="text-blue-500" />;
-    return <Info className="text-gray-500" />;
+    return <Info className="text-slate-500" />;
   };
 
   if (isLoading) {
@@ -290,13 +290,13 @@ export const PatientTimeline: React.FC = () => {
         <div className="bg-white rounded-lg shadow p-6">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div>
-              <h2 className="text-2xl font-bold text-gray-900">Disease Progression Timeline</h2>
-              <p className="text-gray-600 mt-1">Track disease progression and severity over time</p>
+              <h2 className="text-2xl font-bold text-slate-900">Disease Progression Timeline</h2>
+              <p className="text-slate-600 mt-1">Track disease progression and severity over time</p>
             </div>
             
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Select Disease</label>
+                <label className="block text-sm font-medium text-slate-700 mb-1">Select Disease</label>
                 <select
                   value={selectedDisease}
                   onChange={(e) => setSelectedDisease(e.target.value)}
@@ -312,8 +312,8 @@ export const PatientTimeline: React.FC = () => {
               
               {report && (
                 <div className="px-4 py-2 bg-blue-50 rounded-lg">
-                  <p className="text-sm text-gray-600">Report Generated</p>
-                  <p className="text-sm font-medium text-gray-900">
+                  <p className="text-sm text-slate-600">Report Generated</p>
+                  <p className="text-sm font-medium text-slate-900">
                     {new Date(report.generated_at).toLocaleDateString('en-US', {
                       month: 'long',
                       day: 'numeric',
@@ -336,12 +336,12 @@ export const PatientTimeline: React.FC = () => {
           <>
             {/* Current Status Card */}
             <div className="bg-white rounded-lg shadow p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Current Status</h3>
+              <h3 className="text-lg font-semibold text-slate-900 mb-4">Current Status</h3>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div className="p-4 border border-gray-200 rounded-lg">
                   <div className="flex items-center gap-3 mb-2">
                     {getStatusIcon(report.current_stage)}
-                    <span className="font-medium text-gray-900">Current Stage</span>
+                    <span className="font-medium text-slate-900">Current Stage</span>
                   </div>
                   <div 
                     className="text-2xl font-bold py-2 px-3 rounded"
@@ -357,12 +357,12 @@ export const PatientTimeline: React.FC = () => {
                 <div className="p-4 border border-gray-200 rounded-lg">
                   <div className="flex items-center gap-3 mb-2">
                     <TrendingUp className="text-purple-500" />
-                    <span className="font-medium text-gray-900">Predicted Progression</span>
+                    <span className="font-medium text-slate-900">Predicted Progression</span>
                   </div>
                   <div className="text-2xl font-bold text-purple-600 py-2">
                     {report.predicted_progression}
                   </div>
-                  <div className="text-sm text-gray-600">
+                  <div className="text-sm text-slate-600">
                     Confidence: {(report.confidence_score * 100).toFixed(1)}%
                   </div>
                 </div>
@@ -370,7 +370,7 @@ export const PatientTimeline: React.FC = () => {
                 <div className="p-4 border border-gray-200 rounded-lg">
                   <div className="flex items-center gap-3 mb-2">
                     <AlertCircle className="text-orange-500" />
-                    <span className="font-medium text-gray-900">Severity Score</span>
+                    <span className="font-medium text-slate-900">Severity Score</span>
                   </div>
                   <div className="flex items-center gap-4">
                     <div 
@@ -382,7 +382,7 @@ export const PatientTimeline: React.FC = () => {
                     >
                       {report.progression_timeline[report.progression_timeline.length - 1]?.severity_score.toFixed(1) || 'N/A'}
                     </div>
-                    <div className="text-sm text-gray-600">
+                    <div className="text-sm text-slate-600">
                       Scale: 0-10 (10 = most severe)
                     </div>
                   </div>
@@ -392,7 +392,7 @@ export const PatientTimeline: React.FC = () => {
 
             {/* Timeline Chart */}
             <div className="bg-white rounded-lg shadow p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Progression Timeline</h3>
+              <h3 className="text-lg font-semibold text-slate-900 mb-4">Progression Timeline</h3>
               <div className="h-96">
                 <ResponsiveContainer width="100%" height="100%">
                   <ScatterChart margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
@@ -424,19 +424,19 @@ export const PatientTimeline: React.FC = () => {
                           const data = payload[0].payload;
                           return (
                             <div className="bg-white p-4 border border-gray-200 rounded-lg shadow-lg">
-                              <p className="font-semibold text-gray-900">{data.date}</p>
-                              <p className="text-sm text-gray-600 mt-1">
+                              <p className="font-semibold text-slate-900">{data.date}</p>
+                              <p className="text-sm text-slate-600 mt-1">
                                 <span className="font-medium">Stage:</span>{' '}
                                 <span style={{ color: data.color }}>{data.stage}</span>
                               </p>
-                              <p className="text-sm text-gray-600">
+                              <p className="text-sm text-slate-600">
                                 <span className="font-medium">Severity:</span> {data.severity}
                               </p>
-                              <p className="text-sm text-gray-600">
+                              <p className="text-sm text-slate-600">
                                 <span className="font-medium">Confidence:</span> {(data.confidence * 100).toFixed(0)}%
                               </p>
                               {data.notes && (
-                                <p className="text-sm text-gray-600 mt-2 italic">"{data.notes}"</p>
+                                <p className="text-sm text-slate-600 mt-2 italic">"{data.notes}"</p>
                               )}
                             </div>
                           );
@@ -480,13 +480,13 @@ export const PatientTimeline: React.FC = () => {
 
             {/* Progression Timeline Details */}
             <div className="bg-white rounded-lg shadow p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Detailed Progression History</h3>
+              <h3 className="text-lg font-semibold text-slate-900 mb-4">Detailed Progression History</h3>
               <div className="space-y-4">
                 {report.progression_timeline.map((entry, index) => (
                   <div key={index} className="relative pl-8 pb-6 last:pb-0">
                     {/* Timeline line */}
                     {index < report.progression_timeline.length - 1 && (
-                      <div className="absolute left-[15px] top-[24px] bottom-0 w-0.5 bg-gray-200" />
+                      <div className="absolute left-[15px] top-[24px] bottom-0 w-0.5 bg-slate-200" />
                     )}
                     
                     {/* Timeline dot */}
@@ -495,7 +495,7 @@ export const PatientTimeline: React.FC = () => {
                       style={{ backgroundColor: getStageColor(entry.progression_stage) }}
                     />
                     
-                    <div className="bg-gray-50 rounded-lg p-4">
+                    <div className="bg-slate-50 rounded-lg p-4">
                       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-3">
                         <div>
                           <div className="flex flex-wrap items-center gap-3">
@@ -505,7 +505,7 @@ export const PatientTimeline: React.FC = () => {
                             >
                               {entry.progression_stage}
                             </span>
-                            <span className="text-sm text-gray-500">
+                            <span className="text-sm text-slate-500">
                               {new Date(entry.date).toLocaleDateString('en-US', {
                                 month: 'long',
                                 day: 'numeric',
@@ -519,7 +519,7 @@ export const PatientTimeline: React.FC = () => {
                         
                         <div className="flex items-center gap-6">
                           <div className="text-center">
-                            <div className="text-sm text-gray-600">Severity</div>
+                            <div className="text-sm text-slate-600">Severity</div>
                             <div 
                               className="text-lg font-bold"
                               style={{ color: getSeverityColor(entry.severity_score) }}
@@ -528,7 +528,7 @@ export const PatientTimeline: React.FC = () => {
                             </div>
                           </div>
                           <div className="text-center">
-                            <div className="text-sm text-gray-600">Confidence</div>
+                            <div className="text-sm text-slate-600">Confidence</div>
                             <div className="text-lg font-bold text-blue-600">
                               {(entry.confidence_score * 100).toFixed(0)}%
                             </div>
@@ -536,7 +536,7 @@ export const PatientTimeline: React.FC = () => {
                         </div>
                       </div>
                       
-                      <p className="text-gray-700 mb-3">{entry.notes}</p>
+                      <p className="text-slate-700 mb-3">{entry.notes}</p>
                       
                       {entry.doctor_notes && (
                         <div className="mt-3 p-3 bg-blue-50 border border-blue-100 rounded">
@@ -546,11 +546,11 @@ export const PatientTimeline: React.FC = () => {
                       )}
                       
                       {entry.visit_date && (
-                        <div className="mt-3 flex items-center gap-2 text-sm text-gray-600">
+                        <div className="mt-3 flex items-center gap-2 text-sm text-slate-600">
                           <Clock size={14} />
                           <span>Visit: {new Date(entry.visit_date).toLocaleDateString()}</span>
                           {entry.visit_type && (
-                            <span className="ml-2 px-2 py-1 bg-gray-100 rounded text-xs">
+                            <span className="ml-2 px-2 py-1 bg-slate-100 rounded text-xs">
                               {entry.visit_type}
                             </span>
                           )}
@@ -564,12 +564,12 @@ export const PatientTimeline: React.FC = () => {
 
             {/* Recommendations */}
             <div className="bg-white rounded-lg shadow p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Recommendations</h3>
+              <h3 className="text-lg font-semibold text-slate-900 mb-4">Recommendations</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {report.recommendations.map((recommendation, index) => (
-                  <div key={index} className="flex items-start gap-3 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                  <div key={index} className="flex items-start gap-3 p-4 border border-gray-200 rounded-lg hover:bg-slate-50 transition-colors">
                     <CheckCircle className="text-green-500 mt-0.5 flex-shrink-0" size={18} />
-                    <p className="text-gray-700">{recommendation}</p>
+                    <p className="text-slate-700">{recommendation}</p>
                   </div>
                 ))}
               </div>
@@ -578,7 +578,7 @@ export const PatientTimeline: React.FC = () => {
             {/* Risk Factors (if any) */}
             {report.risk_factors && report.risk_factors.length > 0 && (
               <div className="bg-white rounded-lg shadow p-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Risk Factors</h3>
+                <h3 className="text-lg font-semibold text-slate-900 mb-4">Risk Factors</h3>
                 <div className="flex flex-wrap gap-2">
                   {report.risk_factors.map((factor, index) => (
                     <span key={index} className="px-3 py-1 bg-red-100 text-red-800 rounded-full text-sm">
@@ -591,8 +591,8 @@ export const PatientTimeline: React.FC = () => {
           </>
         ) : (
           <div className="bg-white rounded-lg shadow p-8 text-center">
-            <TrendingUp className="mx-auto text-gray-400 mb-4" size={48} />
-            <p className="text-gray-600">No progression data available for {selectedDisease}</p>
+            <TrendingUp className="mx-auto text-slate-400 mb-4" size={48} />
+            <p className="text-slate-600">No progression data available for {selectedDisease}</p>
             <button
               onClick={fetchProgressionReport}
               className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"

@@ -9,7 +9,7 @@ import {
   Calendar,
   TrendingUp,
   Users,
-  Heart,
+  Heart
 } from "lucide-react";
 import { formatDate } from "../../utils/formatters";
 import { usePagination, useError, useLoading } from "../../utils/hooks";
@@ -214,8 +214,8 @@ export const PatientVisits: React.FC = () => {
     <Layout navItems={patientNavItems} title="Patient Portal">
       <div className="space-y-6">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">Visit History</h2>
-          <p className="text-gray-600 mt-1">
+          <h2 className="text-2xl font-bold text-slate-900">Visit History</h2>
+          <p className="text-slate-600 mt-1">
             Your medical visit records
           </p>
         </div>

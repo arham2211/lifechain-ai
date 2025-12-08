@@ -21,7 +21,7 @@ interface DataTableProps<T> {
   };
 }
 
-const glassContainer = 'backdrop-blur-xl bg-white/10 border border-white/20 rounded-2xl shadow-glow overflow-hidden';
+const glassContainer = 'glass-card rounded-3xl shadow-lg border border-slate-100 overflow-hidden';
 
 export function DataTable<T extends Record<string, any>>({
   data,
@@ -35,7 +35,7 @@ export function DataTable<T extends Record<string, any>>({
     return (
       <div className={glassContainer}>
         <div className="p-8 text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-teal-300 mx-auto"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-500 mx-auto"></div>
         </div>
       </div>
     );
@@ -44,7 +44,7 @@ export function DataTable<T extends Record<string, any>>({
   if (data.length === 0) {
     return (
       <div className={glassContainer}>
-        <div className="p-8 text-center text-white/70">{emptyMessage}</div>
+        <div className="p-8 text-center text-slate-600">{emptyMessage}</div>
       </div>
     );
   }
@@ -52,28 +52,28 @@ export function DataTable<T extends Record<string, any>>({
   return (
     <div className={glassContainer}>
       <div className="overflow-x-auto">
-        <table className="min-w-full divide-y divide-white/10 text-sm text-white">
-          <thead className="bg-white/5">
+        <table className="min-w-full divide-y divide-slate-200 text-sm text-slate-900">
+          <thead className="bg-slate-50">
             <tr >
               {columns.map((column) => (
                 <th
                   key={column.key}
-                  className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-[0.25em] text-white/60"
+                  className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-[0.25em] text-slate-500"
                 >
                   {column.label}
                 </th>
               ))}
             </tr>
           </thead>
-          <tbody className="divide-y divide-white/5">
+          <tbody className="divide-y divide-slate-100 bg-white">
             {data.map((item, index) => (
               <tr
                 key={index}
                 onClick={() => onRowClick?.(item)}
-                className={`${onRowClick ? 'cursor-pointer hover:bg-white/5' : ''} transition-colors`}
+                className={`${onRowClick ? 'cursor-pointer hover:bg-slate-50' : ''} transition-colors`}
               >
                 {columns.map((column) => (
-                  <td key={column.key} className="px-6 py-4 whitespace-nowrap text-white/80">
+                  <td key={column.key} className="px-6 py-4 whitespace-nowrap text-slate-700">
                     {column.render ? column.render(item) : item[column.key]}
                   </td>
                 ))}
@@ -83,22 +83,22 @@ export function DataTable<T extends Record<string, any>>({
         </table>
       </div>
       {pagination && (
-        <div className="bg-white/5 px-6 py-3 flex items-center justify-between border-t border-white/10 text-white/70">
-          <div className="text-sm">
+        <div className="bg-slate-50 px-6 py-3 flex items-center justify-between border-t border-slate-200 text-slate-600">
+          <div className="text-sm font-medium">
             Page {pagination.currentPage + 1} of {pagination.totalPages}
           </div>
           <div className="flex gap-2">
             <button
               onClick={pagination.onPrevPage}
               disabled={pagination.currentPage === 0}
-              className="px-3 py-1 rounded-xl border border-white/20 text-sm disabled:opacity-40 disabled:cursor-not-allowed hover:bg-white/10"
+              className="px-3 py-1 rounded-xl border border-slate-300 text-sm disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-100 transition-colors"
             >
               <ChevronLeft size={16} />
             </button>
             <button
               onClick={pagination.onNextPage}
               disabled={pagination.currentPage >= pagination.totalPages - 1}
-              className="px-3 py-1 rounded-xl border border-white/20 text-sm disabled:opacity-40 disabled:cursor-not-allowed hover:bg-white/10"
+              className="px-3 py-1 rounded-xl border border-slate-300 text-sm disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-100 transition-colors"
             >
               <ChevronRight size={16} />
             </button>

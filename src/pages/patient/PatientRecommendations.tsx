@@ -52,16 +52,16 @@ export const PatientRecommendations: React.FC = () => {
     <Layout navItems={patientNavItems} title="Patient Portal">
       <div className="space-y-6">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">AI Health Recommendations</h2>
-          <p className="text-gray-600 mt-1">Personalized health guidance based on your medical data</p>
+          <h2 className="text-2xl font-bold text-slate-900">AI Health Recommendations</h2>
+          <p className="text-slate-600 mt-1">Personalized health guidance based on your medical data</p>
         </div>
 
         {error && <ErrorMessage message={error} onClose={() => setError('')} />}
 
         {recommendations.length === 0 && !error ? (
           <div className="bg-white rounded-lg shadow p-8 text-center">
-            <Heart className="mx-auto text-gray-400 mb-4" size={48} />
-            <p className="text-gray-600">No recommendations available yet. Keep updating your medical records!</p>
+            <Heart className="mx-auto text-slate-400 mb-4" size={48} />
+            <p className="text-slate-600">No recommendations available yet. Keep updating your medical records!</p>
           </div>
         ) : (
           <div className="space-y-6">
@@ -69,11 +69,11 @@ export const PatientRecommendations: React.FC = () => {
               <div key={index} className="bg-white rounded-lg shadow p-6">
                 <div className="flex justify-between items-start mb-4">
                   <div>
-                    <h3 className="text-lg font-semibold text-gray-900">{rec.disease_name}</h3>
-                    <p className="text-sm text-gray-600 mt-1">Based on: {rec.based_on_data}</p>
+                    <h3 className="text-lg font-semibold text-slate-900">{rec.disease_name}</h3>
+                    <p className="text-sm text-slate-600 mt-1">Based on: {rec.based_on_data}</p>
                   </div>
                   <div className="text-right">
-                    <p className="text-sm text-gray-600">Confidence</p>
+                    <p className="text-sm text-slate-600">Confidence</p>
                     <p className="text-lg font-semibold text-primary">
                       {(rec.confidence_score * 100).toFixed(0)}%
                     </p>
@@ -106,9 +106,9 @@ export const PatientRecommendations: React.FC = () => {
                               <span className={`px-2 py-1 rounded text-xs font-medium ${priorityIcons[r.priority]}`}>
                                 {r.priority.toUpperCase()}
                               </span>
-                              <span className="text-sm text-gray-600 capitalize">{r.category}</span>
+                              <span className="text-sm text-slate-600 capitalize">{r.category}</span>
                             </div>
-                            <p className="text-gray-900">{r.recommendation}</p>
+                            <p className="text-slate-900">{r.recommendation}</p>
                           </div>
                         </div>
                       </div>

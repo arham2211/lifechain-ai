@@ -251,11 +251,11 @@ export const PatientReportDetails: React.FC = () => {
       <Layout navItems={patientNavItems} title="Patient Portal">
         <div className="container mx-auto px-4 py-8">
           <div className="text-center py-12">
-            <FileText className="mx-auto h-12 w-12 text-gray-400" />
-            <h3 className="mt-2 text-lg font-medium text-gray-900">
+            <FileText className="mx-auto h-12 w-12 text-slate-400" />
+            <h3 className="mt-2 text-lg font-medium text-slate-900">
               Report not found
             </h3>
-            <p className="mt-1 text-gray-500">
+            <p className="mt-1 text-slate-500">
               The requested lab report could not be found.
             </p>
             <button
@@ -284,8 +284,8 @@ export const PatientReportDetails: React.FC = () => {
             <ArrowLeft className="h-4 w-4 mr-1" />
             Back to Reports
           </button>
-          <h1 className="text-3xl font-bold text-gray-900">Lab Report Details</h1>
-          <p className="text-gray-600 mt-2">
+          <h1 className="text-3xl font-bold text-slate-900">Lab Report Details</h1>
+          <p className="text-slate-600 mt-2">
             Detailed view of your laboratory test report
           </p>
         </div>
@@ -304,23 +304,23 @@ export const PatientReportDetails: React.FC = () => {
                     </div>
                   </div>
                   <div>
-                    <h3 className="text-lg font-semibold text-gray-900">
+                    <h3 className="text-lg font-semibold text-slate-900">
                       {report.report_type || "Laboratory Report"}
                     </h3>
-                    <div className="mt-1 flex flex-wrap items-center gap-2 text-sm text-gray-600">
+                    <div className="mt-1 flex flex-wrap items-center gap-2 text-sm text-slate-600">
                       <span className="inline-flex items-center">
                         <Calendar className="h-4 w-4 mr-1" />
                         {formatDate(report.report_date)}
                       </span>
-                      <span className="text-gray-400">•</span>
+                      <span className="text-slate-400">•</span>
                       <span>{report.lab?.name || "Unknown Lab"}</span>
-                      <span className="text-gray-400">•</span>
+                      <span className="text-slate-400">•</span>
                       <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(report.status)}`}>
                         {report.status || "Unknown"}
                       </span>
                       {abnormalCount > 0 && (
                         <>
-                          <span className="text-gray-400">•</span>
+                          <span className="text-slate-400">•</span>
                           <span className="inline-flex items-center text-red-600">
                             <AlertCircle className="h-4 w-4 mr-1" />
                             {abnormalCount} abnormal result{abnormalCount > 1 ? 's' : ''}
@@ -330,19 +330,19 @@ export const PatientReportDetails: React.FC = () => {
                     </div>
                   </div>
                 </div>
-                <div className="mt-4 text-sm text-gray-700 grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="mt-4 text-sm text-slate-700 grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <p className="font-medium">Report ID:</p>
-                    <p className="text-gray-600">{report.report_id}</p>
+                    <p className="text-slate-600">{report.report_id}</p>
                   </div>
                   <div>
                     <p className="font-medium">Lab ID:</p>
-                    <p className="text-gray-600">{report.lab_id}</p>
+                    <p className="text-slate-600">{report.lab_id}</p>
                   </div>
                   {report.patient_id && (
                     <div>
                       <p className="font-medium">Patient ID:</p>
-                      <p className="text-gray-600">{report.patient_id}</p>
+                      <p className="text-slate-600">{report.patient_id}</p>
                     </div>
                   )}
                 </div>
@@ -351,21 +351,21 @@ export const PatientReportDetails: React.FC = () => {
               <div className="flex items-center space-x-2 ml-4">
                 <button
                   onClick={downloadReport}
-                  className="p-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-colors"
+                  className="p-2 text-slate-600 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-colors"
                   title="Download Report"
                 >
                   <Download className="h-5 w-5" />
                 </button>
                 <button
                   onClick={printReport}
-                  className="p-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-colors"
+                  className="p-2 text-slate-600 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-colors"
                   title="Print Report"
                 >
                   <Printer className="h-5 w-5" />
                 </button>
                 <button
                   onClick={toggleResultsExpansion}
-                  className="p-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-colors"
+                  className="p-2 text-slate-600 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-colors"
                   title={isExpanded ? "Collapse Results" : "View Results"}
                 >
                   {isExpanded ? (
@@ -380,9 +380,9 @@ export const PatientReportDetails: React.FC = () => {
 
           {/* Test Results Section */}
           {isExpanded && (
-            <div className="border-t border-gray-200 bg-gray-50">
+            <div className="border-t border-gray-200 bg-slate-50">
               <div className="p-6">
-                <h4 className="text-md font-semibold text-gray-900 mb-4">
+                <h4 className="text-md font-semibold text-slate-900 mb-4">
                   Test Results
                 </h4>
                 
@@ -391,27 +391,27 @@ export const PatientReportDetails: React.FC = () => {
                     <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
                   </div>
                 ) : testResults.length === 0 ? (
-                  <div className="text-center py-8 text-gray-500">
+                  <div className="text-center py-8 text-slate-500">
                     No test results available for this report
                   </div>
                 ) : (
                   <div className="overflow-x-auto">
                     <table className="min-w-full divide-y divide-gray-200">
-                      <thead className="bg-gray-100">
+                      <thead className="bg-slate-100">
                         <tr>
-                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
+                          <th className="px-6 py-3 text-left text-xs font-medium text-slate-700 uppercase tracking-wider">
                             Test Name
                           </th>
-                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
+                          <th className="px-6 py-3 text-left text-xs font-medium text-slate-700 uppercase tracking-wider">
                             Result
                           </th>
-                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
+                          <th className="px-6 py-3 text-left text-xs font-medium text-slate-700 uppercase tracking-wider">
                             Reference Range
                           </th>
-                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
+                          <th className="px-6 py-3 text-left text-xs font-medium text-slate-700 uppercase tracking-wider">
                             Unit
                           </th>
-                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
+                          <th className="px-6 py-3 text-left text-xs font-medium text-slate-700 uppercase tracking-wider">
                             Status
                           </th>
                         </tr>
@@ -420,28 +420,28 @@ export const PatientReportDetails: React.FC = () => {
                         {testResults.map((result) => (
                           <tr 
                             key={result.result_id}
-                            className={result.is_abnormal ? "bg-red-50" : "hover:bg-gray-50"}
+                            className={result.is_abnormal ? "bg-red-50" : "hover:bg-slate-50"}
                           >
                             <td className="px-6 py-4 whitespace-nowrap">
-                              <div className="text-sm font-medium text-gray-900">
+                              <div className="text-sm font-medium text-slate-900">
                                 {result.test_name?.replace(/_/g, ' ').toLowerCase().replace(/\b\w/g, l => l.toUpperCase())}
                               </div>
-                              <div className="text-xs text-gray-500">
+                              <div className="text-xs text-slate-500">
                                 ID: {result.result_id}
                                 
                               </div>
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap">
-                              <div className={`text-sm font-semibold ${result.is_abnormal ? 'text-red-700' : 'text-gray-900'}`}>
+                              <div className={`text-sm font-semibold ${result.is_abnormal ? 'text-red-700' : 'text-slate-900'}`}>
                                 {result.test_value}
                               </div>
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap">
-                              <div className="text-sm text-gray-900">
+                              <div className="text-sm text-slate-900">
                                 {result.reference_range_min} - {result.reference_range_max}
                               </div>
                             </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-900">
                               {result.unit}
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap">
@@ -473,7 +473,7 @@ export const PatientReportDetails: React.FC = () => {
                 {testResults.length > 0 && (
                   <div className="mt-6 pt-4 border-t border-gray-200">
                     <div className="flex justify-between items-center">
-                      <div className="text-sm text-gray-600">
+                      <div className="text-sm text-slate-600">
                         <span className="font-medium">Total Tests:</span> {testResults.length}
                         {abnormalCount > 0 && (
                           <span className="ml-4 text-red-600">
@@ -481,7 +481,7 @@ export const PatientReportDetails: React.FC = () => {
                           </span>
                         )}
                       </div>
-                      <div className="text-xs text-gray-500">
+                      <div className="text-xs text-slate-500">
                         Generated: {formatDate(testResults[0]?.created_at)}
                       </div>
                     </div>

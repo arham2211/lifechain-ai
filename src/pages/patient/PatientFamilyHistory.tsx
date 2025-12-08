@@ -124,7 +124,7 @@
 //       case 'spouse': return 'bg-pink-100 text-pink-800';
 //       case 'grandparent': return 'bg-indigo-100 text-indigo-800';
 //       case 'grandchild': return 'bg-teal-100 text-teal-800';
-//       default: return 'bg-gray-100 text-gray-800';
+//       default: return 'bg-slate-100 text-slate-800';
 //     }
 //   };
 
@@ -171,8 +171,8 @@
 //     <Layout navItems={patientNavItems} title="Patient Portal">
 //       <div className="space-y-6">
 //         <div>
-//           <h2 className="text-2xl font-bold text-gray-900">Family Medical History</h2>
-//           <p className="text-gray-600 mt-1">View your family tree and genetic risk assessment</p>
+//           <h2 className="text-2xl font-bold text-slate-900">Family Medical History</h2>
+//           <p className="text-slate-600 mt-1">View your family tree and genetic risk assessment</p>
 //         </div>
 
 //         {error && <ErrorMessage message={error} onClose={() => setError('')} />}
@@ -187,8 +187,8 @@
 //                     <Users className="h-5 w-5 text-blue-600" />
 //                   </div>
 //                   <div className="ml-3">
-//                     <p className="text-sm text-gray-600">Total Relatives</p>
-//                     <p className="text-2xl font-bold text-gray-900">{familyTree.total_blood_relatives}</p>
+//                     <p className="text-sm text-slate-600">Total Relatives</p>
+//                     <p className="text-2xl font-bold text-slate-900">{familyTree.total_blood_relatives}</p>
 //                   </div>
 //                 </div>
 //               </div>
@@ -198,19 +198,19 @@
 //                     <AlertTriangle className="h-5 w-5 text-green-600" />
 //                   </div>
 //                   <div className="ml-3">
-//                     <p className="text-sm text-gray-600">With Diseases</p>
-//                     <p className="text-2xl font-bold text-gray-900">{familyTree.relatives_with_diseases}</p>
+//                     <p className="text-sm text-slate-600">With Diseases</p>
+//                     <p className="text-2xl font-bold text-slate-900">{familyTree.relatives_with_diseases}</p>
 //                   </div>
 //                 </div>
 //               </div>
 //               <div className="bg-white rounded-lg shadow p-4 border border-gray-200">
 //                 <div className="flex items-center">
-//                   <div className="p-2 bg-gray-100 rounded-lg">
-//                     <Stethoscope className="h-5 w-5 text-gray-600" />
+//                   <div className="p-2 bg-slate-100 rounded-lg">
+//                     <Stethoscope className="h-5 w-5 text-slate-600" />
 //                   </div>
 //                   <div className="ml-3">
-//                     <p className="text-sm text-gray-600">Healthy Relatives</p>
-//                     <p className="text-2xl font-bold text-gray-900">{familyTree.relatives_without_diseases}</p>
+//                     <p className="text-sm text-slate-600">Healthy Relatives</p>
+//                     <p className="text-2xl font-bold text-slate-900">{familyTree.relatives_without_diseases}</p>
 //                   </div>
 //                 </div>
 //               </div>
@@ -220,8 +220,8 @@
 //                     <Layers className="h-5 w-5 text-purple-600" />
 //                   </div>
 //                   <div className="ml-3">
-//                     <p className="text-sm text-gray-600">Family Depth</p>
-//                     <p className="text-2xl font-bold text-gray-900">{familyTree.max_depth} levels</p>
+//                     <p className="text-sm text-slate-600">Family Depth</p>
+//                     <p className="text-2xl font-bold text-slate-900">{familyTree.max_depth} levels</p>
 //                   </div>
 //                 </div>
 //               </div>
@@ -231,8 +231,8 @@
 //               {/* Family Tree List */}
 //               <div className="lg:col-span-2">
 //                 <div className="bg-white rounded-lg shadow p-6">
-//                   <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-//                     <Network className="text-gray-600" size={20} />
+//                   <h3 className="text-lg font-semibold text-slate-900 mb-4 flex items-center gap-2">
+//                     <Network className="text-slate-600" size={20} />
 //                     Family Tree
 //                   </h3>
 //                   <div className="space-y-3">
@@ -242,7 +242,7 @@
 //                         className={`border rounded-lg transition-all duration-200 ${
 //                           selectedMember?.patient_id === member.patient_id
 //                             ? 'border-blue-300 bg-blue-50'
-//                             : 'border-gray-200 hover:bg-gray-50'
+//                             : 'border-gray-200 hover:bg-slate-50'
 //                         }`}
 //                         style={getDepthStyle(member.depth)}
 //                       >
@@ -259,7 +259,7 @@
 //                                 <Users size={16} />
 //                               </div>
 //                               <div>
-//                                 <h4 className="font-medium text-gray-900">{member.name}</h4>
+//                                 <h4 className="font-medium text-slate-900">{member.name}</h4>
 //                                 <div className="flex items-center gap-2 mt-1">
 //                                   <span className={`px-2 py-0.5 rounded text-xs font-medium ${getRelationshipColor(member.relationship_type)}`}>
 //                                     {member.relationship_type}
@@ -268,7 +268,7 @@
 //                                     {member.gender}
 //                                   </span>
 //                                   {member.date_of_birth && (
-//                                     <span className="text-xs text-gray-600 flex items-center gap-1">
+//                                     <span className="text-xs text-slate-600 flex items-center gap-1">
 //                                       <Clock size={12} />
 //                                       Age: {calculateAge(member.date_of_birth)}
 //                                     </span>
@@ -286,7 +286,7 @@
 //                                   Healthy
 //                                 </span>
 //                               )}
-//                               <ChevronRight className={`h-4 w-4 text-gray-400 transition-transform ${
+//                               <ChevronRight className={`h-4 w-4 text-slate-400 transition-transform ${
 //                                 expandedMembers.has(member.patient_id) ? 'rotate-90' : ''
 //                               }`} />
 //                             </div>
@@ -296,17 +296,17 @@
 //                         {expandedMembers.has(member.patient_id) && member.total_diseases > 0 && (
 //                           <div className="px-4 pb-4 border-t border-gray-200">
 //                             <div className="mt-3">
-//                               <h5 className="text-sm font-medium text-gray-700 mb-2">Diagnosed Conditions:</h5>
+//                               <h5 className="text-sm font-medium text-slate-700 mb-2">Diagnosed Conditions:</h5>
 //                               <div className="space-y-2">
 //                                 {member.diagnoses.map((diagnosis, idx) => (
-//                                   <div key={idx} className="bg-gray-50 rounded p-3">
+//                                   <div key={idx} className="bg-slate-50 rounded p-3">
 //                                     <div className="flex justify-between items-start">
 //                                       <div>
-//                                         <span className="font-medium text-gray-900 capitalize">
+//                                         <span className="font-medium text-slate-900 capitalize">
 //                                           {diagnosis.disease_name}
 //                                         </span>
 //                                         {diagnosis.diagnosis_date && (
-//                                           <p className="text-xs text-gray-600 mt-1">
+//                                           <p className="text-xs text-slate-600 mt-1">
 //                                             Diagnosed: {formatDate(diagnosis.diagnosis_date)}
 //                                           </p>
 //                                         )}
@@ -315,13 +315,13 @@
 //                                         <span className="px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
 //                                           Confidence: {formatConfidenceScore(diagnosis.confidence_score)}
 //                                         </span>
-//                                         <p className="text-xs text-gray-600 mt-1 capitalize">
+//                                         <p className="text-xs text-slate-600 mt-1 capitalize">
 //                                           Status: {diagnosis.status}
 //                                         </p>
 //                                       </div>
 //                                     </div>
 //                                     {diagnosis.ml_model_used && (
-//                                       <p className="text-xs text-gray-500 mt-2">
+//                                       <p className="text-xs text-slate-500 mt-2">
 //                                         AI Model: {diagnosis.ml_model_used}
 //                                       </p>
 //                                     )}
@@ -340,8 +340,8 @@
 //               {/* Selected Member Details & Stats */}
 //               <div className="space-y-6">
 //                 <div className="bg-white rounded-lg shadow p-6">
-//                   <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-//                     <User className="text-gray-600" size={20} />
+//                   <h3 className="text-lg font-semibold text-slate-900 mb-4 flex items-center gap-2">
+//                     <User className="text-slate-600" size={20} />
 //                     Member Details
 //                   </h3>
 //                   {selectedMember ? (
@@ -351,19 +351,19 @@
 //                           <Users size={20} />
 //                         </div>
 //                         <div>
-//                           <h4 className="font-bold text-lg text-gray-900">{selectedMember.name}</h4>
-//                           <p className="text-sm text-gray-600">ID: {selectedMember.patient_id}</p>
+//                           <h4 className="font-bold text-lg text-slate-900">{selectedMember.name}</h4>
+//                           <p className="text-sm text-slate-600">ID: {selectedMember.patient_id}</p>
 //                         </div>
 //                       </div>
 
 //                       <div className="space-y-3">
 //                         <div>
-//                           <p className="text-sm font-medium text-gray-700">Relationship</p>
-//                           <p className="text-sm text-gray-900 capitalize">{selectedMember.relationship_type}</p>
+//                           <p className="text-sm font-medium text-slate-700">Relationship</p>
+//                           <p className="text-sm text-slate-900 capitalize">{selectedMember.relationship_type}</p>
 //                         </div>
 
 //                         <div>
-//                           <p className="text-sm font-medium text-gray-700">Gender</p>
+//                           <p className="text-sm font-medium text-slate-700">Gender</p>
 //                           <span className={`px-2 py-1 rounded text-xs font-medium ${getGenderColor(selectedMember.gender)}`}>
 //                             {selectedMember.gender}
 //                           </span>
@@ -371,8 +371,8 @@
 
 //                         {selectedMember.date_of_birth && (
 //                           <div>
-//                             <p className="text-sm font-medium text-gray-700">Date of Birth</p>
-//                             <p className="text-sm text-gray-900">
+//                             <p className="text-sm font-medium text-slate-700">Date of Birth</p>
+//                             <p className="text-sm text-slate-900">
 //                               {formatDate(selectedMember.date_of_birth)} 
 //                               <span className="ml-2 text-blue-600">
 //                                 ({calculateAge(selectedMember.date_of_birth)} years)
@@ -383,18 +383,18 @@
 
 //                         {selectedMember.cnic && (
 //                           <div>
-//                             <p className="text-sm font-medium text-gray-700">CNIC</p>
-//                             <p className="text-sm text-gray-900 font-mono">{selectedMember.cnic}</p>
+//                             <p className="text-sm font-medium text-slate-700">CNIC</p>
+//                             <p className="text-sm text-slate-900 font-mono">{selectedMember.cnic}</p>
 //                           </div>
 //                         )}
 
 //                         <div>
-//                           <p className="text-sm font-medium text-gray-700">Family Depth</p>
-//                           <p className="text-sm text-gray-900">Level {selectedMember.depth}</p>
+//                           <p className="text-sm font-medium text-slate-700">Family Depth</p>
+//                           <p className="text-sm text-slate-900">Level {selectedMember.depth}</p>
 //                         </div>
 
 //                         <div>
-//                           <p className="text-sm font-medium text-gray-700">Health Status</p>
+//                           <p className="text-sm font-medium text-slate-700">Health Status</p>
 //                           {selectedMember.total_diseases > 0 ? (
 //                             <div>
 //                               <span className="px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">
@@ -404,7 +404,7 @@
 //                                 {selectedMember.disease_names.map((disease, idx) => (
 //                                   <div key={idx} className="flex items-center">
 //                                     <AlertTriangle className="h-3 w-3 text-red-500 mr-2" />
-//                                     <span className="text-sm text-gray-900 capitalize">{disease}</span>
+//                                     <span className="text-sm text-slate-900 capitalize">{disease}</span>
 //                                   </div>
 //                                 ))}
 //                               </div>
@@ -418,8 +418,8 @@
 //                       </div>
 //                     </div>
 //                   ) : (
-//                     <div className="text-center py-8 text-gray-500">
-//                       <User className="mx-auto h-12 w-12 text-gray-300 mb-3" />
+//                     <div className="text-center py-8 text-slate-500">
+//                       <User className="mx-auto h-12 w-12 text-slate-300 mb-3" />
 //                       <p>Select a family member to view details</p>
 //                     </div>
 //                   )}
@@ -428,19 +428,19 @@
 //                 {/* Family Health Overview */}
 //                 {familyTree.relatives_with_diseases > 0 && (
 //                   <div className="bg-white rounded-lg shadow p-6">
-//                     <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-//                       <PieChart className="text-gray-600" size={20} />
+//                     <h3 className="text-lg font-semibold text-slate-900 mb-4 flex items-center gap-2">
+//                       <PieChart className="text-slate-600" size={20} />
 //                       Family Health Overview
 //                     </h3>
 //                     <div className="space-y-4">
 //                       <div>
 //                         <div className="flex justify-between text-sm mb-1">
-//                           <span className="text-gray-700">With Diseases:</span>
+//                           <span className="text-slate-700">With Diseases:</span>
 //                           <span className="font-medium text-red-600">
 //                             {familyTree.relatives_with_diseases} ({Math.round((familyTree.relatives_with_diseases / familyTree.total_blood_relatives) * 100)}%)
 //                           </span>
 //                         </div>
-//                         <div className="w-full bg-gray-200 rounded-full h-2">
+//                         <div className="w-full bg-slate-200 rounded-full h-2">
 //                           <div 
 //                             className="bg-red-600 h-2 rounded-full"
 //                             style={{ width: `${(familyTree.relatives_with_diseases / familyTree.total_blood_relatives) * 100}%` }}
@@ -449,12 +449,12 @@
 //                       </div>
 //                       <div>
 //                         <div className="flex justify-between text-sm mb-1">
-//                           <span className="text-gray-700">Healthy Relatives:</span>
+//                           <span className="text-slate-700">Healthy Relatives:</span>
 //                           <span className="font-medium text-green-600">
 //                             {familyTree.relatives_without_diseases} ({Math.round((familyTree.relatives_without_diseases / familyTree.total_blood_relatives) * 100)}%)
 //                           </span>
 //                         </div>
-//                         <div className="w-full bg-gray-200 rounded-full h-2">
+//                         <div className="w-full bg-slate-200 rounded-full h-2">
 //                           <div 
 //                             className="bg-green-600 h-2 rounded-full"
 //                             style={{ width: `${(familyTree.relatives_without_diseases / familyTree.total_blood_relatives) * 100}%` }}
@@ -466,7 +466,7 @@
 //                     {/* Genetic Risk Assessment */}
 //                     {familyTree.relatives_with_diseases > 0 && (
 //                       <div className="mt-6 pt-6 border-t border-gray-200">
-//                         <h4 className="font-medium text-gray-900 mb-3">Genetic Risk Insight</h4>
+//                         <h4 className="font-medium text-slate-900 mb-3">Genetic Risk Insight</h4>
 //                         <div className="p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
 //                           <div className="flex items-start gap-2">
 //                             <AlertTriangle className="text-yellow-600 mt-0.5" size={16} />
@@ -767,7 +767,7 @@ export const PatientFamilyHistory: React.FC = () => {
       case 'spouse': return 'bg-pink-100 text-pink-800';
       case 'grandparent': return 'bg-indigo-100 text-indigo-800';
       case 'great-grandparent': return 'bg-amber-100 text-amber-800';
-      default: return 'bg-gray-100 text-gray-800';
+      default: return 'bg-slate-100 text-slate-800';
     }
   };
 
@@ -814,8 +814,8 @@ export const PatientFamilyHistory: React.FC = () => {
     <Layout navItems={patientNavItems} title="Patient Portal">
       <div className="space-y-6">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">Family Medical History</h2>
-          <p className="text-gray-600 mt-1">View your family tree and genetic risk assessment</p>
+          <h2 className="text-2xl font-bold text-slate-900">Family Medical History</h2>
+          <p className="text-slate-600 mt-1">View your family tree and genetic risk assessment</p>
         </div>
 
         {error && <ErrorMessage message={error} onClose={() => setError('')} />}
@@ -830,8 +830,8 @@ export const PatientFamilyHistory: React.FC = () => {
                     <Users className="h-5 w-5 text-blue-600" />
                   </div>
                   <div className="ml-3">
-                    <p className="text-sm text-gray-600">Total Relatives</p>
-                    <p className="text-2xl font-bold text-gray-900">{familyTree.total_blood_relatives}</p>
+                    <p className="text-sm text-slate-600">Total Relatives</p>
+                    <p className="text-2xl font-bold text-slate-900">{familyTree.total_blood_relatives}</p>
                   </div>
                 </div>
               </div>
@@ -841,8 +841,8 @@ export const PatientFamilyHistory: React.FC = () => {
                     <AlertTriangle className="h-5 w-5 text-red-600" />
                   </div>
                   <div className="ml-3">
-                    <p className="text-sm text-gray-600">With Diseases</p>
-                    <p className="text-2xl font-bold text-gray-900">{familyTree.relatives_with_diseases}</p>
+                    <p className="text-sm text-slate-600">With Diseases</p>
+                    <p className="text-2xl font-bold text-slate-900">{familyTree.relatives_with_diseases}</p>
                   </div>
                 </div>
               </div>
@@ -852,8 +852,8 @@ export const PatientFamilyHistory: React.FC = () => {
                     <Stethoscope className="h-5 w-5 text-green-600" />
                   </div>
                   <div className="ml-3">
-                    <p className="text-sm text-gray-600">Healthy Relatives</p>
-                    <p className="text-2xl font-bold text-gray-900">{familyTree.relatives_without_diseases}</p>
+                    <p className="text-sm text-slate-600">Healthy Relatives</p>
+                    <p className="text-2xl font-bold text-slate-900">{familyTree.relatives_without_diseases}</p>
                   </div>
                 </div>
               </div>
@@ -863,8 +863,8 @@ export const PatientFamilyHistory: React.FC = () => {
                     <Layers className="h-5 w-5 text-purple-600" />
                   </div>
                   <div className="ml-3">
-                    <p className="text-sm text-gray-600">Family Depth</p>
-                    <p className="text-2xl font-bold text-gray-900">{familyTree.max_depth} levels</p>
+                    <p className="text-sm text-slate-600">Family Depth</p>
+                    <p className="text-2xl font-bold text-slate-900">{familyTree.max_depth} levels</p>
                   </div>
                 </div>
               </div>
@@ -875,11 +875,11 @@ export const PatientFamilyHistory: React.FC = () => {
               <div className="lg:col-span-2">
                 <div className="bg-white rounded-lg shadow p-6">
                   <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
-                      <Network className="text-gray-600" size={20} />
+                    <h3 className="text-lg font-semibold text-slate-900 flex items-center gap-2">
+                      <Network className="text-slate-600" size={20} />
                       Family Tree (Depth: {familyTree.max_depth})
                     </h3>
-                    <div className="text-sm text-gray-500">
+                    <div className="text-sm text-slate-500">
                       {familyTree.family_tree.length} members
                     </div>
                   </div>
@@ -890,7 +890,7 @@ export const PatientFamilyHistory: React.FC = () => {
                         className={`border rounded-lg transition-all duration-200 ${
                           selectedMember?.patient_id === member.patient_id
                             ? 'border-blue-300 bg-blue-50'
-                            : 'border-gray-200 hover:bg-gray-50'
+                            : 'border-gray-200 hover:bg-slate-50'
                         }`}
                         style={getDepthStyle(member.depth)}
                       >
@@ -907,7 +907,7 @@ export const PatientFamilyHistory: React.FC = () => {
                                 <Users size={16} />
                               </div>
                               <div>
-                                <h4 className="font-medium text-gray-900">{member.name}</h4>
+                                <h4 className="font-medium text-slate-900">{member.name}</h4>
                                 <div className="flex flex-wrap items-center gap-2 mt-1">
                                   <span className={`px-2 py-0.5 rounded text-xs font-medium ${getRelationshipColor(member.relationship_type)}`}>
                                     {member.relationship_type.charAt(0).toUpperCase() + member.relationship_type.slice(1).replace('-', ' ')}
@@ -916,12 +916,12 @@ export const PatientFamilyHistory: React.FC = () => {
                                     {member.gender}
                                   </span>
                                   {member.date_of_birth && (
-                                    <span className="text-xs text-gray-600 flex items-center gap-1">
+                                    <span className="text-xs text-slate-600 flex items-center gap-1">
                                       <Clock size={12} />
                                       Age: {calculateAge(member.date_of_birth)}
                                     </span>
                                   )}
-                                  <span className="text-xs text-gray-500">
+                                  <span className="text-xs text-slate-500">
                                     Depth: {member.depth}
                                   </span>
                                 </div>
@@ -937,7 +937,7 @@ export const PatientFamilyHistory: React.FC = () => {
                                   Healthy
                                 </span>
                               )}
-                              <ChevronRight className={`h-4 w-4 text-gray-400 transition-transform ${
+                              <ChevronRight className={`h-4 w-4 text-slate-400 transition-transform ${
                                 expandedMembers.has(member.patient_id) ? 'rotate-90' : ''
                               }`} />
                             </div>
@@ -947,35 +947,35 @@ export const PatientFamilyHistory: React.FC = () => {
                         {expandedMembers.has(member.patient_id) && member.total_diseases > 0 && (
                           <div className="px-4 pb-4 border-t border-gray-200">
                             <div className="mt-3">
-                              <h5 className="text-sm font-medium text-gray-700 mb-2">Diagnosed Conditions:</h5>
+                              <h5 className="text-sm font-medium text-slate-700 mb-2">Diagnosed Conditions:</h5>
                               <div className="space-y-2">
                                 {member.diagnoses.map((diagnosis, idx) => (
-                                  <div key={idx} className="bg-gray-50 rounded p-3">
+                                  <div key={idx} className="bg-slate-50 rounded p-3">
                                     <div className="flex justify-between items-start">
                                       <div>
-                                        <span className="font-medium text-gray-900 capitalize">
+                                        <span className="font-medium text-slate-900 capitalize">
                                           {diagnosis.disease_name.replace('_', ' ')}
                                         </span>
                                         {diagnosis.diagnosis_date && (
-                                          <p className="text-xs text-gray-600 mt-1">
+                                          <p className="text-xs text-slate-600 mt-1">
                                             Diagnosed: {formatDate(diagnosis.diagnosis_date)}
                                           </p>
                                         )}
                                         {diagnosis.notes && (
-                                          <p className="text-xs text-gray-500 mt-1">{diagnosis.notes}</p>
+                                          <p className="text-xs text-slate-500 mt-1">{diagnosis.notes}</p>
                                         )}
                                       </div>
                                       <div className="text-right">
                                         <span className="px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
                                           Confidence: {formatConfidenceScore(diagnosis.confidence_score)}
                                         </span>
-                                        <p className="text-xs text-gray-600 mt-1 capitalize">
+                                        <p className="text-xs text-slate-600 mt-1 capitalize">
                                           Status: {diagnosis.status}
                                         </p>
                                       </div>
                                     </div>
                                     {diagnosis.ml_model_used && (
-                                      <p className="text-xs text-gray-500 mt-2">
+                                      <p className="text-xs text-slate-500 mt-2">
                                         AI Model: {diagnosis.ml_model_used}
                                       </p>
                                     )}
@@ -994,8 +994,8 @@ export const PatientFamilyHistory: React.FC = () => {
               {/* Selected Member Details & Stats */}
               <div className="space-y-6">
                 <div className="bg-white rounded-lg shadow p-6">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                    <User className="text-gray-600" size={20} />
+                  <h3 className="text-lg font-semibold text-slate-900 mb-4 flex items-center gap-2">
+                    <User className="text-slate-600" size={20} />
                     Member Details
                   </h3>
                   {selectedMember ? (
@@ -1005,21 +1005,21 @@ export const PatientFamilyHistory: React.FC = () => {
                           <Users size={20} />
                         </div>
                         <div>
-                          <h4 className="font-bold text-lg text-gray-900">{selectedMember.name}</h4>
-                          <p className="text-sm text-gray-600">ID: {selectedMember.patient_id}</p>
+                          <h4 className="font-bold text-lg text-slate-900">{selectedMember.name}</h4>
+                          <p className="text-sm text-slate-600">ID: {selectedMember.patient_id}</p>
                         </div>
                       </div>
 
                       <div className="space-y-3">
                         <div>
-                          <p className="text-sm font-medium text-gray-700">Relationship</p>
-                          <p className="text-sm text-gray-900 capitalize">
+                          <p className="text-sm font-medium text-slate-700">Relationship</p>
+                          <p className="text-sm text-slate-900 capitalize">
                             {selectedMember.relationship_type.charAt(0).toUpperCase() + selectedMember.relationship_type.slice(1).replace('-', ' ')}
                           </p>
                         </div>
 
                         <div>
-                          <p className="text-sm font-medium text-gray-700">Gender</p>
+                          <p className="text-sm font-medium text-slate-700">Gender</p>
                           <span className={`px-2 py-1 rounded text-xs font-medium ${getGenderColor(selectedMember.gender)}`}>
                             {selectedMember.gender}
                           </span>
@@ -1027,8 +1027,8 @@ export const PatientFamilyHistory: React.FC = () => {
 
                         {selectedMember.date_of_birth && (
                           <div>
-                            <p className="text-sm font-medium text-gray-700">Date of Birth</p>
-                            <p className="text-sm text-gray-900">
+                            <p className="text-sm font-medium text-slate-700">Date of Birth</p>
+                            <p className="text-sm text-slate-900">
                               {formatDate(selectedMember.date_of_birth)} 
                               <span className="ml-2 text-blue-600">
                                 ({calculateAge(selectedMember.date_of_birth)} years)
@@ -1039,18 +1039,18 @@ export const PatientFamilyHistory: React.FC = () => {
 
                         {selectedMember.cnic && (
                           <div>
-                            <p className="text-sm font-medium text-gray-700">CNIC</p>
-                            <p className="text-sm text-gray-900 font-mono">{selectedMember.cnic}</p>
+                            <p className="text-sm font-medium text-slate-700">CNIC</p>
+                            <p className="text-sm text-slate-900 font-mono">{selectedMember.cnic}</p>
                           </div>
                         )}
 
                         <div>
-                          <p className="text-sm font-medium text-gray-700">Family Depth</p>
-                          <p className="text-sm text-gray-900">Level {selectedMember.depth}</p>
+                          <p className="text-sm font-medium text-slate-700">Family Depth</p>
+                          <p className="text-sm text-slate-900">Level {selectedMember.depth}</p>
                         </div>
 
                         <div>
-                          <p className="text-sm font-medium text-gray-700">Health Status</p>
+                          <p className="text-sm font-medium text-slate-700">Health Status</p>
                           {selectedMember.total_diseases > 0 ? (
                             <div>
                               <span className="px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">
@@ -1060,7 +1060,7 @@ export const PatientFamilyHistory: React.FC = () => {
                                 {selectedMember.disease_names.map((disease, idx) => (
                                   <div key={idx} className="flex items-center">
                                     <AlertTriangle className="h-3 w-3 text-red-500 mr-2" />
-                                    <span className="text-sm text-gray-900 capitalize">{disease.replace('_', ' ')}</span>
+                                    <span className="text-sm text-slate-900 capitalize">{disease.replace('_', ' ')}</span>
                                   </div>
                                 ))}
                               </div>
@@ -1074,8 +1074,8 @@ export const PatientFamilyHistory: React.FC = () => {
                       </div>
                     </div>
                   ) : (
-                    <div className="text-center py-8 text-gray-500">
-                      <User className="mx-auto h-12 w-12 text-gray-300 mb-3" />
+                    <div className="text-center py-8 text-slate-500">
+                      <User className="mx-auto h-12 w-12 text-slate-300 mb-3" />
                       <p>Select a family member to view details</p>
                     </div>
                   )}
@@ -1083,19 +1083,19 @@ export const PatientFamilyHistory: React.FC = () => {
 
                 {/* Family Health Overview */}
                 <div className="bg-white rounded-lg shadow p-6">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                    <PieChart className="text-gray-600" size={20} />
+                  <h3 className="text-lg font-semibold text-slate-900 mb-4 flex items-center gap-2">
+                    <PieChart className="text-slate-600" size={20} />
                     Family Health Overview
                   </h3>
                   <div className="space-y-4">
                     <div>
                       <div className="flex justify-between text-sm mb-1">
-                        <span className="text-gray-700">With Diseases:</span>
+                        <span className="text-slate-700">With Diseases:</span>
                         <span className="font-medium text-red-600">
                           {familyTree.relatives_with_diseases} ({Math.round((familyTree.relatives_with_diseases / familyTree.total_blood_relatives) * 100)}%)
                         </span>
                       </div>
-                      <div className="w-full bg-gray-200 rounded-full h-2">
+                      <div className="w-full bg-slate-200 rounded-full h-2">
                         <div 
                           className="bg-red-600 h-2 rounded-full"
                           style={{ width: `${(familyTree.relatives_with_diseases / familyTree.total_blood_relatives) * 100}%` }}
@@ -1104,12 +1104,12 @@ export const PatientFamilyHistory: React.FC = () => {
                     </div>
                     <div>
                       <div className="flex justify-between text-sm mb-1">
-                        <span className="text-gray-700">Healthy Relatives:</span>
+                        <span className="text-slate-700">Healthy Relatives:</span>
                         <span className="font-medium text-green-600">
                           {familyTree.relatives_without_diseases} ({Math.round((familyTree.relatives_without_diseases / familyTree.total_blood_relatives) * 100)}%)
                         </span>
                       </div>
-                      <div className="w-full bg-gray-200 rounded-full h-2">
+                      <div className="w-full bg-slate-200 rounded-full h-2">
                         <div 
                           className="bg-green-600 h-2 rounded-full"
                           style={{ width: `${(familyTree.relatives_without_diseases / familyTree.total_blood_relatives) * 100}%` }}
@@ -1120,7 +1120,7 @@ export const PatientFamilyHistory: React.FC = () => {
                   
                   {/* Genetic Risk Assessment */}
                   <div className="mt-6 pt-6 border-t border-gray-200">
-                    <h4 className="font-medium text-gray-900 mb-3">Genetic Risk Insight</h4>
+                    <h4 className="font-medium text-slate-900 mb-3">Genetic Risk Insight</h4>
                     <div className="p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
                       <div className="flex items-start gap-2">
                         <AlertTriangle className="text-yellow-600 mt-0.5" size={16} />

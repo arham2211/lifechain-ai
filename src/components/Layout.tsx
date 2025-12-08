@@ -31,12 +31,13 @@ export const Layout: React.FC<LayoutProps> = ({
   };
 
   return (
-    <div className="relative min-h-screen bg-teal-950 text-white overflow-hidden">
-      {/* <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute w-[30rem] h-[30rem] bg-teal-500/20 blur-[120px] -top-32 -left-10 animate-pulse" />
-        <div className="absolute w-[25rem] h-[25rem] bg-aqua-500/20 blur-[120px] bottom-0 right-0 animate-pulse delay-700" />
-        <div className="absolute w-72 h-72 bg-white/5 blur-[100px] top-1/3 left-1/2 -translate-x-1/2" />
-      </div> */}
+    <div className="relative min-h-screen bg-gradient-to-br from-gray-50 to-white overflow-hidden">
+      {/* Animated Background Blobs */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        <div className="absolute w-[500px] h-[500px] bg-gradient-to-r from-primary-200/40 to-secondary-200/40 rounded-full blur-[100px] opacity-70 -top-32 -left-10 animate-blob" />
+        <div className="absolute w-[400px] h-[400px] bg-gradient-to-l from-purple-200/30 to-blue-200/30 rounded-full blur-[100px] opacity-50 bottom-0 right-0 animate-blob animation-delay-2000" />
+        <div className="absolute w-[300px] h-[300px] bg-gradient-to-tr from-emerald-200/30 to-teal-200/30 rounded-full blur-[100px] opacity-40 top-1/3 left-1/2 -translate-x-1/2 animate-blob animation-delay-4000" />
+      </div>
 
       <div className="relative z-10 flex">
         {/* Sidebar */}
@@ -47,11 +48,11 @@ export const Layout: React.FC<LayoutProps> = ({
               : "-translate-x-full lg:translate-x-0"
           } w-72`}
         >
-          <div className="h-full backdrop-blur-2xl bg-white/10 border-r border-white/10 shadow-glow">
-            <div className="p-6 border-b border-white/10">
-              <p className="text-sm text-white/70">Welcome back</p>
-              <h1 className="text-2xl font-bold text-white mt-1">{title}</h1>
-              <p className="text-xs text-white/50 mt-2">{user?.email}</p>
+          <div className="h-full glass-card border-r border-slate-200 shadow-xl">
+            <div className="p-6 border-b border-slate-200">
+              <p className="text-sm text-slate-500 font-medium">Welcome back</p>
+              <h1 className="text-2xl font-bold text-slate-900 mt-1">{title}</h1>
+              <p className="text-xs text-slate-400 mt-2">{user?.email}</p>
             </div>
 
             <nav className="flex-1 overflow-y-auto p-4 space-y-2">
@@ -63,21 +64,21 @@ export const Layout: React.FC<LayoutProps> = ({
                     to={item.path}
                     className={`flex items-center gap-3 px-4 py-3 rounded-2xl transition-all ${
                       isActive
-                        ? "bg-white/20 border border-white/30 shadow-glow"
-                        : "text-white/70 hover:bg-white/10 hover:text-white"
+                        ? "bg-gradient-to-r from-primary-500 to-secondary-500 text-white shadow-lg shadow-primary-500/20"
+                        : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
                     }`}
                   >
-                    <span className="text-white">{item.icon}</span>
+                    <span className={isActive ? "text-white" : "text-slate-500"}>{item.icon}</span>
                     <span className="font-medium">{item.label}</span>
                   </Link>
                 );
               })}
             </nav>
 
-            <div className="p-4 border-t border-white/10">
+            <div className="p-4 border-t border-slate-200">
               <button
                 onClick={handleLogout}
-                className="w-full flex items-center gap-3 px-4 py-3 rounded-2xl bg-white/5 hover:bg-white/10 transition-colors text-white/80"
+                className="w-full flex items-center gap-3 px-4 py-3 rounded-2xl bg-slate-100 hover:bg-slate-200 transition-colors text-slate-700"
               >
                 <LogOut size={20} />
                 <span>Logout</span>
@@ -93,17 +94,17 @@ export const Layout: React.FC<LayoutProps> = ({
           }`}
         >
           {/* Header */}
-          <header className="flex items-center justify-between sticky top-0 z-30 backdrop-blur-xl bg-white/5 border-b border-white/10">
+          <header className="flex items-center justify-between sticky top-0 z-30 backdrop-blur-xl bg-white/80 border-b border-slate-200 shadow-sm">
             <div className="flex items-center justify-between px-6 py-4">
               <button
                 onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-                className="text-white/70 hover:text-white transition-colors lg:hidden"
+                className="text-slate-600 hover:text-slate-900 transition-colors lg:hidden"
               >
                 {isSidebarOpen ? <X size={24} /> : <Menu size={24} />}
               </button>
-              <div className="flex items-center gap-3 text-sm text-white/70">
-                <span className="uppercase tracking-wide text-xs">Role</span>
-                <span className="px-3 py-1 rounded-full border border-white/20 bg-white/5 text-white font-semibold capitalize">
+              <div className="flex items-center gap-3 text-sm text-slate-600">
+                <span className="uppercase tracking-wide text-xs font-semibold">Role</span>
+                <span className="px-3 py-1 rounded-full border border-primary-200 bg-primary-50 text-primary-700 font-semibold capitalize">
                   {user?.role?.replace("_", " ")}
                 </span>
               </div>
@@ -113,13 +114,13 @@ export const Layout: React.FC<LayoutProps> = ({
               {/* User Avatar */}
             <Link to="/profile" >
               <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center border border-white/20">
-                <User size={26} className="text-white/80" />
+              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary-500 to-secondary-500 flex items-center justify-center shadow-lg shadow-primary-500/20">
+                <User size={26} className="text-white" />
               </div>
 
               {/* User Info */}
               <div>
-                <h1 className="text-lg font-semibold text-white capitalize">
+                <h1 className="text-lg font-semibold text-slate-900 capitalize">
                   {user?.name || "User"}
                 </h1>
               </div>
