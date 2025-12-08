@@ -86,7 +86,7 @@ export const LabAbnormalResults: React.FC = () => {
       key: 'reference_range',
       label: 'Reference Range',
       render: (result) => (
-        <span className="text-gray-600">{result.reference_range || 'N/A'}</span>
+        <span className="text-gray-600">{result.reference_range_min || 'N/A'}</span>
       ),
     },
     {

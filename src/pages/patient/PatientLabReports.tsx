@@ -3,8 +3,7 @@ import { Layout } from "../../components/Layout";
 import { DataTable, type Column } from "./PatientDataTable";
 import { ErrorMessage } from "../../components/common/ErrorMessage";
 import { useAuth } from "../../contexts/AuthContext";
-// import { labService } from '../../services/labService';
-import type { LabReport, TestResult } from "../../types";
+import type { LabReport } from "../../types";
 import {
   Activity,
   FileText,
@@ -58,8 +57,7 @@ const patientNavItems = [
 export const PatientLabReports: React.FC = () => {
   const { user } = useAuth();
   const [reports, setReports] = useState<LabReport[]>([]);
-  const [selectedReport, setSelectedReport] = useState<LabReport | null>(null);
-  const [testResults, setTestResults] = useState<TestResult[]>([]);
+  const [, setSelectedReport] = useState<LabReport | null>(null);
   const { isLoading } = useLoading();
   const { error, setError, clearError } = useError();
   const pagination = usePagination();
@@ -114,7 +112,6 @@ export const PatientLabReports: React.FC = () => {
       // Enhance reports with lab names
       const enhancedReports = await Promise.all(
         reportsData.map(async (report: Omit<LabReport, 'lab'>) => {
-      
           const labName = await fetchLabName(report.lab_id);
           return {
             ...report,
@@ -139,7 +136,6 @@ export const PatientLabReports: React.FC = () => {
 
   useEffect(() => {
     if (user?.entity_id) {
-      
       fetchReportsData();
     }
   }, [user, pagination.skip, pagination.limit]);

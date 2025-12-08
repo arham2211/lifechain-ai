@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Layout } from "../../components/Layout";
 import { ErrorMessage } from "../../components/common/ErrorMessage";
-import { useAuth } from "../../contexts/AuthContext";
 import type { LabReport, TestResult } from "../../types";
 import {
   FileText,
@@ -60,7 +59,6 @@ const patientNavItems = [
 ];
 
 export const PatientReportDetails: React.FC = () => {
-  const { user } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
   const [report, setReport] = useState<LabReport | null>(null);
@@ -140,6 +138,7 @@ export const PatientReportDetails: React.FC = () => {
       }
       
       const resultsData = await response.json();
+      
       setTestResults(resultsData);
     } catch (err: unknown) {
       if (err instanceof Error) {
@@ -429,6 +428,7 @@ export const PatientReportDetails: React.FC = () => {
                               </div>
                               <div className="text-xs text-gray-500">
                                 ID: {result.result_id}
+                                
                               </div>
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap">

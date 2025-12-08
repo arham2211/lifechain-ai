@@ -76,7 +76,9 @@ export interface TestResult {
   test_name: string;
   test_value: string;
   unit: string;
-  reference_range?: string;
+  reference_range_min: string;
+  reference_range_max: string;
+  result_id: string;
   is_abnormal: boolean;
   created_at: string;
   updated_at: string;

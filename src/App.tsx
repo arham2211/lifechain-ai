@@ -16,6 +16,7 @@ import { PatientRecommendations } from "./pages/patient/PatientRecommendations";
 import { PatientFamilyHistory } from "./pages/patient/PatientFamilyHistory";
 import { PatientTimeline } from "./pages/patient/PatientTimeline";
 import { PatientReportDetails } from "./pages/patient/PatientReportDetails";
+import { PatientVisitDetails } from "./pages/patient/PatientVisitsDetails";
 
 // Doctor Pages
 import { DoctorDashboard } from "./pages/doctor/DoctorDashboard";
@@ -39,6 +40,7 @@ import { AdminLabManagement } from "./pages/admin/AdminLabManagement";
 import { Profile } from "./pages/profile/Profile";
 
 import { useEffect, useState } from 'react';
+
 
 function App() {
   const [, setBasePath] = useState('');
@@ -91,6 +93,14 @@ function App() {
             element={
               <ProtectedRoute allowedRoles={["patient"]}>
                 <PatientVisits />
+              </ProtectedRoute>
+            }
+          />
+           <Route
+            path="/patient/visits/:visit_id"
+            element={
+              <ProtectedRoute allowedRoles={["patient"]}>
+                <PatientVisitDetails />
               </ProtectedRoute>
             }
           />
