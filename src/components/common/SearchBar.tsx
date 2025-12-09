@@ -26,9 +26,9 @@ export const SearchBar: React.FC<SearchBarProps> = ({
     <div className="relative">
       <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
         {loading ? (
-          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-teal-300"></div>
+          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-slate-400"></div>
         ) : (
-          <Search className="text-white/60" size={20} />
+          <Search className="text-slate-400" size={20} />
         )}
       </div>
       <input
@@ -37,7 +37,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
         onChange={(e) => setQuery(e.target.value)}
         placeholder={placeholder}
         disabled={loading}
-        className="block w-full pl-12 pr-4 py-3 rounded-2xl bg-white/10 border border-white/20 text-white placeholder-white/50 focus:ring-2 focus:ring-teal-400 focus:border-transparent transition-all"
+        className="block w-full pl-12 pr-4 py-3 rounded-xl bg-white border border-slate-200 text-slate-900 placeholder-slate-400 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
       />
     </div>
   );

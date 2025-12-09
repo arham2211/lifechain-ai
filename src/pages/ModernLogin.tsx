@@ -365,6 +365,15 @@ export const ModernLogin: React.FC = () => {
                       doctor@test.com
                     </span>
                   </div>
+                   <div
+                    className="p-2.5 rounded-lg border border-slate-100 bg-slate-50/50 text-center cursor-help"
+                    title="Use doctor@test.com"
+                  >
+                    <span className="block text-slate-400 mb-1">Lab</span>
+                    <span className="font-mono font-medium text-slate-700">
+                      lab@test.com
+                    </span>
+                  </div>
                 </div>
                 <p className="text-center text-xs text-slate-400 mt-4">
                   Password for all accounts:{" "}
