@@ -2,44 +2,87 @@ import React, { useState } from 'react';
 import { Layout } from '../../components/Layout';
 import { SearchBar } from '../../components/common/SearchBar';
 import { DataTable, type Column } from '../../components/common/DataTable';
-import { StatCard } from '../../components/common/StatCard';
 import { ErrorMessage } from '../../components/common/ErrorMessage';
 import { useNavigate } from 'react-router-dom';
-import { patientService } from '../../services/patientService';
 import type { Patient } from '../../types';
-import { Activity, Users, Calendar, FileText, ClipboardList } from 'lucide-react';
+import { Activity, Users, FileText, ClipboardList, Search } from 'lucide-react';
 import { formatDate } from '../../utils/formatters';
 import { useLoading, useError } from '../../utils/hooks';
 
 const doctorNavItems = [
   { path: '/doctor/dashboard', label: 'Dashboard', icon: <Activity size={20} /> },
-  { path: '/doctor/patients', label: 'Patient Search', icon: <Users size={20} /> },
-  { path: '/doctor/visits', label: 'Visit Management', icon: <Calendar size={20} /> },
   { path: '/doctor/create-visit', label: 'Create Visit', icon: <ClipboardList size={20} /> },
 ];
 
-const glassCard = 'backdrop-blur-xl bg-white/10 border border-white/20 rounded-3xl shadow-glow';
+const glassCard = 'backdrop-blur-xl bg-black/80 border border-white/20 rounded-3xl shadow-glow';
 
 export const DoctorDashboard: React.FC = () => {
   const [patients, setPatients] = useState<Patient[]>([]);
   const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
-  const stats = { todayVisits: 8, patientsSeen: 23, pendingReports: 5 };
+  const [searchQuery, setSearchQuery] = useState('');
+  const [showSearchResults, setShowSearchResults] = useState(false);
   const { isLoading, withLoading } = useLoading();
   const { error, setError, clearError } = useError();
   const navigate = useNavigate();
 
-  const handleSearch = async (query: string) => {
-    if (!query) {
+  const handleSearch = async (query?: string) => {
+    const searchValue = query !== undefined ? query : searchQuery;
+    
+    if (!searchValue.trim()) {
       setPatients([]);
+      setSelectedPatient(null);
+      setShowSearchResults(false);
       return;
     }
 
     try {
       clearError();
-      const results = await withLoading(() => patientService.searchPatients(query));
+      const results = await withLoading(async () => {
+        const response = await fetch(
+          `http://0.0.0.0:8001/api/v1/patients/?skip=0&limit=100&search=${encodeURIComponent(searchValue)}`
+        );
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        
+        return data.map((patient: any) => ({
+          ...patient,
+          name: `${patient.first_name} ${patient.last_name}`,
+          // Ensure all required Patient fields are present
+          patient_id: patient.patient_id || patient.id || '',
+          first_name: patient.first_name || '',
+          last_name: patient.last_name || '',
+          cnic: patient.cnic || '',
+          date_of_birth: patient.date_of_birth || '',
+          gender: patient.gender || 'other',
+          phone: patient.phone || '',
+        }));
+      });
+      
       setPatients(results);
+      setShowSearchResults(true);
+      
+      // Auto-select the first patient if available
+      if (results.length > 0) {
+        const firstPatient = results[0];
+        setSelectedPatient(firstPatient);
+        localStorage.setItem('selectedPatient', JSON.stringify(firstPatient));
+      } else {
+        setSelectedPatient(null);
+        localStorage.removeItem('selectedPatient');
+      }
     } catch (err: any) {
-      setError(err.response?.data?.detail || 'Failed to search patients');
+      setError(err.message || 'Failed to search patients');
+      setPatients([]);
+      setShowSearchResults(false);
+    }
+  };
+
+  const handleInputChange = (value: string) => {
+    setSearchQuery(value);
+    if (!value.trim()) {
+      setShowSearchResults(false);
     }
   };
 
@@ -49,7 +92,11 @@ export const DoctorDashboard: React.FC = () => {
   };
 
   const columns: Column<Patient>[] = [
-    { key: 'name', label: 'Name' },
+    { 
+      key: 'name', 
+      label: 'Name',
+      render: (patient) => `${patient.first_name} ${patient.last_name}`
+    },
     { key: 'cnic', label: 'CNIC' },
     {
       key: 'date_of_birth',
@@ -61,7 +108,26 @@ export const DoctorDashboard: React.FC = () => {
       label: 'Gender',
       render: (patient) => <span className="capitalize">{patient.gender}</span>,
     },
+    {
+      key: 'phone',
+      label: 'Phone',
+      render: (patient) => patient.phone || 'N/A',
+    },
   ];
+
+  // Load selected patient from localStorage on initial render
+  React.useEffect(() => {
+    const savedPatient = localStorage.getItem('selectedPatient');
+    if (savedPatient) {
+      try {
+        const parsedPatient = JSON.parse(savedPatient);
+        setSelectedPatient(parsedPatient);
+      } catch (err) {
+        console.error('Failed to parse saved patient:', err);
+        localStorage.removeItem('selectedPatient');
+      }
+    }
+  }, []);
 
   return (
     <Layout navItems={doctorNavItems} title="Doctor Portal">
@@ -87,16 +153,31 @@ export const DoctorDashboard: React.FC = () => {
             <div className="flex flex-wrap items-start justify-between gap-4">
               <div>
                 <p className="text-xs uppercase tracking-[0.3em] text-white/60">Selected patient</p>
-                <h3 className="text-2xl font-semibold mt-2">{selectedPatient.name}</h3>
+                <h3 className="text-2xl font-semibold mt-2">
+                  {selectedPatient.first_name} {selectedPatient.last_name}
+                </h3>
                 <p className="text-white/70 mt-1">CNIC: {selectedPatient.cnic}</p>
                 <p className="text-white/70">DOB: {formatDate(selectedPatient.date_of_birth)}</p>
+                <p className="text-white/70">Gender: {selectedPatient.gender}</p>
+                <p className="text-white/70">Phone: {selectedPatient.phone || 'N/A'}</p>
               </div>
-              <button
-                onClick={() => navigate('/doctor/create-visit')}
-                className="px-5 py-3 rounded-2xl bg-gradient-to-r from-teal-500 to-aqua-500 font-semibold text-white shadow-glow hover:shadow-glow-lg transition-all"
-              >
-                Create Visit
-              </button>
+              <div className="flex flex-col gap-3">
+                <button
+                  onClick={() => navigate('/doctor/create-visit')}
+                  className="px-5 py-3 rounded-2xl bg-gradient-to-r from-teal-500 to-aqua-500 font-semibold text-white shadow-glow hover:shadow-glow-lg transition-all"
+                >
+                  Create Visit
+                </button>
+                <button
+                  onClick={() => {
+                    setSelectedPatient(null);
+                    localStorage.removeItem('selectedPatient');
+                  }}
+                  className="px-5 py-3 rounded-2xl border border-white/20 font-semibold text-white hover:bg-white/5 transition-all"
+                >
+                  Clear Selection
+                </button>
+              </div>
             </div>
           </div>
         )}
@@ -104,31 +185,62 @@ export const DoctorDashboard: React.FC = () => {
         <section className={`${glassCard} p-6`}>
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-xl font-semibold">Patient Search</h3>
+            <div className="text-sm text-white/60">
+              Found {patients.length} patient{patients.length !== 1 ? 's' : ''}
+            </div>
           </div>
-          <SearchBar placeholder="Search by name or CNIC..." onSearch={handleSearch} />
+          
+          <div className="flex gap-2">
+            <div className="flex-1">
+              <SearchBar 
+                placeholder="Search by name or CNIC..." 
+                onSearch={handleInputChange}
+                loading={isLoading}
+                // value={searchQuery}
+                // onChange={handleInputChange}
+              />
+            </div>
+            <button
+              onClick={() => handleSearch()}
+              disabled={!searchQuery.trim() || isLoading}
+              className="px-6 py-3 rounded-2xl bg-gradient-to-r from-teal-500 to-aqua-500 font-semibold text-white shadow-glow hover:shadow-glow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+            >
+              <Search size={20} />
+              Search
+            </button>
+          </div>
+          
           {error && (
             <div className="mt-4">
               <ErrorMessage message={error} onClose={clearError} />
             </div>
           )}
-          {patients.length > 0 && (
+          
+          {showSearchResults && patients.length > 0 ? (
             <div className="mt-4">
               <DataTable
                 data={patients}
                 columns={columns}
                 isLoading={isLoading}
                 onRowClick={handleSelectPatient}
-                emptyMessage="No patients found"
+                // selectedRow={selectedPatient?.patient_id}
               />
+            </div>
+          ) : showSearchResults && patients.length === 0 ? (
+            <div className="mt-8 text-center py-8 border border-white/10 rounded-2xl">
+              <p className="text-white/60">No patients found. Try searching by name, CNIC, or phone number.</p>
+              <p className="text-sm text-white/40 mt-2">Example: Kenneth, 42103-2282167-4, 03014425988</p>
+            </div>
+          ) : !showSearchResults && searchQuery.trim() ? (
+            <div className="mt-8 text-center py-8 border border-white/10 rounded-2xl">
+              <p className="text-white/60">Click the Search button to find patients</p>
+            </div>
+          ) : (
+            <div className="mt-8 text-center py-8 border border-white/10 rounded-2xl">
+              <p className="text-white/60">Enter search criteria and click Search button</p>
             </div>
           )}
         </section>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <StatCard title="Today's Visits" value={stats.todayVisits} icon={Calendar} color="primary" />
-          <StatCard title="Patients Seen" value={stats.patientsSeen} icon={Users} color="success" />
-          <StatCard title="Pending Reports" value={stats.pendingReports} icon={FileText} color="warning" />
-        </div>
 
         <section className={`${glassCard} p-6`}>
           <div className="flex items-center justify-between mb-4">
@@ -145,7 +257,7 @@ export const DoctorDashboard: React.FC = () => {
                 title: 'View Patient Dashboard',
                 description: 'Complete medical history',
                 icon: <Users size={24} />,
-                action: () => navigate('/doctor/patient-view'),
+                action: () => selectedPatient?.patient_id && navigate(`/doctor/patient/${selectedPatient.patient_id}`),
               },
               {
                 title: 'Create New Visit',
@@ -154,16 +266,16 @@ export const DoctorDashboard: React.FC = () => {
                 action: () => navigate('/doctor/create-visit'),
               },
               {
-                title: 'Medical Records',
-                description: 'View diagnostics & documents',
+                title: 'Patient Family Tree',
+                description: 'View patient fmaily history',
                 icon: <FileText size={24} />,
-                action: () => navigate('/doctor/patient-view'),
+                action: () => selectedPatient?.patient_id && navigate(`/doctor/patient/${selectedPatient.patient_id}/records`),
               },
             ].map((item) => (
               <button
                 key={item.title}
-                onClick={() => selectedPatient && item.action()}
-                disabled={!selectedPatient}
+                onClick={() => item.action()}
+                disabled={!selectedPatient && item.title !== 'Create New Visit'}
                 className="group p-4 rounded-2xl border border-white/10 bg-white/5 hover:bg-white/10 transition-all flex items-start gap-3 disabled:opacity-40 disabled:cursor-not-allowed"
               >
                 <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-teal-500/60 to-aqua-500/60 flex items-center justify-center text-white shadow-glow">
@@ -181,4 +293,3 @@ export const DoctorDashboard: React.FC = () => {
     </Layout>
   );
 };
-

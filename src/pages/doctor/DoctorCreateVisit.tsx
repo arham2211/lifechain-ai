@@ -4,17 +4,15 @@ import { ErrorMessage } from '../../components/common/ErrorMessage';
 import { useAuth } from '../../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { visitService } from '../../services/visitService';
-import type { Patient, CreateVitalSignsForm, CreateSymptomForm, CreateDiagnosisForm, CreatePrescriptionForm } from '../../types';
-import { Activity, Users, Calendar, ClipboardList } from 'lucide-react';
+import type { Patient, CreateSymptomForm, CreateDiagnosisForm, CreatePrescriptionForm } from '../../types';
+import { Activity,ClipboardList } from 'lucide-react';
 
 const doctorNavItems = [
   { path: '/doctor/dashboard', label: 'Dashboard', icon: <Activity size={20} /> },
-  { path: '/doctor/patients', label: 'Patient Search', icon: <Users size={20} /> },
-  { path: '/doctor/visits', label: 'Visit Management', icon: <Calendar size={20} /> },
   { path: '/doctor/create-visit', label: 'Create Visit', icon: <ClipboardList size={20} /> },
 ];
 
-type FormStep = 'basic' | 'vitals' | 'symptoms' | 'diagnosis' | 'prescriptions';
+type FormStep = 'basic' | 'symptoms' | 'diagnosis' | 'prescriptions';
 
 export const DoctorCreateVisit: React.FC = () => {
   const { user } = useAuth();
@@ -30,7 +28,7 @@ export const DoctorCreateVisit: React.FC = () => {
   const [chiefComplaint, setChiefComplaint] = useState('');
   const [notes, setNotes] = useState('');
 
-  const [vitals, setVitals] = useState<CreateVitalSignsForm>({});
+  // const [vitals, setVitals] = useState<CreateVitalSignsForm>({}); // Removed
   const [symptoms, setSymptoms] = useState<CreateSymptomForm[]>([]);
   const [diagnoses, setDiagnoses] = useState<CreateDiagnosisForm[]>([]);
   const [prescriptions, setPrescriptions] = useState<CreatePrescriptionForm[]>([]);
@@ -56,23 +54,11 @@ export const DoctorCreateVisit: React.FC = () => {
         notes: notes,
       });
       setVisitId(visit.visit_id);
-      setCurrentStep('vitals');
     } catch (err: any) {
       setError(err.response?.data?.detail || 'Failed to create visit');
     }
   };
 
-  const handleAddVitals = async () => {
-    try {
-      setError('');
-      if (Object.keys(vitals).length > 0) {
-        await visitService.createVitalSigns(visitId, vitals);
-      }
-      setCurrentStep('symptoms');
-    } catch (err: any) {
-      setError(err.response?.data?.detail || 'Failed to add vital signs');
-    }
-  };
 
   const handleAddSymptom = () => {
     setSymptoms([...symptoms, { symptom_name: '', severity: '', duration: '', notes: '' }]);
@@ -136,7 +122,7 @@ export const DoctorCreateVisit: React.FC = () => {
 
   const steps = [
     { key: 'basic', label: 'Basic Info' },
-    { key: 'vitals', label: 'Vital Signs' },
+    // { key: 'vitals', label: 'Vital Signs' }, // Not supported in current API
     { key: 'symptoms', label: 'Symptoms' },
     { key: 'diagnosis', label: 'Diagnosis' },
     { key: 'prescriptions', label: 'Prescriptions' },
@@ -153,13 +139,13 @@ export const DoctorCreateVisit: React.FC = () => {
         </div>
 
         {/* Progress Steps */}
-        <div className="bg-white rounded-lg shadow p-6">
+        <div className="bg-black rounded-lg shadow p-6">
           <div className="flex justify-between">
             {steps.map((step, index) => (
               <div key={step.key} className="flex items-center">
                 <div className={`flex flex-col items-center ${index < steps.findIndex(s => s.key === currentStep) ? 'opacity-50' : ''}`}>
                   <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                    step.key === currentStep ? 'bg-primary text-white' : 'bg-gray-200 text-gray-600'
+                    step.key === currentStep ? 'bg-primary text-black' : 'bg-gray-200 text-gray-600'
                   }`}>
                     {index + 1}
                   </div>
@@ -221,69 +207,10 @@ export const DoctorCreateVisit: React.FC = () => {
               <button
                 onClick={handleCreateBasicVisit}
                 disabled={!selectedPatient}
-                className="w-full bg-primary text-white py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50"
+                className="w-full bg-primary text-black py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50"
               >
-                Next: Add Vital Signs
+                Next: Add Symptoms
               </button>
-            </div>
-          )}
-
-          {currentStep === 'vitals' && (
-            <div className="space-y-4">
-              <h3 className="text-lg font-semibold mb-4">Vital Signs (Optional)</h3>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Blood Pressure (Systolic)</label>
-                  <input
-                    type="number"
-                    value={vitals.blood_pressure_systolic || ''}
-                    onChange={(e) => setVitals({ ...vitals, blood_pressure_systolic: Number(e.target.value) })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Blood Pressure (Diastolic)</label>
-                  <input
-                    type="number"
-                    value={vitals.blood_pressure_diastolic || ''}
-                    onChange={(e) => setVitals({ ...vitals, blood_pressure_diastolic: Number(e.target.value) })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Heart Rate (bpm)</label>
-                  <input
-                    type="number"
-                    value={vitals.heart_rate || ''}
-                    onChange={(e) => setVitals({ ...vitals, heart_rate: Number(e.target.value) })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Temperature (°C)</label>
-                  <input
-                    type="number"
-                    step="0.1"
-                    value={vitals.temperature || ''}
-                    onChange={(e) => setVitals({ ...vitals, temperature: Number(e.target.value) })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg"
-                  />
-                </div>
-              </div>
-              <div className="flex gap-3">
-                <button
-                  onClick={() => setCurrentStep('basic')}
-                  className="flex-1 border border-gray-300 text-gray-700 py-2 rounded-lg hover:bg-gray-50"
-                >
-                  Back
-                </button>
-                <button
-                  onClick={handleAddVitals}
-                  className="flex-1 bg-primary text-white py-2 rounded-lg hover:bg-blue-700"
-                >
-                  Next: Add Symptoms
-                </button>
-              </div>
             </div>
           )}
 
@@ -293,7 +220,7 @@ export const DoctorCreateVisit: React.FC = () => {
                 <h3 className="text-lg font-semibold">Symptoms (Optional)</h3>
                 <button
                   onClick={handleAddSymptom}
-                  className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-blue-700 text-sm"
+                  className="px-4 py-2 bg-primary text-black rounded-lg hover:bg-blue-700 text-sm"
                 >
                   Add Symptom
                 </button>
@@ -339,14 +266,14 @@ export const DoctorCreateVisit: React.FC = () => {
               ))}
               <div className="flex gap-3">
                 <button
-                  onClick={() => setCurrentStep('vitals')}
+                  onClick={() => setCurrentStep('basic')}
                   className="flex-1 border border-gray-300 text-gray-700 py-2 rounded-lg hover:bg-gray-50"
                 >
                   Back
                 </button>
                 <button
                   onClick={handleSaveSymptoms}
-                  className="flex-1 bg-primary text-white py-2 rounded-lg hover:bg-blue-700"
+                  className="flex-1 bg-primary text-black py-2 rounded-lg hover:bg-blue-700"
                 >
                   Next: Add Diagnosis
                 </button>
@@ -360,7 +287,7 @@ export const DoctorCreateVisit: React.FC = () => {
                 <h3 className="text-lg font-semibold">Diagnosis</h3>
                 <button
                   onClick={handleAddDiagnosis}
-                  className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-blue-700 text-sm"
+                  className="px-4 py-2 bg-primary text-black rounded-lg hover:bg-blue-700 text-sm"
                 >
                   Add Diagnosis
                 </button>
@@ -415,7 +342,7 @@ export const DoctorCreateVisit: React.FC = () => {
                 </button>
                 <button
                   onClick={handleSaveDiagnoses}
-                  className="flex-1 bg-primary text-white py-2 rounded-lg hover:bg-blue-700"
+                  className="flex-1 bg-primary text-black py-2 rounded-lg hover:bg-blue-700"
                 >
                   Next: Add Prescriptions
                 </button>
@@ -429,7 +356,7 @@ export const DoctorCreateVisit: React.FC = () => {
                 <h3 className="text-lg font-semibold">Prescriptions (Optional)</h3>
                 <button
                   onClick={handleAddPrescription}
-                  className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-blue-700 text-sm"
+                  className="px-4 py-2 bg-primary text-black rounded-lg hover:bg-blue-700 text-sm"
                 >
                   Add Prescription
                 </button>
@@ -493,7 +420,7 @@ export const DoctorCreateVisit: React.FC = () => {
                 </button>
                 <button
                   onClick={handleSavePrescriptions}
-                  className="flex-1 bg-green-600 text-white py-2 rounded-lg hover:bg-green-700"
+                  className="flex-1 bg-green-600 text-black py-2 rounded-lg hover:bg-green-700"
                 >
                   Complete Visit
                 </button>

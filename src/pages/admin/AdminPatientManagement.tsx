@@ -48,7 +48,7 @@ export const AdminPatientManagement: React.FC = () => {
       return;
     }
     const filtered = patients.filter(patient =>
-      patient.name.toLowerCase().includes(query.toLowerCase()) ||
+      patient.first_name.toLowerCase().includes(query.toLowerCase()) ||
       patient.cnic.includes(query) ||
       patient.email?.toLowerCase().includes(query.toLowerCase())
     );
@@ -61,7 +61,7 @@ export const AdminPatientManagement: React.FC = () => {
   };
 
   const handleDelete = async (patient: Patient) => {
-    if (!confirm(`Are you sure you want to delete patient ${patient.name}?`)) {
+    if (!confirm(`Are you sure you want to delete patient ${patient.first_name}?`)) {
       return;
     }
     try {
@@ -79,7 +79,7 @@ export const AdminPatientManagement: React.FC = () => {
       label: 'Name',
       render: (patient) => (
         <div>
-          <p className="font-medium text-gray-900">{patient.name}</p>
+          <p className="font-medium text-gray-900">{patient.first_name}</p>
           <p className="text-sm text-gray-600">{patient.email || 'No email'}</p>
         </div>
       ),
@@ -214,7 +214,7 @@ export const AdminPatientManagement: React.FC = () => {
         <div className="space-y-4">
           <p className="text-gray-600">
             {selectedPatient
-              ? `Editing patient: ${selectedPatient.name}`
+              ? `Editing patient: ${selectedPatient.first_name}`
               : 'Create a new patient record (Mock Mode - Changes not saved)'}
           </p>
           <div className="flex gap-3 justify-end pt-4">

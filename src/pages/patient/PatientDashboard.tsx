@@ -71,7 +71,7 @@ export const PatientDashboard: React.FC = () => {
 
         let recommendations: Recommendation[] = [];
         try {
-          recommendations = await patientService.getRecommendations(patientId);
+          recommendations = await patientService.getRecommendations();
         } catch (err) {
           // optional
         }

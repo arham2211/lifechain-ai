@@ -137,7 +137,7 @@ function App() {
             }
           />
           <Route
-            path="/doctor/patient-view"
+            path="/doctor/patient/:view_id"
             element={
               <ProtectedRoute allowedRoles={["doctor"]}>
                 <DoctorPatientView />

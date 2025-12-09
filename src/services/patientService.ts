@@ -45,8 +45,9 @@ export const patientService = {
   },
 
   searchPatients: async (query: string): Promise<Patient[]> => {
-    const response = await apiClient.get(`/patients/search?query=${encodeURIComponent(query)}`);
-    return response.data;
+    // Use getPatients with name filter as search endpoint is not provided
+    const response = await patientService.getPatients({ name: query });
+    return response.items;
   },
 
   getCompleteFamilyTree: async (patientId: string): Promise<CompleteFamilyTree> => {
@@ -56,24 +57,38 @@ export const patientService = {
         family_members: mockFamilyHistory as any,
       } as CompleteFamilyTree;
     }
-    const response = await apiClient.get(`/patients/${patientId}/complete-family-tree`);
+    const response = await apiClient.get(`/patients/with-family-tree/list?patient_id=${patientId}`);
+    // The previous implementation assumed a specific single-patient endpoint for family tree
+    // The API list has /api/v1/patients/with-family-tree/list which implies a list or filter
+    // We'll assume it returns the tree structure for the patient or we might need to fetch family-disease-history
     return response.data;
   },
 
-  predictProgression: async (patientId: string, monthsAhead: number = 6): Promise<ProgressionPrediction[]> => {
+  getFamilyDiseaseHistory: async (patientId: string): Promise<any> => {
+     const response = await apiClient.get(`/patients/${patientId}/family-disease-history`);
+     return response.data;
+  },
+
+  predictProgression: async (): Promise<ProgressionPrediction[]> => {
     if (MOCK_MODE) {
       return [] as ProgressionPrediction[];
     }
+    return [] as ProgressionPrediction[];
+    /* Endpoint not available in provided list
     const response = await apiClient.post(`/reports/patient/${patientId}/predict-progression?months_ahead=${monthsAhead}`);
     return response.data;
+    */
   },
 
-  getRecommendations: async (patientId: string): Promise<Recommendation[]> => {
+  getRecommendations: async (): Promise<Recommendation[]> => {
     if (MOCK_MODE) {
       return [] as Recommendation[]; // Empty for now since we don't have mock recommendations in correct format
     }
+    return [] as Recommendation[];
+    /* Endpoint not available in provided list
     const response = await apiClient.get(`/reports/patient/${patientId}/recommendations`);
     return response.data;
+    */
   },
 };
 

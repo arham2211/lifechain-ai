@@ -40,7 +40,8 @@ export const mockPatients: Patient[] = [
   {
     patient_id: 'P001',
     cnic: '12345-1234567-1',
-    name: 'John Doe',
+    first_name: 'John',
+    last_name: 'Doe',
     date_of_birth: '1990-05-15',
     gender: 'male',
     phone: '555-0101',
@@ -53,7 +54,8 @@ export const mockPatients: Patient[] = [
   {
     patient_id: 'P002',
     cnic: '12345-1234567-2',
-    name: 'Jane Smith',
+    first_name: 'Jane',
+    last_name: 'Smith',
     date_of_birth: '1985-08-22',
     gender: 'female',
     phone: '555-0201',
@@ -275,7 +277,8 @@ export const mockFamilyHistory: Patient[] = [
   {
     patient_id: 'P003',
     cnic: '12345-1234567-3',
-    name: 'Robert Doe (Father)',
+    first_name: 'Robert',
+    last_name: "Doe",
     date_of_birth: '1960-03-10',
     gender: 'male',
     created_at: new Date().toISOString(),
@@ -284,7 +287,8 @@ export const mockFamilyHistory: Patient[] = [
   {
     patient_id: 'P004',
     cnic: '12345-1234567-4',
-    name: 'Mary Doe (Mother)',
+    first_name: 'Mary',
+    last_name: "Doe",
     date_of_birth: '1962-07-15',
     gender: 'female',
     created_at: new Date().toISOString(),

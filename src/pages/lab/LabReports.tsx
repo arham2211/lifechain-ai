@@ -59,7 +59,7 @@ export const LabReports: React.FC = () => {
       return;
     }
     const filtered = reports.filter(report => 
-      report.patient?.name.toLowerCase().includes(query.toLowerCase()) ||
+      report.patient?.first_name.toLowerCase().includes(query.toLowerCase()) ||
       report.report_type.toLowerCase().includes(query.toLowerCase()) ||
       report.report_id.toLowerCase().includes(query.toLowerCase())
     );

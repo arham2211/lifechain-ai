@@ -19,7 +19,9 @@ export interface AuthResponse {
 export interface Patient {
   patient_id: string;
   cnic: string;
-  name: string;
+  name?: string;
+  first_name: string;
+  last_name: string;
   date_of_birth: string;
   gender: 'male' | 'female' | 'other';
   phone?: string;

@@ -8,7 +8,7 @@ import {
   type PaginatedResponse,
   type VisitFilters,
   type CreateVisitForm,
-  type CreateVitalSignsForm,
+  // type CreateVitalSignsForm,
   type CreateSymptomForm,
   type CreateDiagnosisForm,
   type CreatePrescriptionForm,
@@ -59,14 +59,14 @@ export const visitService = {
   },
 
   // Vital Signs
-  getVitalSigns: async (visitId: string): Promise<VitalSign[]> => {
-    const response = await apiClient.get(`/visits/${visitId}/vitals`);
-    return response.data;
+  getVitalSigns: async (): Promise<VitalSign[]> => {
+    // Vitals API not listed in provided spec
+    return [];
   },
 
-  createVitalSigns: async (visitId: string, data: CreateVitalSignsForm): Promise<VitalSign> => {
-    const response = await apiClient.post(`/visits/${visitId}/vitals`, data);
-    return response.data;
+  createVitalSigns: async (): Promise<VitalSign> => {
+     // Vitals API not listed in provided spec
+     throw new Error("Vitals API not supported");
   },
 
   // Symptoms
