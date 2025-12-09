@@ -92,7 +92,7 @@ export interface Visit {
   patient_id: string;
   doctor_id: string;
   visit_date: string;
-  visit_type?: string;
+  visit_type: string;
   chief_complaint?: string;
   diagnosis?: string;
   notes?: string;

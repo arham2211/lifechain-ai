@@ -48,7 +48,7 @@ export const PatientProfile: React.FC = () => {
         setError('');
 
         // Using the specific URL requested by the user
-        const response = await fetch('http://0.0.0.0:8001/api/v1/patients/fa60c143-5f74-42e5-8993-a2baaaa40786');
+        const response = await fetch('http://0.0.0.0:8001/api/v1/patients/4351c0c0-4336-4598-ad0e-0cdf4ef02490');
         
         if (!response.ok) {
           throw new Error('Failed to fetch patient data');
@@ -103,9 +103,9 @@ export const PatientProfile: React.FC = () => {
           <div className="group relative">
             <div className="w-28 h-28 lg:w-32 lg:h-32 rounded-full p-1 bg-gradient-to-br from-primary-500 to-secondary-500 shadow-xl shadow-primary-500/20">
               <div className="w-full h-full rounded-full bg-white flex items-center justify-center overflow-hidden">
-                {patientData.name ? (
+                {patientData.first_name ? (
                   <span className="text-4xl font-bold bg-gradient-to-br from-primary-600 to-secondary-600 bg-clip-text text-transparent">
-                    {patientData.name.charAt(0)}
+                    {patientData.first_name.charAt(0)}
                   </span>
                 ) : (
                   <UserCircle size={64} className="text-slate-300" />
@@ -121,7 +121,7 @@ export const PatientProfile: React.FC = () => {
             <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
               <div>
                 <h1 className="text-3xl lg:text-4xl font-bold text-slate-900">
-                  {patientData.name}
+                  {patientData.first_name} {patientData.last_name}
                 </h1>
                 <div className="flex flex-wrap items-center gap-3 mt-3">
                   <span className="px-3 py-1 rounded-full text-xs font-semibold bg-primary-50 text-primary-700 border border-primary-100 flex items-center gap-1.5 capitalize">
@@ -228,7 +228,7 @@ export const PatientProfile: React.FC = () => {
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8">
         {[
-          { label: 'Full Name', value: patientData.name },
+          { label: 'Full Name', value: patientData.first_name + ' ' + patientData.last_name },
           { label: 'Date of Birth', value: `${formatDate(patientData.date_of_birth)} (${getAge(patientData.date_of_birth)} years)` },
           { label: 'National ID (CNIC)', value: patientData.cnic },
           { label: 'Gender', value: patientData.gender, capitalize: true },
@@ -397,4 +397,4 @@ export const PatientProfile: React.FC = () => {
       </div>
     </Layout>
   );
-};
+};  

@@ -27,6 +27,7 @@ import { LabCreateReport } from "./pages/lab/LabCreateReport";
 import { LabReports } from "./pages/lab/LabReports";
 import { LabAbnormalResults } from "./pages/lab/LabAbnormalResults";
 import { LabUploadReport } from "./pages/lab/LabUploadReport";
+import { LabUpdateReport } from "./pages/lab/LabUpdateReport";
 
 // Admin Pages
 import { AdminDashboard } from "./pages/admin/AdminDashboard";
@@ -191,6 +192,14 @@ function App() {
             element={
               <ProtectedRoute allowedRoles={["lab_staff"]}>
                 <LabReports />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/lab/update-report/:report_id"
+            element={
+              <ProtectedRoute allowedRoles={["lab_staff"]}>
+                <LabUpdateReport />
               </ProtectedRoute>
             }
           />

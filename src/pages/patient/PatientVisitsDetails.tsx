@@ -11,6 +11,7 @@ import {
   TrendingUp,
   Users,
   Clock,
+  Pill,
 } from "lucide-react";
 import { formatDate } from "../../utils/formatters";
 import { useError, useLoading } from "../../utils/hooks";
@@ -66,6 +67,17 @@ interface Diagnosis {
   created_at: string;
 }
 
+interface Prescription {
+  prescription_id: string;
+  visit_id: string;
+  medication_name: string;
+  dosage: string;
+  frequency: string;
+  duration_days: number;
+  instructions: string;
+  created_at: string;
+}
+
 interface VisitDetails {
   visit_id: string;
   visit_date: string;
@@ -90,6 +102,7 @@ export const PatientVisitDetails: React.FC = () => {
   const [visit, setVisit] = useState<VisitDetails | null>(null);
   const [symptoms, setSymptoms] = useState<Symptom[]>([]);
   const [diagnoses, setDiagnoses] = useState<Diagnosis[]>([]);
+  const [prescriptions, setPrescriptions] = useState<Prescription[]>([]);
   const [doctorInfo, setDoctorInfo] = useState<DoctorInfo | null>(null);
   const { isLoading, setIsLoading } = useLoading();
   const { error, setError, clearError } = useError();
@@ -226,6 +239,32 @@ export const PatientVisitDetails: React.FC = () => {
     }
   };
 
+  // Function to fetch prescriptions
+  const fetchPrescriptions = async () => {
+    if (!visitId) return;
+    
+    try {
+      const response = await fetch(
+        `http://localhost:8001/api/v1/visits/${visitId}/prescriptions?lang=en`,
+        {
+          method: "GET",
+          headers: {
+            accept: "application/json",
+          },
+        }
+      );
+      
+      if (!response.ok) {
+        throw new Error("Failed to fetch prescriptions");
+      }
+      
+      const prescriptionsData: Prescription[] = await response.json();
+      setPrescriptions(prescriptionsData);
+    } catch (err: unknown) {
+      console.error("Error fetching prescriptions:", err);
+    }
+  };
+
   // Format visit type for display
   const formatVisitType = (visitType: string) => {
     return visitType
@@ -276,6 +315,7 @@ export const PatientVisitDetails: React.FC = () => {
       fetchVisitDetails();
       fetchSymptoms();
       fetchDiagnoses();
+      fetchPrescriptions();
     }
   }, [visitId]);
 
@@ -527,6 +567,66 @@ export const PatientVisitDetails: React.FC = () => {
                             <div className="mt-3">
                               <p className="text-sm font-medium text-slate-700">Notes</p>
                               <p className="text-sm text-slate-900">{diagnosis.notes}</p>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Prescriptions Section */}
+          <div className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200">
+            <div className="p-6">
+              <div className="flex items-center mb-4">
+                <div className="flex-shrink-0">
+                  <div className="p-2 bg-purple-100 rounded-lg">
+                    <Pill className="h-5 w-5 text-purple-600" />
+                  </div>
+                </div>
+                <h3 className="ml-3 text-lg font-semibold text-slate-900">Prescriptions</h3>
+                <span className="ml-auto px-3 py-1 rounded-full text-xs font-medium bg-slate-100 text-slate-800">
+                  {prescriptions.length} medications
+                </span>
+              </div>
+
+              {prescriptions.length === 0 ? (
+                <div className="text-center py-6 text-slate-500">
+                  No prescriptions recorded for this visit
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {prescriptions.map((prescription) => (
+                    <div key={prescription.prescription_id} className="border border-gray-200 rounded-lg p-4 hover:bg-slate-50">
+                      <div className="flex justify-between items-start">
+                        <div className="flex-1">
+                          <h4 className="text-md font-semibold text-slate-900">
+                            {prescription.medication_name}
+                          </h4>
+                          <div className="mt-3 grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div>
+                              <p className="text-sm font-medium text-slate-700">Dosage</p>
+                              <p className="text-sm text-slate-900">{prescription.dosage}</p>
+                            </div>
+                            <div>
+                              <p className="text-sm font-medium text-slate-700">Frequency</p>
+                              <p className="text-sm text-slate-900">{prescription.frequency}</p>
+                            </div>
+                            <div>
+                              <p className="text-sm font-medium text-slate-700">Duration</p>
+                              <p className="text-sm text-slate-900 flex items-center">
+                                <Clock className="h-4 w-4 mr-1 text-slate-400" />
+                                {prescription.duration_days} days
+                              </p>
+                            </div>
+                          </div>
+                          {prescription.instructions && (
+                            <div className="mt-3">
+                              <p className="text-sm font-medium text-slate-700">Instructions</p>
+                              <p className="text-sm text-slate-900 mt-1">{prescription.instructions}</p>
                             </div>
                           )}
                         </div>

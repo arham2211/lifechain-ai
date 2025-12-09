@@ -3,12 +3,10 @@ import { Layout } from "../../components/Layout";
 import { StatCard } from "../../components/common/StatCard";
 import { ErrorMessage } from "../../components/common/ErrorMessage";
 import { LoadingSpinner } from "../../components/common/LoadingSpinner";
-import { useAuth } from "../../contexts/AuthContext";
-import { patientService } from "../../services/patientService";
-import { visitService } from "../../services/visitService";
-import { labService } from "../../services/labService";
-import { Activity, FileText, Calendar, TrendingUp, Users } from "lucide-react";
-import type { Recommendation } from "../../types";
+// import { useAuth } from "../../contexts/AuthContext";
+import { Activity, FileText, Calendar, TrendingUp, Users, Clock } from "lucide-react";
+import type { Visit, LabReport, Patient } from "../../types";
+import { formatDate } from "../../utils/formatters";
 
 const patientNavItems = [
   {
@@ -40,16 +38,25 @@ const patientNavItems = [
 
 const glassCard = "glass-card rounded-3xl shadow-lg border border-slate-100";
 
+interface ActivityItem {
+  type: 'visit' | 'lab_report';
+  date: string;
+  title: string;
+  description: string;
+  status?: string;
+}
+
 export const PatientDashboard: React.FC = () => {
-  const { user } = useAuth();
+  // const { user } = useAuth();
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
+  const [patientData, setPatientData] = useState<Patient | null>(null);
   const [stats, setStats] = useState({
     totalVisits: 0,
     totalReports: 0,
     pendingReports: 0,
-    recentRecommendations: [] as Recommendation[],
   });
+  const [recentActivity, setRecentActivity] = useState<ActivityItem[]>([]);
 
   useEffect(() => {
     const fetchDashboardData = async () => {
@@ -57,42 +64,75 @@ export const PatientDashboard: React.FC = () => {
         setIsLoading(true);
         setError("");
 
-        const patientId = user?.entity_id || "";
+        // Hardcoded patient ID
+        const patientId = "4351c0c0-4336-4598-ad0e-0cdf4ef02490";
 
-        const visitsResponse = await visitService.getVisits({
-          patient_id: patientId,
-        });
-        const reportsResponse = await labService.getLabReports({
-          patient_id: patientId,
-        });
-        const pendingReports = reportsResponse.items.filter(
-          (r) => r.status === "pending"
+        // Fetch patient data
+        const patientResponse = await fetch(`http://0.0.0.0:8001/api/v1/patients/${patientId}`);
+        const fetchedPatientData = await patientResponse.json();
+        setPatientData(fetchedPatientData);
+
+        // Fetch visits
+        const visitsResponse = await fetch(
+          `http://0.0.0.0:8001/api/v1/visits/?skip=0&limit=100&patient_id=${patientId}&lang=en`
+        );
+        const visitsData: Visit[] = await visitsResponse.json();
+
+        // Fetch lab reports
+        const reportsResponse = await fetch(
+          `http://0.0.0.0:8001/api/v1/labs/reports?skip=0&limit=100&patient_id=${patientId}&lang=en`
+        );
+        const reportsData: LabReport[] = await reportsResponse.json();
+
+        // Calculate stats using array length
+        const pendingReports = reportsData.filter(
+          (r: LabReport) => r.status === "pending"
         );
 
-        let recommendations: Recommendation[] = [];
-        try {
-          recommendations = await patientService.getRecommendations();
-        } catch (err) {
-          // optional
-        }
-
         setStats({
-          totalVisits: visitsResponse.total,
-          totalReports: reportsResponse.total,
+          totalVisits: visitsData.length,
+          totalReports: reportsData.length,
           pendingReports: pendingReports.length,
-          recentRecommendations: recommendations.slice(0, 3),
         });
+
+        // Combine visits and reports for recent activity
+        const activities: ActivityItem[] = [];
+        
+        // Add recent visits to activity
+        visitsData.slice(0, 3).forEach((visit: Visit) => {
+          activities.push({
+            type: 'visit',
+            date: visit.visit_date,
+            title: 'Doctor Visit',
+            description: visit.visit_type.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
+            status: 'completed'
+          });
+        });
+
+        // Add recent lab reports to activity
+        reportsData.slice(0, 3).forEach((report: LabReport) => {
+          activities.push({
+            type: 'lab_report',
+            date: report.report_date,
+            title: 'Lab Report',
+            description: report.report_type.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
+            status: report.status
+          });
+        });
+
+        // Sort by date (most recent first)
+        activities.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+        setRecentActivity(activities.slice(0, 5));
+
       } catch (err: any) {
-        setError(err.response?.data?.detail || "Failed to load dashboard data");
+        setError(err.message || "Failed to load dashboard data");
       } finally {
         setIsLoading(false);
       }
     };
 
-    if (user?.entity_id) {
-      fetchDashboardData();
-    }
-  }, [user]);
+    fetchDashboardData();
+  }, []);
 
   if (isLoading) {
     return (
@@ -112,7 +152,7 @@ export const PatientDashboard: React.FC = () => {
                 Welcome back
               </p>
               <h2 className="text-4xl font-bold mt-2 text-slate-900">
-                {user?.name || "Patient"}
+                {patientData?.first_name} {patientData?.last_name}
               </h2>
               <p className="text-slate-600 mt-3 max-w-2xl">
                 Your personalized health hub with AI insights, lab intelligence,
@@ -123,9 +163,7 @@ export const PatientDashboard: React.FC = () => {
               <p className="text-xs uppercase tracking-[0.3em] text-slate-500 font-semibold">
                 Patient ID
               </p>
-              <p className="text-lg font-semibold text-slate-900 mt-1">
-                {user?.entity_id}
-              </p>
+                {patientData?.patient_id?.slice(0, 8)} ...
             </div>
           </div>
         </section>
@@ -153,124 +191,65 @@ export const PatientDashboard: React.FC = () => {
           />
         </div>
 
-        {stats.recentRecommendations.length > 0 && (
-          <section className={`${glassCard} p-6`}>
-            <h3 className="text-2xl font-semibold mb-4 text-slate-900">
-              AI Health Recommendations
+        <section className="grid">
+          {/* Recent Activity */}
+          <div className={`${glassCard} p-6`}>
+            <h3 className="text-xl font-semibold mb-4 text-slate-900">
+              Recent Activity
             </h3>
-            <div className="space-y-5">
-              {stats.recentRecommendations.map((rec, index) => (
-                <div
-                  key={index}
-                  className="p-4 rounded-2xl bg-slate-50 border border-slate-200"
-                >
-                  <div className="flex items-center justify-between mb-3">
-                    <div>
-                      <p className="text-xs uppercase tracking-[0.3em] text-slate-500 font-semibold">
-                        Condition
-                      </p>
-                      <h4 className="text-lg font-semibold text-slate-900">
-                        {rec.disease_name}
-                      </h4>
-                    </div>
-                    <span className="px-3 py-1 rounded-full text-xs bg-primary-50 text-primary-700 border border-primary-200 font-semibold">
-                      Confidence {Math.round((rec.confidence_score ?? 0) * 100)}
-                      %
-                    </span>
-                  </div>
-                  <div className="space-y-3">
-                    {rec.recommendations.slice(0, 3).map((r, i) => (
-                      <div key={i} className="flex items-start gap-3">
-                        <span
-                          className={`px-3 py-1 rounded-full text-xs font-medium ${
-                            r.priority === "high"
-                              ? "bg-rose-100 text-rose-700"
-                              : r.priority === "medium"
-                              ? "bg-amber-100 text-amber-700"
-                              : "bg-emerald-100 text-emerald-700"
-                          }`}
-                        >
-                          {r.priority}
-                        </span>
-                        <p className="text-sm text-slate-700">
-                          {r.recommendation}
+            <div className="space-y-3">
+              {recentActivity.length > 0 ? (
+                recentActivity.map((activity, index) => (
+                  <div
+                    key={index}
+                    className="p-4 rounded-2xl bg-slate-50 border border-slate-200 hover:bg-white transition-colors"
+                  >
+                    <div className="flex items-start gap-3">
+                      <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
+                        activity.type === 'visit' 
+                          ? 'bg-blue-100' 
+                          : 'bg-green-100'
+                      }`}>
+                        {activity.type === 'visit' ? (
+                          <Calendar size={20} className="text-blue-600" />
+                        ) : (
+                          <FileText size={20} className="text-green-600" />
+                        )}
+                      </div>
+                      <div className="flex-1">
+                        <div className="flex items-center justify-between mb-1">
+                          <p className="font-semibold text-slate-900">
+                            {activity.title}
+                          </p>
+                          {activity.status && (
+                            <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                              activity.status === 'completed' 
+                                ? 'bg-green-100 text-green-700'
+                                : activity.status === 'pending'
+                                ? 'bg-yellow-100 text-yellow-700'
+                                : 'bg-slate-100 text-slate-700'
+                            }`}>
+                              {activity.status}
+                            </span>
+                          )}
+                        </div>
+                        <p className="text-sm text-slate-600 mb-1">
+                          {activity.description}
+                        </p>
+                        <p className="text-xs text-slate-500 flex items-center gap-1">
+                          <Clock size={12} />
+                          {formatDate(activity.date)}
                         </p>
                       </div>
-                    ))}
+                    </div>
                   </div>
+                ))
+              ) : (
+                <div className="text-center py-8 text-slate-500">
+                  <Activity size={48} className="mx-auto mb-2 opacity-50" />
+                  <p>No recent activity</p>
                 </div>
-              ))}
-            </div>
-          </section>
-        )}
-
-        <section className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div className={`${glassCard} p-6`}>
-            <h3 className="text-xl font-semibold mb-4 text-slate-900">
-              Health Snapshot
-            </h3>
-            <div className="grid grid-cols-2 gap-4">
-              {[
-                {
-                  label: "Upcoming Appointments",
-                  value: Math.max(1, Math.round(stats.totalVisits / 4)),
-                },
-                { label: "Active Prescriptions", value: 3 },
-                { label: "Alerts", value: stats.pendingReports },
-                { label: "Care Team", value: 4 },
-              ].map((item) => (
-                <div
-                  key={item.label}
-                  className="p-4 rounded-2xl bg-slate-50 border border-slate-200"
-                >
-                  <p className="text-xs text-slate-500 uppercase tracking-[0.3em] font-semibold">
-                    {item.label}
-                  </p>
-                  <p className="text-3xl font-semibold mt-2 text-slate-900">
-                    {item.value}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className={`${glassCard} p-6`}>
-            <h3 className="text-xl font-semibold mb-4 text-slate-900">
-              Quick Actions
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {[
-                {
-                  title: "Lab Reports",
-                  description: "Check your latest diagnostics",
-                  icon: <FileText size={24} />,
-                  href: "/patient/lab-reports",
-                },
-                {
-                  title: "Health Predictions",
-                  description: "AI risk forecasting",
-                  icon: <TrendingUp size={24} />,
-                  href: "/patient/predictions",
-                },
-              ].map((action) => (
-                <a
-                  key={action.title}
-                  href={action.href}
-                  className="group p-4 rounded-2xl border border-slate-200 bg-slate-50 hover:bg-white hover:shadow-lg transition-all flex items-start gap-3"
-                >
-                  <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary-500 to-secondary-500 flex items-center justify-center text-white shadow-lg shadow-primary-500/20">
-                    {action.icon}
-                  </div>
-                  <div>
-                    <p className="font-semibold text-slate-900">
-                      {action.title}
-                    </p>
-                    <p className="text-sm text-slate-600">
-                      {action.description}
-                    </p>
-                  </div>
-                </a>
-              ))}
+              )}
             </div>
           </div>
         </section>

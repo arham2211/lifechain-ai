@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { LogOut, Menu, X, User } from "lucide-react";
 import { useAuth } from "../contexts/AuthContext";
@@ -15,12 +15,20 @@ interface LayoutProps {
   title: string;
 }
 
+interface PatientData {
+  patient_id: string;
+  first_name: string;
+  last_name: string;
+  email: string;
+}
+
 export const Layout: React.FC<LayoutProps> = ({
   children,
   navItems,
   title,
 }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [patientData, setPatientData] = useState<PatientData | null>(null);
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
@@ -30,6 +38,25 @@ export const Layout: React.FC<LayoutProps> = ({
     navigate("/login");
   };
 
+  useEffect(() => {
+    const fetchPatientData = async () => {
+      try {
+        // Hardcoded patient ID
+        const patientId = "4351c0c0-4336-4598-ad0e-0cdf4ef02490";
+
+        // Fetch patient data
+        const patientResponse = await fetch(`http://0.0.0.0:8001/api/v1/patients/${patientId}`);
+        if (patientResponse.ok) {
+          const fetchedPatientData = await patientResponse.json();
+          setPatientData(fetchedPatientData);
+        }
+      } catch (error) {
+        console.error("Failed to fetch patient data:", error);
+      }
+    };
+
+    fetchPatientData();
+  }, []);
   return (
     <div className="relative min-h-screen bg-gradient-to-br from-gray-50 to-white overflow-hidden">
       {/* Animated Background Blobs */}
@@ -121,7 +148,7 @@ export const Layout: React.FC<LayoutProps> = ({
               {/* User Info */}
               <div>
                 <h1 className="text-lg font-semibold text-slate-900 capitalize">
-                  {user?.name || "User"}
+                  {patientData ? `${patientData.first_name} ${patientData.last_name}` : user?.name || "User"}
                 </h1>
               </div>
               </div>
