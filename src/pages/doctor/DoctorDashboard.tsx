@@ -5,7 +5,7 @@ import { DataTable, type Column } from '../../components/common/DataTable';
 import { ErrorMessage } from '../../components/common/ErrorMessage';
 import { useNavigate } from 'react-router-dom';
 import type { Patient } from '../../types';
-import { Activity, Users, FileText, ClipboardList, Search } from 'lucide-react';
+import { Activity, Users, FileText, ClipboardList, Search, UserCircle } from 'lucide-react';
 import { formatDate } from '../../utils/formatters';
 import { useLoading, useError } from '../../utils/hooks';
 
@@ -14,7 +14,7 @@ const doctorNavItems = [
   { path: '/doctor/create-visit', label: 'Create Visit', icon: <ClipboardList size={20} /> },
 ];
 
-const glassCard = 'backdrop-blur-xl bg-black/80 border border-white/20 rounded-3xl shadow-glow';
+const glassCard = "glass-card rounded-3xl shadow-lg border border-slate-100";
 
 export const DoctorDashboard: React.FC = () => {
   const [patients, setPatients] = useState<Patient[]>([]);
@@ -95,7 +95,14 @@ export const DoctorDashboard: React.FC = () => {
     { 
       key: 'name', 
       label: 'Name',
-      render: (patient) => `${patient.first_name} ${patient.last_name}`
+      render: (patient) => (
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500">
+            <UserCircle size={20} />
+          </div>
+          <span className="font-medium text-slate-900">{patient.first_name} {patient.last_name}</span>
+        </div>
+      )
     },
     { key: 'cnic', label: 'CNIC' },
     {
@@ -106,7 +113,7 @@ export const DoctorDashboard: React.FC = () => {
     {
       key: 'gender',
       label: 'Gender',
-      render: (patient) => <span className="capitalize">{patient.gender}</span>,
+      render: (patient) => <span className="capitalize px-2 py-1 bg-slate-100 rounded-full text-xs font-medium text-slate-700">{patient.gender}</span>,
     },
     {
       key: 'phone',
@@ -131,41 +138,58 @@ export const DoctorDashboard: React.FC = () => {
 
   return (
     <Layout navItems={doctorNavItems} title="Doctor Portal">
-      <div className="space-y-8 text-white">
-        <section className={`${glassCard} p-6`}>
+      <div className="space-y-8">
+        <section className={`${glassCard} p-6 lg:p-10 `}>
           <div className="flex flex-wrap items-center justify-between gap-6">
             <div>
-              <p className="text-xs uppercase tracking-[0.3em] text-white/60">Clinical cockpit</p>
-              <h2 className="text-3xl font-bold mt-2">Patient Intelligence</h2>
-              <p className="text-white/70 mt-2 max-w-2xl">
+              <p className="text-sm uppercase tracking-[0.3em] text-slate-500 font-semibold mb-2">Clinical Cockpit</p>
+              <h2 className="text-4xl font-bold text-slate-900">Patient Intelligence</h2>
+              <p className="text-slate-600 mt-3 max-w-2xl text-lg">
                 Surface real-time vitals, case histories, and AI-assisted triage to streamline every consultation.
               </p>
             </div>
-            <div className="px-6 py-4 rounded-2xl bg-white/5 border border-white/10">
-              <p className="text-xs uppercase tracking-[0.3em] text-white/60">Today</p>
-              <p className="text-lg font-semibold">8 scheduled visits</p>
+            <div className="px-6 py-4 rounded-2xl bg-slate-50 border border-slate-200 shadow-sm">
+              <p className="text-xs uppercase tracking-[0.3em] text-slate-500 font-semibold">Today</p>
+              <p className="text-xl font-bold text-slate-900 mt-1">8 scheduled visits</p>
             </div>
           </div>
         </section>
 
         {selectedPatient && (
-          <div className={`${glassCard} p-6`}>
-            <div className="flex flex-wrap items-start justify-between gap-4">
-              <div>
-                <p className="text-xs uppercase tracking-[0.3em] text-white/60">Selected patient</p>
-                <h3 className="text-2xl font-semibold mt-2">
-                  {selectedPatient.first_name} {selectedPatient.last_name}
-                </h3>
-                <p className="text-white/70 mt-1">CNIC: {selectedPatient.cnic}</p>
-                <p className="text-white/70">DOB: {formatDate(selectedPatient.date_of_birth)}</p>
-                <p className="text-white/70">Gender: {selectedPatient.gender}</p>
-                <p className="text-white/70">Phone: {selectedPatient.phone || 'N/A'}</p>
+          <div className={`${glassCard} p-6 border-l-4 border-l-primary-500`}>
+            <div className="flex flex-wrap items-center justify-between gap-6">
+              <div className="flex items-start gap-4">
+                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary-500 to-blue-600 flex items-center justify-center text-white shadow-lg shadow-primary-500/20">
+                    <UserCircle size={32} />
+                </div>
+                <div>
+                  <p className="text-xs uppercase tracking-[0.3em] text-slate-500 font-semibold">Selected Patient</p>
+                  <h3 className="text-2xl font-bold text-slate-900 mt-1">
+                    {selectedPatient.first_name} {selectedPatient.last_name}
+                  </h3>
+                  <div className="flex flex-wrap gap-x-6 gap-y-2 mt-2 text-sm text-slate-600">
+                    <span className="flex items-center gap-1.5">
+                      <span className="w-1.5 h-1.5 rounded-full bg-slate-400"></span>
+                      CNIC: {selectedPatient.cnic}
+                    </span>
+                    <span className="flex items-center gap-1.5">
+                      <span className="w-1.5 h-1.5 rounded-full bg-slate-400"></span>
+                      DOB: {formatDate(selectedPatient.date_of_birth)}
+                    </span>
+                    <span className="flex items-center gap-1.5">
+                      <span className="w-1.5 h-1.5 rounded-full bg-slate-400"></span>
+                      {selectedPatient.gender}
+                    </span>
+                  </div>
+                </div>
               </div>
-              <div className="flex flex-col gap-3">
+              
+              <div className="flex flex-col sm:flex-row gap-3">
                 <button
                   onClick={() => navigate('/doctor/create-visit')}
-                  className="px-5 py-3 rounded-2xl bg-gradient-to-r from-teal-500 to-aqua-500 font-semibold text-white shadow-glow hover:shadow-glow-lg transition-all"
+                  className="px-6 py-3 rounded-xl bg-slate-900 text-white font-semibold shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 flex items-center gap-2"
                 >
+                  <ClipboardList size={18} />
                   Create Visit
                 </button>
                 <button
@@ -173,7 +197,7 @@ export const DoctorDashboard: React.FC = () => {
                     setSelectedPatient(null);
                     localStorage.removeItem('selectedPatient');
                   }}
-                  className="px-5 py-3 rounded-2xl border border-white/20 font-semibold text-white hover:bg-white/5 transition-all"
+                  className="px-6 py-3 rounded-xl border border-slate-200 text-slate-600 font-semibold hover:bg-slate-50 hover:text-slate-900 transition-all duration-200"
                 >
                   Clear Selection
                 </button>
@@ -183,27 +207,25 @@ export const DoctorDashboard: React.FC = () => {
         )}
 
         <section className={`${glassCard} p-6`}>
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-xl font-semibold">Patient Search</h3>
-            <div className="text-sm text-white/60">
-              Found {patients.length} patient{patients.length !== 1 ? 's' : ''}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4">
+            <div>
+               <h3 className="text-xl font-bold text-slate-900">Patient Search</h3>
+               <p className="text-slate-500 text-sm mt-1">Found {patients.length} patient{patients.length !== 1 ? 's' : ''}</p>
             </div>
           </div>
           
-          <div className="flex gap-2">
+          <div className="flex flex-col sm:flex-row gap-3 mb-6">
             <div className="flex-1">
               <SearchBar 
-                placeholder="Search by name or CNIC..." 
+                placeholder="Search by name, CNIC, or phone..." 
                 onSearch={handleInputChange}
                 loading={isLoading}
-                // value={searchQuery}
-                // onChange={handleInputChange}
               />
             </div>
             <button
               onClick={() => handleSearch()}
               disabled={!searchQuery.trim() || isLoading}
-              className="px-6 py-3 rounded-2xl bg-gradient-to-r from-teal-500 to-aqua-500 font-semibold text-white shadow-glow hover:shadow-glow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+              className="px-8 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 font-semibold text-white shadow-lg hover:shadow-blue-500/25 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
               <Search size={20} />
               Search
@@ -211,79 +233,90 @@ export const DoctorDashboard: React.FC = () => {
           </div>
           
           {error && (
-            <div className="mt-4">
+            <div className="mb-6">
               <ErrorMessage message={error} onClose={clearError} />
             </div>
           )}
           
           {showSearchResults && patients.length > 0 ? (
-            <div className="mt-4">
+            <div className="rounded-2xl border border-slate-200 overflow-hidden">
               <DataTable
                 data={patients}
                 columns={columns}
                 isLoading={isLoading}
                 onRowClick={handleSelectPatient}
-                // selectedRow={selectedPatient?.patient_id}
               />
             </div>
           ) : showSearchResults && patients.length === 0 ? (
-            <div className="mt-8 text-center py-8 border border-white/10 rounded-2xl">
-              <p className="text-white/60">No patients found. Try searching by name, CNIC, or phone number.</p>
-              <p className="text-sm text-white/40 mt-2">Example: Kenneth, 42103-2282167-4, 03014425988</p>
+            <div className="text-center py-12 bg-slate-50 rounded-2xl border border-slate-100 border-dashed">
+              <div className="w-16 h-16 rounded-full bg-slate-100 flex items-center justify-center mx-auto mb-4">
+                <Search size={32} className="text-slate-400" />
+              </div>
+              <p className="text-slate-900 font-medium">No patients found</p>
+              <p className="text-sm text-slate-500 mt-1">Try adjusting your search terms</p>
             </div>
           ) : !showSearchResults && searchQuery.trim() ? (
-            <div className="mt-8 text-center py-8 border border-white/10 rounded-2xl">
-              <p className="text-white/60">Click the Search button to find patients</p>
+            <div className="text-center py-12 bg-slate-50 rounded-2xl border border-slate-100 border-dashed">
+              <p className="text-slate-500">Click the Search button to find patients</p>
             </div>
           ) : (
-            <div className="mt-8 text-center py-8 border border-white/10 rounded-2xl">
-              <p className="text-white/60">Enter search criteria and click Search button</p>
+            <div className="text-center py-12 bg-slate-50 rounded-2xl border border-slate-100 border-dashed">
+                <div className="w-16 h-16 rounded-full bg-slate-100 flex items-center justify-center mx-auto mb-4">
+                    <Users size={32} className="text-slate-400" />
+                </div>
+              <p className="text-slate-900 font-medium">Patient Search</p>
+              <p className="text-sm text-slate-500 mt-1 mb-2">Enter search criteria above to find patient records</p>
+              <p className="text-xs text-slate-400 bg-white inline-block px-3 py-1 rounded-full border border-slate-200">Example: Kenneth, 42103-2282167-4</p>
             </div>
           )}
         </section>
 
         <section className={`${glassCard} p-6`}>
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-xl font-semibold">Quick Actions</h3>
+          <div className="flex items-center justify-between mb-6">
+            <h3 className="text-xl font-bold text-slate-900">Quick Actions</h3>
             {!selectedPatient && (
-              <p className="text-sm text-white/70">
-                Search and select a patient to unlock patient-specific workflows.
-              </p>
+              <span className="px-3 py-1 rounded-full bg-amber-50 text-amber-700 text-xs font-medium border border-amber-100 flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+                Select a patient first
+              </span>
             )}
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[
               {
                 title: 'View Patient Dashboard',
-                description: 'Complete medical history',
+                description: 'Complete medical history & reports',
                 icon: <Users size={24} />,
                 action: () => selectedPatient?.patient_id && navigate(`/doctor/patient/${selectedPatient.patient_id}`),
+                color: 'from-blue-500 to-indigo-600'
               },
               {
                 title: 'Create New Visit',
-                description: 'Record patient visit',
+                description: 'Record patient symptoms & diagnosis',
                 icon: <ClipboardList size={24} />,
                 action: () => navigate('/doctor/create-visit'),
+                color: 'from-emerald-500 to-teal-600'
               },
               {
                 title: 'Patient Family Tree',
-                description: 'View patient fmaily history',
+                description: 'View genetic history analysis',
                 icon: <FileText size={24} />,
                 action: () => selectedPatient?.patient_id && navigate(`/doctor/patient/${selectedPatient.patient_id}/records`),
+                color: 'from-purple-500 to-violet-600'
               },
             ].map((item) => (
               <button
                 key={item.title}
                 onClick={() => item.action()}
                 disabled={!selectedPatient && item.title !== 'Create New Visit'}
-                className="group p-4 rounded-2xl border border-white/10 bg-white/5 hover:bg-white/10 transition-all flex items-start gap-3 disabled:opacity-40 disabled:cursor-not-allowed"
+                className="group p-5 rounded-2xl border border-slate-200 bg-slate-50 hover:bg-white hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex items-start gap-4 text-left disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:shadow-none"
               >
-                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-teal-500/60 to-aqua-500/60 flex items-center justify-center text-white shadow-glow">
+                <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${item.color} flex items-center justify-center text-white shadow-lg`}>
                   {item.icon}
                 </div>
-                <div className="text-left">
-                  <p className="font-semibold text-white">{item.title}</p>
-                  <p className="text-sm text-white/70">{item.description}</p>
+                <div>
+                  <p className="font-bold text-slate-900 group-hover:text-blue-600 transition-colors">{item.title}</p>
+                  <p className="text-sm text-slate-500 mt-1 leading-relaxed">{item.description}</p>
                 </div>
               </button>
             ))}

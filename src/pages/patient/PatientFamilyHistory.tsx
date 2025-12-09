@@ -577,158 +577,345 @@ interface CompleteFamilyTree {
 
 // Dummy data with 2 relatives with diseases and depth of 3
 const dummyFamilyData: CompleteFamilyTree = {
-  patient_id: "00f49e86-3d79-4cc0-af69-17b8a047df37",
-  patient_name: "Mudassir Huzaifa",
-  total_blood_relatives: 6,
-  max_depth: 3,
-  relatives_with_diseases: 2,
-  relatives_without_diseases: 4,
-  family_tree: [
+  
+  "patient_id": "a45f3e18-67ef-4d40-85d1-c132d583e40b",
+  "patient_name": "Ahmed Ali",
+  "total_blood_relatives": 15,
+  "max_depth": 5,
+  "relatives_with_diseases": 5,
+  "relatives_without_diseases": 10,
+  "family_tree": [
     {
-      patient_id: "45daab9f-8d48-47ce-bf0c-71cbbbc61142",
-      name: "Muneeb Mustafa",
-      cnic: "42101-4195480-7",
-      date_of_birth: "1950-12-01",
-      gender: "male",
-      relationship_path: ["parent"],
-      relationship_to_searched_patient: "parent",
-      depth: 1,
-      relationship_type: "parent",
-      total_diseases: 1,
-      disease_names: ["diabetes"],
-      diagnoses: [
-        {
-          disease_name: "diabetes",
-          diagnosis_date: "2025-08-08T22:59:53",
-          confidence_score: 0.7445482681400702,
-          ml_model_used: "xgb_diabetes_v1",
-          status: "confirmed",
-          notes: "Type 2 diabetes diagnosed with high blood sugar levels",
-          diagnosed_at: "2025-08-08T22:59:53",
-          source: "diagnosis",
-        },
+      "patient_id": "4d330346-71a9-4a4f-ad20-ff5a6d06a3c8",
+      "name": "Maryam Ali",
+      "cnic": "83591-3532385-4",
+      "date_of_birth": "1997-08-14",
+      "gender": "female",
+      "relationship_path": [
+        "child"
       ],
+      "relationship_to_searched_patient": "child",
+      "depth": 0,
+      "relationship_type": "child",
+      "total_diseases": 0,
+      "disease_names": [],
+      "diagnoses": []
     },
     {
-      patient_id: "78e1b9c3-2a45-4d89-b6f1-9c3b7a8d4e5f",
-      name: "Fatima Ahmed",
-      cnic: "42101-5192378-9",
-      date_of_birth: "1952-05-15",
-      gender: "female",
-      relationship_path: ["parent"],
-      relationship_to_searched_patient: "parent",
-      depth: 1,
-      relationship_type: "parent",
-      total_diseases: 0,
-      disease_names: [],
-      diagnoses: [],
-    },
-    {
-      patient_id: "92c3a7d1-5b68-4f29-a3e7-8c1b2d9e4f6a",
-      name: "Abdul Rahman",
-      cnic: "42101-3194852-3",
-      date_of_birth: "1945-03-22",
-      gender: "male",
-      relationship_path: ["parent", "parent"],
-      relationship_to_searched_patient: "grandparent",
-      depth: 2,
-      relationship_type: "grandparent",
-      total_diseases: 1,
-      disease_names: ["hypertension", "heart_disease"],
-      diagnoses: [
-        {
-          disease_name: "hypertension",
-          diagnosis_date: "2020-06-15T10:30:00",
-          confidence_score: 0.9123456789,
-          ml_model_used: "hypertension_model_v2",
-          status: "confirmed",
-          notes: "Stage 2 hypertension with consistent high readings",
-          diagnosed_at: "2020-06-15T10:30:00",
-          source: "diagnosis",
-        },
-        {
-          disease_name: "heart_disease",
-          diagnosis_date: "2021-11-20T14:45:00",
-          confidence_score: 0.856743219,
-          ml_model_used: "cardio_model_v3",
-          status: "confirmed",
-          notes: "Coronary artery disease detected",
-          diagnosed_at: "2021-11-20T14:45:00",
-          source: "diagnosis",
-        },
+      "patient_id": "e479a295-2d46-4cc1-bcf6-c3c38d4d1f10",
+      "name": "Hira Ali",
+      "cnic": "57661-5595423-8",
+      "date_of_birth": "2022-09-08",
+      "gender": "female",
+      "relationship_path": [
+        "sibling"
       ],
+      "relationship_to_searched_patient": "sibling",
+      "depth": 0,
+      "relationship_type": "sibling",
+      "total_diseases": 0,
+      "disease_names": [],
+      "diagnoses": []
     },
     {
-      patient_id: "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
-      name: "Aisha Khan",
-      cnic: "42101-2193784-5",
-      date_of_birth: "1948-07-30",
-      gender: "female",
-      relationship_path: ["parent", "parent"],
-      relationship_to_searched_patient: "grandparent",
-      depth: 2,
-      relationship_type: "grandparent",
-      total_diseases: 0,
-      disease_names: [],
-      diagnoses: [],
+      "patient_id": "5ed5c449-84a6-4355-a26b-70f3cc75313d",
+      "name": "Ayesha Imran",
+      "cnic": "10636-8918305-7",
+      "date_of_birth": "1975-09-25",
+      "gender": "female",
+      "relationship_path": [
+        "grandchild"
+      ],
+      "relationship_to_searched_patient": "grandchild",
+      "depth": 0,
+      "relationship_type": "grandchild",
+      "total_diseases": 1,
+      "disease_names": [
+        "iron_deficiency_anemia"
+      ],
+      "diagnoses": [
+        {
+          "disease_name": "iron_deficiency_anemia",
+          "progression_stage": "Stable",
+          "assessed_date": "2025-11-09T15:27:53.091108",
+          "confidence_score": 0.92,
+          "ml_model_used": "anemia_progression_lstm",
+          "notes": "Well controlled",
+          "source": "progression"
+        }
+      ]
     },
     {
-      patient_id: "b2c3d4e5-f6a7-8901-bcde-f23456789012",
-      name: "Ahmed Ali",
-      cnic: "42101-6198432-7",
-      date_of_birth: "1975-09-12",
-      gender: "male",
-      relationship_path: ["sibling"],
-      relationship_to_searched_patient: "sibling",
-      depth: 1,
-      relationship_type: "sibling",
-      total_diseases: 0,
-      disease_names: [],
-      diagnoses: [],
+      "patient_id": "de1cc91f-57b6-407e-8ec7-ad89b0ee252f",
+      "name": "Ali Imran",
+      "cnic": "78721-7284673-1",
+      "date_of_birth": "1995-04-10",
+      "gender": "male",
+      "relationship_path": [
+        "child"
+      ],
+      "relationship_to_searched_patient": "child",
+      "depth": 0,
+      "relationship_type": "child",
+      "total_diseases": 1,
+      "disease_names": [
+        "chronic_kidney_disease"
+      ],
+      "diagnoses": [
+        {
+          "disease_name": "chronic_kidney_disease",
+          "progression_stage": "Stage 2",
+          "assessed_date": "2025-11-09T15:27:53.091108",
+          "confidence_score": 0.89,
+          "ml_model_used": "ckd_progression_lstm",
+          "notes": "Current status - Stage 2 CKD",
+          "source": "progression"
+        }
+      ]
     },
     {
-      patient_id: "c3d4e5f6-a7b8-9012-cdef-345678901234",
-      name: "Sara Ahmed",
-      cnic: "42101-7193265-1",
-      date_of_birth: "1980-11-25",
-      gender: "female",
-      relationship_path: ["sibling"],
-      relationship_to_searched_patient: "sibling",
-      depth: 1,
-      relationship_type: "sibling",
-      total_diseases: 0,
-      disease_names: [],
-      diagnoses: [],
+      "patient_id": "b3fc41fb-19b7-4a4d-886d-44efd326a760",
+      "name": "Imran Ahmad",
+      "cnic": "88488-1261147-5",
+      "date_of_birth": "1970-06-12",
+      "gender": "male",
+      "relationship_path": [
+        "grandchild"
+      ],
+      "relationship_to_searched_patient": "grandchild",
+      "depth": 0,
+      "relationship_type": "grandchild",
+      "total_diseases": 1,
+      "disease_names": [
+        "diabetes"
+      ],
+      "diagnoses": [
+        {
+          "disease_name": "diabetes",
+          "progression_stage": "Controlled",
+          "assessed_date": "2025-11-09T15:27:53.091108",
+          "confidence_score": 0.91,
+          "ml_model_used": "diabetes_progression_lstm",
+          "notes": "Well controlled with lifestyle",
+          "source": "progression"
+        }
+      ]
     },
     {
-      patient_id: "d4e5f6a7-b8c9-0123-defg-456789012345",
-      name: "Zainab Mustafa",
-      cnic: "42101-8194753-9",
-      date_of_birth: "2005-02-14",
-      gender: "female",
-      relationship_path: ["child"],
-      relationship_to_searched_patient: "child",
-      depth: 1,
-      relationship_type: "child",
-      total_diseases: 0,
-      disease_names: [],
-      diagnoses: [],
+      "patient_id": "a45f3e18-67ef-4d40-85d1-c132d583e40b",
+      "name": "Ahmed Ali",
+      "cnic": "32176-8567210-9",
+      "date_of_birth": "2020-03-15",
+      "gender": "male",
+      "relationship_path": [
+        "child",
+        "parent"
+      ],
+      "relationship_to_searched_patient": "spouse (via child)",
+      "depth": 1,
+      "relationship_type": "parent",
+      "total_diseases": 0,
+      "disease_names": [],
+      "diagnoses": []
     },
     {
-      patient_id: "e5f6a7b8-c9d0-1234-efgh-567890123456",
-      name: "Omar Khan",
-      cnic: "42101-9193268-3",
-      date_of_birth: "1920-04-05",
-      gender: "male",
-      relationship_path: ["parent", "parent", "parent"],
-      relationship_to_searched_patient: "great-grandparent",
-      depth: 3,
-      relationship_type: "great-grandparent",
-      total_diseases: 0,
-      disease_names: [],
-      diagnoses: [],
+      "patient_id": "4cbae5fa-4821-42ae-bb4f-4cc09599dd37",
+      "name": "Khadija Rashid",
+      "cnic": "45434-9026895-6",
+      "date_of_birth": "1947-05-30",
+      "gender": "female",
+      "relationship_path": [
+        "child",
+        "parent",
+        "grandchild",
+        "grandchild"
+      ],
+      "relationship_to_searched_patient": "Child → Parent → Grandchild → Grandchild",
+      "depth": 3,
+      "relationship_type": "grandchild",
+      "total_diseases": 0,
+      "disease_names": [],
+      "diagnoses": []
     },
-  ],
+    {
+      "patient_id": "803f58eb-06dc-4696-bd61-01766a8083eb",
+      "name": "Sana Hussain",
+      "cnic": "72397-2555061-8",
+      "date_of_birth": "1978-12-03",
+      "gender": "female",
+      "relationship_path": [
+        "child",
+        "parent",
+        "grandchild",
+        "sibling"
+      ],
+      "relationship_to_searched_patient": "Child → Parent → Grandchild → Sibling",
+      "depth": 3,
+      "relationship_type": "sibling",
+      "total_diseases": 0,
+      "disease_names": [],
+      "diagnoses": []
+    },
+    {
+      "patient_id": "82988805-b6e7-4a78-9e93-e8d6ff2f3f72",
+      "name": "Hassan Imran",
+      "cnic": "14046-7138780-1",
+      "date_of_birth": "1998-01-20",
+      "gender": "male",
+      "relationship_path": [
+        "child",
+        "parent",
+        "grandchild",
+        "parent"
+      ],
+      "relationship_to_searched_patient": "Child → Parent → Grandchild → Parent",
+      "depth": 3,
+      "relationship_type": "parent",
+      "total_diseases": 0,
+      "disease_names": [],
+      "diagnoses": []
+    },
+    {
+      "patient_id": "9c593569-547a-48b0-bbe9-df98932c9fbc",
+      "name": "Abdul Rashid",
+      "cnic": "21497-9668664-3",
+      "date_of_birth": "1943-11-08",
+      "gender": "male",
+      "relationship_path": [
+        "child",
+        "parent",
+        "grandchild",
+        "grandchild"
+      ],
+      "relationship_to_searched_patient": "Child → Parent → Grandchild → Grandchild",
+      "depth": 3,
+      "relationship_type": "grandchild",
+      "total_diseases": 1,
+      "disease_names": [
+        "chronic_kidney_disease"
+      ],
+      "diagnoses": [
+        {
+          "disease_name": "chronic_kidney_disease",
+          "progression_stage": "ESRD",
+          "assessed_date": "2025-11-09T15:27:53.091108",
+          "confidence_score": 0.92,
+          "ml_model_used": "ckd_progression_lstm",
+          "notes": "Ongoing dialysis",
+          "source": "progression"
+        }
+      ]
+    },
+    {
+      "patient_id": "cb3d00f4-f37d-4858-a3f6-84480561e9a8",
+      "name": "Zainab Imran",
+      "cnic": "44890-7582479-4",
+      "date_of_birth": "2000-11-05",
+      "gender": "female",
+      "relationship_path": [
+        "child",
+        "parent",
+        "grandchild",
+        "parent"
+      ],
+      "relationship_to_searched_patient": "Child → Parent → Grandchild → Parent",
+      "depth": 3,
+      "relationship_type": "parent",
+      "total_diseases": 0,
+      "disease_names": [],
+      "diagnoses": []
+    },
+    {
+      "patient_id": "64c9c8b3-6240-4a56-b448-451966a82a25",
+      "name": "Fatima Ahmad",
+      "cnic": "32165-1103519-8",
+      "date_of_birth": "1948-07-22",
+      "gender": "female",
+      "relationship_path": [
+        "child",
+        "parent",
+        "grandchild",
+        "grandchild"
+      ],
+      "relationship_to_searched_patient": "Child → Parent → Grandchild → Grandchild",
+      "depth": 3,
+      "relationship_type": "grandchild",
+      "total_diseases": 0,
+      "disease_names": [],
+      "diagnoses": []
+    },
+    {
+      "patient_id": "a82706f7-5d13-4f4a-8b5d-acc1ce498205",
+      "name": "Usman Ahmad",
+      "cnic": "67663-6746226-8",
+      "date_of_birth": "1968-02-18",
+      "gender": "male",
+      "relationship_path": [
+        "child",
+        "parent",
+        "grandchild",
+        "sibling"
+      ],
+      "relationship_to_searched_patient": "Child → Parent → Grandchild → Sibling",
+      "depth": 3,
+      "relationship_type": "sibling",
+      "total_diseases": 0,
+      "disease_names": [],
+      "diagnoses": []
+    },
+    {
+      "patient_id": "af97f9e6-b725-42bf-9d18-a2b067b5a1e1",
+      "name": "Muhammad Ahmad",
+      "cnic": "53647-4559722-5",
+      "date_of_birth": "1945-03-15",
+      "gender": "male",
+      "relationship_path": [
+        "child",
+        "parent",
+        "grandchild",
+        "grandchild"
+      ],
+      "relationship_to_searched_patient": "Child → Parent → Grandchild → Grandchild",
+      "depth": 3,
+      "relationship_type": "grandchild",
+      "total_diseases": 1,
+      "disease_names": [
+        "diabetes"
+      ],
+      "diagnoses": [
+        {
+          "disease_name": "diabetes",
+          "progression_stage": "Severe",
+          "assessed_date": "2025-11-09T15:27:53.091108",
+          "confidence_score": 0.9,
+          "ml_model_used": "diabetes_progression_lstm",
+          "notes": "Ongoing management",
+          "source": "progression"
+        }
+      ]
+    },
+    {
+      "patient_id": "ea8d8064-6b41-4aa9-877e-1b8175956a7d",
+      "name": "Bilal Usman",
+      "cnic": "23558-7449051-4",
+      "date_of_birth": "1996-07-28",
+      "gender": "male",
+      "relationship_path": [
+        "child",
+        "parent",
+        "grandchild",
+        "grandchild",
+        "grandparent"
+      ],
+      "relationship_to_searched_patient": "Child → Parent → Grandchild → Grandchild → Grandparent",
+      "depth": 4,
+      "relationship_type": "grandparent",
+      "total_diseases": 0,
+      "disease_names": [],
+      "diagnoses": []
+    }
+  ]
+
 };
 
 export const PatientFamilyHistory: React.FC = () => {
