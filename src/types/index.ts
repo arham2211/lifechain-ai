@@ -9,6 +9,27 @@ export interface User {
   entity_id: string; // patient_id, doctor_id, etc.
 }
 
+export interface ActivityItem {
+  type: 'visit' | 'lab_report';
+  date: string;
+  title: string;
+  description: string;
+  status?: string;
+}
+
+export interface FamilyMemberDiagnosis {
+  disease_name: string;
+  // diagnosis_date: string;
+  confidence_score: number;
+  ml_model_used: string;
+  // status: string;
+  notes: string | null;
+  // diagnosed_at: string;
+  source: string;
+  progression_stage?: string;
+  assessed_date?: string;
+}
+
 export interface AuthResponse {
   access_token: string;
   token_type: string;
@@ -89,18 +110,17 @@ export interface TestResult {
 // Visit Types
 export interface Visit {
   visit_id: string;
-  patient_id: string;
-  doctor_id: string;
   visit_date: string;
   visit_type: string;
-  chief_complaint?: string;
-  diagnosis?: string;
-  notes?: string;
+  chief_complaint: string;
+  doctor_patient_id: string;
+  patient_id: string;
+  doctor_notes: string;
+  vital_signs: any;
   created_at: string;
   updated_at: string;
-  patient?: Patient;
-  doctor?: Doctor;
 }
+
 
 export interface VitalSign {
   vital_id: string;
@@ -118,14 +138,13 @@ export interface VitalSign {
 }
 
 export interface Symptom {
-  symptom_id: string;
+  id: string;
   visit_id: string;
   symptom_name: string;
-  severity?: string;
-  duration?: string;
-  notes?: string;
+  severity: number;
+  duration_days: number;
+  notes: string;
   created_at: string;
-  updated_at: string;
 }
 
 // Diagnosis Types
@@ -133,13 +152,12 @@ export interface Diagnosis {
   diagnosis_id: string;
   visit_id: string;
   disease_name: string;
-  diagnosed_date: string;
-  severity?: string;
-  status: 'active' | 'resolved' | 'chronic';
-  ml_confidence_score?: number;
-  notes?: string;
+  diagnosis_date: string;
+  confidence_score: number;
+  ml_model_used: string;
+  status: string;
+  notes: string | null;
   created_at: string;
-  updated_at: string;
 }
 
 export interface Prescription {
@@ -148,8 +166,20 @@ export interface Prescription {
   medication_name: string;
   dosage: string;
   frequency: string;
-  duration: string;
-  notes?: string;
+  duration_days: number;
+  instructions: string;
+  created_at: string;
+}
+
+export interface VisitDetails {
+  visit_id: string;
+  visit_date: string;
+  visit_type: string;
+  chief_complaint: string;
+  doctor_patient_id: string;
+  patient_id: string;
+  doctor_notes: string;
+  vital_signs: any;
   created_at: string;
   updated_at: string;
 }
@@ -200,21 +230,26 @@ export interface FamilyRelationship {
 export interface FamilyMember {
   patient_id: string;
   name: string;
+  cnic: string;
   date_of_birth: string;
   gender: string;
-  relationship: string;
-  diseases: string[];
-  is_blood_relative: boolean;
+  relationship_path: string[];
+  relationship_to_searched_patient: string;
+  depth: number;
+  relationship_type: string;
+  total_diseases: number;
+  disease_names: string[];
+  diagnoses: FamilyMemberDiagnosis[];
 }
 
 export interface CompleteFamilyTree {
-  patient: Patient;
-  family_members: FamilyMember[];
-  genetic_risks: {
-    disease_name: string;
-    risk_score: number;
-    affected_relatives: number;
-  }[];
+  patient_id: string;
+  patient_name: string;
+  total_blood_relatives: number;
+  max_depth: number;
+  relatives_with_diseases: number;
+  relatives_without_diseases: number;
+  family_tree: FamilyMember[];
 }
 
 // API Response Types
@@ -291,16 +326,17 @@ export interface CreateVitalSignsForm {
 
 export interface CreateSymptomForm {
   symptom_name: string;
-  severity?: string;
-  duration?: string;
-  notes?: string;
+  severity: number; // Changed from string to number (1-5 scale)
+  duration_days: number; // Changed from string duration to number of days
+  notes?: string; // Made optional
 }
 
 export interface CreateDiagnosisForm {
   disease_name: string;
-  diagnosed_date: string;
-  severity?: string;
-  status: 'active' | 'resolved' | 'chronic';
+  diagnosis_date?: string; // Optional, will default to visit date
+  confidence_score?: number; // For AI diagnoses
+  ml_model_used?: string; // For AI diagnoses
+  status: "active" | "resolved" | "chronic" | "confirmed"; // Added "confirmed"
   notes?: string;
 }
 

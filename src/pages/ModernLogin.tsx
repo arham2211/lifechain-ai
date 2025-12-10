@@ -17,12 +17,14 @@ import {
 import { motion } from "framer-motion";
 
 export const ModernLogin: React.FC = () => {
+  const [loginMethod, setLoginMethod] = useState<'patient' | 'staff'>('patient');
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [cnic, setCnic] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const { login } = useAuth();
+  const { login, loginWithCnic } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -31,29 +33,36 @@ export const ModernLogin: React.FC = () => {
     setIsLoading(true);
 
     try {
-      await login(email, password);
-      const user = JSON.parse(localStorage.getItem("user") || "{}");
+      if (loginMethod === 'patient') {
+        await loginWithCnic(cnic);
+        // Navigate for patient
+        navigate("/patient/dashboard");
+      } else {
+        await login(email, password);
+        const user = JSON.parse(localStorage.getItem("user") || "{}");
 
-      switch (user.role) {
-        case "patient":
-          navigate("/patient/dashboard");
-          break;
-        case "doctor":
-          navigate("/doctor/dashboard");
-          break;
-        case "lab_staff":
-          navigate("/lab/dashboard");
-          break;
-        case "admin":
-          navigate("/admin/dashboard");
-          break;
-        default:
-          navigate("/");
+        switch (user.role) {
+          case "patient":
+            navigate("/patient/dashboard");
+            break;
+          case "doctor":
+            navigate("/doctor/dashboard");
+            break;
+          case "lab_staff":
+            navigate("/lab/dashboard");
+            break;
+          case "admin":
+            navigate("/admin/dashboard");
+            break;
+          default:
+            navigate("/");
+        }
       }
     } catch (err: any) {
       setError(
+        err.message ||
         err.response?.data?.detail ||
-          "Login failed. Please check your credentials."
+        "Login failed. Please check your credentials."
       );
     } finally {
       setIsLoading(false);
@@ -255,7 +264,7 @@ export const ModernLogin: React.FC = () => {
               {/* Decorative Header Blob */}
               <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-primary-500 via-purple-500 to-pink-500" />
 
-              <div className="mb-8">
+              <div className="mb-6">
                 <div className="w-12 h-12 bg-primary-50 rounded-xl flex items-center justify-center mb-4 text-primary-600">
                   <Fingerprint size={24} />
                 </div>
@@ -267,6 +276,30 @@ export const ModernLogin: React.FC = () => {
                 </p>
               </div>
 
+              {/* Login Method Toggle */}
+              <div className="flex bg-slate-50 p-1 rounded-xl mb-6">
+                <button
+                  type="button"
+                  onClick={() => setLoginMethod('patient')}
+                  className={`flex-1 py-2 text-sm font-semibold rounded-lg transition-all ${loginMethod === 'patient'
+                    ? 'bg-white text-primary-600 shadow-sm'
+                    : 'text-slate-500 hover:text-slate-700'
+                    }`}
+                >
+                  Patient Login
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setLoginMethod('staff')}
+                  className={`flex-1 py-2 text-sm font-semibold rounded-lg transition-all ${loginMethod === 'staff'
+                    ? 'bg-white text-primary-600 shadow-sm'
+                    : 'text-slate-500 hover:text-slate-700'
+                    }`}
+                >
+                  Staff Login
+                </button>
+              </div>
+
               {error && (
                 <div className="mb-6">
                   <ErrorMessage message={error} onClose={() => setError("")} />
@@ -274,60 +307,91 @@ export const ModernLogin: React.FC = () => {
               )}
 
               <form onSubmit={handleSubmit} className="space-y-5">
-                <div>
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">
-                    Email
-                  </label>
-                  <div className="relative">
-                    <Mail
-                      className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
-                      size={18}
-                    />
-                    <input
-                      type="email"
-                      required
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      className="w-full bg-slate-50 border border-slate-200 text-slate-900 text-sm rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent block w-full pl-11 p-3.5 transition-all hover:bg-slate-100/50"
-                      placeholder="name@hospital.com"
-                    />
+                {loginMethod === 'patient' ? (
+                  /* Patient CNIC Login */
+                  <div>
+                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">
+                      CNIC Number
+                    </label>
+                    <div className="relative">
+                      <Fingerprint
+                        className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
+                        size={18}
+                      />
+                      <input
+                        type="text"
+                        required
+                        pattern="\d{5}-\d{7}-\d{1}"
+                        title="Format: 12345-1234567-1"
+                        value={cnic}
+                        onChange={(e) => setCnic(e.target.value)}
+                        className="w-full bg-slate-50 border border-slate-200 text-slate-900 text-sm rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent block w-full pl-11 p-3.5 transition-all hover:bg-slate-100/50"
+                        placeholder="00000-0000000-0"
+                      />
+                    </div>
+                    <p className="mt-2 text-xs text-slate-400">
+                      Enter your 13-digit CNIC number to access your medical records.
+                    </p>
                   </div>
-                </div>
+                ) : (
+                  /* Staff Email/Password Login */
+                  <>
+                    <div>
+                      <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">
+                        Email
+                      </label>
+                      <div className="relative">
+                        <Mail
+                          className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
+                          size={18}
+                        />
+                        <input
+                          type="email"
+                          required
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
+                          className="w-full bg-slate-50 border border-slate-200 text-slate-900 text-sm rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent block w-full pl-11 p-3.5 transition-all hover:bg-slate-100/50"
+                          placeholder="name@hospital.com"
+                        />
+                      </div>
+                    </div>
 
-                <div>
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">
-                    Password
-                  </label>
-                  <div className="relative">
-                    <Lock
-                      className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
-                      size={18}
-                    />
-                    <input
-                      type={showPassword ? "text" : "password"}
-                      required
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      className="w-full bg-slate-50 border border-slate-200 text-slate-900 text-sm rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent block w-full pl-11 pr-11 p-3.5 transition-all hover:bg-slate-100/50"
-                      placeholder="••••••••"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
-                    >
-                      {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                    </button>
-                  </div>
-                  <div className="flex justify-end mt-2">
-                    <a
-                      href="#"
-                      className="text-xs font-medium text-primary-600 hover:text-primary-700"
-                    >
-                      Forgot password?
-                    </a>
-                  </div>
-                </div>
+                    <div>
+                      <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">
+                        Password
+                      </label>
+                      <div className="relative">
+                        <Lock
+                          className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
+                          size={18}
+                        />
+                        <input
+                          type={showPassword ? "text" : "password"}
+                          required
+                          value={password}
+                          onChange={(e) => setPassword(e.target.value)}
+                          className="w-full bg-slate-50 border border-slate-200 text-slate-900 text-sm rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent block w-full pl-11 pr-11 p-3.5 transition-all hover:bg-slate-100/50"
+                          placeholder="••••••••"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setShowPassword(!showPassword)}
+                          className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
+                        >
+                          {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                        </button>
+                      </div>
+                      <div className="flex justify-end mt-2">
+                        <a
+                          href="#"
+                          className="text-xs font-medium text-primary-600 hover:text-primary-700"
+                        >
+                          Forgot password?
+                        </a>
+                      </div>
+                    </div>
+                  </>
+                )}
 
                 <button
                   type="submit"
@@ -338,7 +402,7 @@ export const ModernLogin: React.FC = () => {
                     <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                   ) : (
                     <>
-                      <span>Sign In</span>
+                      <span>{loginMethod === 'patient' ? 'Access Records' : 'Sign In'}</span>
                       <ArrowLeft className="rotate-180 ml-2" size={16} />
                     </>
                   )}
@@ -347,37 +411,47 @@ export const ModernLogin: React.FC = () => {
 
               <div className="mt-8 border-t border-slate-100 pt-6">
                 <div className="grid grid-cols-2 gap-3 text-xs">
-                  <div
-                    className="p-2.5 rounded-lg border border-slate-100 bg-slate-50/50 text-center cursor-help"
-                    title="Use patient@test.com"
-                  >
-                    <span className="block text-slate-400 mb-1">Patient</span>
-                    <span className="font-mono font-medium text-slate-700">
-                      patient@test.com
-                    </span>
-                  </div>
-                  <div
-                    className="p-2.5 rounded-lg border border-slate-100 bg-slate-50/50 text-center cursor-help"
-                    title="Use doctor@test.com"
-                  >
-                    <span className="block text-slate-400 mb-1">Doctor</span>
-                    <span className="font-mono font-medium text-slate-700">
-                      doctor@test.com
-                    </span>
-                  </div>
-                   <div
-                    className="p-2.5 rounded-lg border border-slate-100 bg-slate-50/50 text-center cursor-help"
-                    title="Use doctor@test.com"
-                  >
-                    <span className="block text-slate-400 mb-1">Lab</span>
-                    <span className="font-mono font-medium text-slate-700">
-                      lab@test.com
-                    </span>
-                  </div>
+                  {loginMethod === 'patient' ? (
+                    <div
+                      className="col-span-2 p-2.5 rounded-lg border border-slate-100 bg-slate-50/50 text-center cursor-help"
+                      title="Use sample CNIC"
+                      onClick={() => setCnic('58312-9350507-5')}
+                    >
+                      <span className="block text-slate-400 mb-1">Sample CNIC</span>
+                      <span className="font-mono font-medium text-slate-700">
+                        58312-9350507-5
+                      </span>
+                    </div>
+                  ) : (
+                    <>
+                      <div
+                        className="p-2.5 rounded-lg border border-slate-100 bg-slate-50/50 text-center cursor-help"
+                        title="Use doctor@test.com"
+                      >
+                        <span className="block text-slate-400 mb-1">Doctor</span>
+                        <span className="font-mono font-medium text-slate-700">
+                          doctor@test.com
+                        </span>
+                      </div>
+                      <div
+                        className="p-2.5 rounded-lg border border-slate-100 bg-slate-50/50 text-center cursor-help"
+                        title="Use lab@test.com"
+                      >
+                        <span className="block text-slate-400 mb-1">Lab</span>
+                        <span className="font-mono font-medium text-slate-700">
+                          lab@test.com
+                        </span>
+                      </div>
+                    </>
+                  )}
                 </div>
                 <p className="text-center text-xs text-slate-400 mt-4">
-                  Password for all accounts:{" "}
-                  <span className="font-mono text-slate-600">password</span>
+                  {loginMethod === 'staff' && (
+                    <span>
+                      Password for staff accounts:{" "}
+                      <span className="font-mono text-slate-600">password</span>
+                    </span>
+                  )}
                 </p>
               </div>
 

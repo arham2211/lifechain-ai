@@ -25,6 +25,11 @@
   --color-secondary-900: #164e63;
 }
 
+
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   font-family: "Plus Jakarta Sans", sans-serif;
   margin: 0;

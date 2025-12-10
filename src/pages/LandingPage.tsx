@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Activity,
   X,
@@ -35,6 +35,31 @@ export const LandingPage: React.FC = () => {
     description: string;
     delay: number;
   }
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId.toLowerCase());
+    if (element) {
+      const offset = 80; // Adjust this value based on your header height
+      const elementPosition = element.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - offset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth"
+      });
+    }
+    setMobileMenuOpen(false);
+  };
+  useEffect(() => {
+    const hash = window.location.hash;
+    if (hash) {
+      const sectionId = hash.substring(1); // Remove the '#'
+      setTimeout(() => {
+        scrollToSection(sectionId);
+      }, 100);
+    }
+  }, []);
+
+  const navItems = ["Home", "Features", "About", "Testimonial", "Contact"];
 
   const features: Feature[] = [
     {
@@ -139,20 +164,21 @@ export const LandingPage: React.FC = () => {
 
             {/* Desktop Navigation */}
             <div className="hidden lg:flex items-center space-x-1">
-              {["Home", "Features", "About", "Team", "Contact"].map((item) => (
-                <a
+              {navItems.map((item) => (
+                <button
                   key={item}
-                  href={`#${item.toLowerCase()}`}
-                  className="px-4 py-2 font-semibold text-slate-600 hover:text-primary-600 hover:bg-primary-50 rounded-full transition-all duration-200"
+                  onClick={() => scrollToSection(item.toLowerCase())}
+                  className="px-4 py-2 font-semibold text-slate-600 hover:text-primary-600 hover:bg-primary-50 rounded-full transition-all duration-200 cursor-pointer"
                 >
                   {item}
-                </a>
+                </button>
               ))}
             </div>
 
+
             {/* CTA Button */}
             <div className="hidden lg:flex items-center space-x-4">
-              <button  onClick={() => navigate('/login')} className="cursor-pointer group relative px-5 py-2.5 bg-slate-900 text-white text-sm font-semibold rounded-full hover:shadow-lg hover:shadow-primary-500/30 transition-all duration-300 overflow-hidden">
+              <button onClick={() => navigate('/login')} className="cursor-pointer group relative px-5 py-2.5 bg-slate-900 text-white text-sm font-semibold rounded-full hover:shadow-lg hover:shadow-primary-500/30 transition-all duration-300 overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-r from-primary-500 to-secondary-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 <span className="relative flex items-center space-x-2">
                   <span>Get Started</span>
@@ -179,21 +205,19 @@ export const LandingPage: React.FC = () => {
         {mobileMenuOpen && (
           <div className="lg:hidden bg-white/80 backdrop-blur-xl border-t border-gray-100 shadow-2xl">
             <div className="px-4 py-6 space-y-2">
-              {["Home", "Features", "About", "Team", "Contact"].map((item) => (
-                <a
+              {navItems.map((item) => (
+                <button
                   key={item}
-                  href={`#${item.toLowerCase()}`}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="group flex items-center px-4 py-3 text-slate-700 font-semibold rounded-xl transition-all duration-300 relative overflow-hidden"
+                  onClick={() => scrollToSection(item.toLowerCase())}
+                  className="group flex items-center w-full px-4 py-3 text-slate-700 font-semibold rounded-xl transition-all duration-300 relative overflow-hidden text-left"
                 >
                   {/* Hover gradient background */}
                   <div className="absolute inset-0 bg-gradient-to-r from-primary-500/10 to-secondary-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-
                   {/* Text */}
                   <span className="relative z-10 group-hover:text-primary-600 transition-colors">
                     {item}
                   </span>
-                </a>
+                </button>
               ))}
 
               {/* Divider */}
@@ -588,7 +612,7 @@ export const LandingPage: React.FC = () => {
       </section>
 
       {/* Testimonials Section */}
-      <section className="py-24 bg-slate-50 relative">
+      <section id="testimonial" className="py-24 bg-slate-50 relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-2xl mx-auto mb-16">
             <h2 className="text-4xl font-bold text-slate-900 mb-4">
@@ -791,15 +815,15 @@ export const LandingPage: React.FC = () => {
                 Quick Links
               </h3>
               <ul className="space-y-3">
-                {["Home", "Features", "About", "Team", "Contact"].map(
+                {["Home", "Features", "About", "Testimonial", "Contact"].map(
                   (item) => (
                     <li key={item}>
-                      <a
-                        href={`#${item.toLowerCase()}`}
-                        className="text-gray-400 hover:text-primary-400 transition-colors duration-200"
+                      <button
+                        onClick={() => scrollToSection(item.toLowerCase())}
+                        className="text-gray-400 hover:text-primary-400 transition-colors duration-200 cursor-pointer"
                       >
                         {item}
-                      </a>
+                      </button>
                     </li>
                   )
                 )}

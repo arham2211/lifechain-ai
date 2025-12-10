@@ -13,6 +13,7 @@ import {
 import { formatDate } from "../../utils/formatters";
 import { usePagination, useError, useLoading } from "../../utils/hooks";
 import { useNavigate } from "react-router-dom";
+import type { Visit } from "../../types";
 
 const patientNavItems = [
   {
@@ -41,19 +42,6 @@ const patientNavItems = [
     icon: <Users size={20} />,
   },
 ];
-
-interface Visit {
-  visit_id: string;
-  visit_date: string;
-  visit_type: string;
-  chief_complaint: string;
-  doctor_patient_id: string;
-  patient_id: string;
-  doctor_notes: string;
-  vital_signs: any;
-  created_at: string;
-  updated_at: string;
-}
 
 interface Doctor {
   first_name: string;
@@ -110,9 +98,9 @@ export const PatientVisits: React.FC = () => {
     try {
       // startLoading();
       clearError();
-      
+
       const response = await fetch(
-        `http://localhost:8001/api/v1/visits/?skip=0&limit=100&patient_id=73b9d154-669f-4628-ad05-dae65207d12e&lang=en`,
+        `http://localhost:8001/api/v1/visits/?skip=0&limit=100&patient_id=${user?.entity_id}&lang=en`,
         {
           method: "GET",
           headers: {
@@ -120,13 +108,13 @@ export const PatientVisits: React.FC = () => {
           },
         }
       );
-      
+
       if (!response.ok) {
         throw new Error("Failed to fetch visit history");
       }
-      
+
       const visitsData: Visit[] = await response.json();
-     
+
       // Enhance visits with doctor names
       const enhancedVisits = await Promise.all(
         visitsData.map(async (visit: Visit) => {

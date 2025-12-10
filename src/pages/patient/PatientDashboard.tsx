@@ -3,9 +3,9 @@ import { Layout } from "../../components/Layout";
 import { StatCard } from "../../components/common/StatCard";
 import { ErrorMessage } from "../../components/common/ErrorMessage";
 import { LoadingSpinner } from "../../components/common/LoadingSpinner";
-// import { useAuth } from "../../contexts/AuthContext";
+import { useAuth } from "../../contexts/AuthContext";
 import { Activity, FileText, Calendar, TrendingUp, Users, Clock } from "lucide-react";
-import type { Visit, LabReport, Patient } from "../../types";
+import type { Visit, LabReport, Patient, ActivityItem } from "../../types";
 import { formatDate } from "../../utils/formatters";
 
 const patientNavItems = [
@@ -38,16 +38,9 @@ const patientNavItems = [
 
 const glassCard = "glass-card rounded-3xl shadow-lg border border-slate-100";
 
-interface ActivityItem {
-  type: 'visit' | 'lab_report';
-  date: string;
-  title: string;
-  description: string;
-  status?: string;
-}
 
 export const PatientDashboard: React.FC = () => {
-  // const { user } = useAuth();
+  const { user } = useAuth();
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
   const [patientData, setPatientData] = useState<Patient | null>(null);
@@ -61,11 +54,16 @@ export const PatientDashboard: React.FC = () => {
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
+        if (!user || !user.entity_id) {
+          setError("User session not found");
+          return;
+        }
+
         setIsLoading(true);
         setError("");
 
-        // Hardcoded patient ID
-        const patientId = "4351c0c0-4336-4598-ad0e-0cdf4ef02490";
+        // Get patient ID from auth context
+        const patientId = user.entity_id;
 
         // Fetch patient data
         const patientResponse = await fetch(`http://0.0.0.0:8001/api/v1/patients/${patientId}`);
@@ -97,7 +95,7 @@ export const PatientDashboard: React.FC = () => {
 
         // Combine visits and reports for recent activity
         const activities: ActivityItem[] = [];
-        
+
         // Add recent visits to activity
         visitsData.slice(0, 3).forEach((visit: Visit) => {
           activities.push({
@@ -163,7 +161,7 @@ export const PatientDashboard: React.FC = () => {
               <p className="text-xs uppercase tracking-[0.3em] text-slate-500 font-semibold">
                 Patient ID
               </p>
-                {patientData?.patient_id?.slice(0, 8)} ...
+              {patientData?.patient_id?.slice(0, 8)} ...
             </div>
           </div>
         </section>
@@ -205,11 +203,10 @@ export const PatientDashboard: React.FC = () => {
                     className="p-4 rounded-2xl bg-slate-50 border border-slate-200 hover:bg-white transition-colors"
                   >
                     <div className="flex items-start gap-3">
-                      <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
-                        activity.type === 'visit' 
-                          ? 'bg-blue-100' 
-                          : 'bg-green-100'
-                      }`}>
+                      <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${activity.type === 'visit'
+                        ? 'bg-blue-100'
+                        : 'bg-green-100'
+                        }`}>
                         {activity.type === 'visit' ? (
                           <Calendar size={20} className="text-blue-600" />
                         ) : (
@@ -222,13 +219,12 @@ export const PatientDashboard: React.FC = () => {
                             {activity.title}
                           </p>
                           {activity.status && (
-                            <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                              activity.status === 'completed' 
-                                ? 'bg-green-100 text-green-700'
-                                : activity.status === 'pending'
+                            <span className={`px-2 py-1 rounded-full text-xs font-medium ${activity.status === 'completed'
+                              ? 'bg-green-100 text-green-700'
+                              : activity.status === 'pending'
                                 ? 'bg-yellow-100 text-yellow-700'
                                 : 'bg-slate-100 text-slate-700'
-                            }`}>
+                              }`}>
                               {activity.status}
                             </span>
                           )}

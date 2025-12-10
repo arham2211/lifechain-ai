@@ -41,14 +41,16 @@ export const Layout: React.FC<LayoutProps> = ({
   useEffect(() => {
     const fetchPatientData = async () => {
       try {
-        // Hardcoded patient ID
-        const patientId = "4351c0c0-4336-4598-ad0e-0cdf4ef02490";
+        // Only fetch if user is patient and has entity_id
+        if (user?.role === 'patient' && user.entity_id) {
+          const patientId = user.entity_id;
 
-        // Fetch patient data
-        const patientResponse = await fetch(`http://0.0.0.0:8001/api/v1/patients/${patientId}`);
-        if (patientResponse.ok) {
-          const fetchedPatientData = await patientResponse.json();
-          setPatientData(fetchedPatientData);
+          // Fetch patient data
+          const patientResponse = await fetch(`http://0.0.0.0:8001/api/v1/patients/${patientId}`);
+          if (patientResponse.ok) {
+            const fetchedPatientData = await patientResponse.json();
+            setPatientData(fetchedPatientData);
+          }
         }
       } catch (error) {
         console.error("Failed to fetch patient data:", error);
@@ -56,7 +58,7 @@ export const Layout: React.FC<LayoutProps> = ({
     };
 
     fetchPatientData();
-  }, []);
+  }, [user]);
   return (
     <div className="relative min-h-screen bg-gradient-to-br from-gray-50 to-white overflow-hidden">
       {/* Animated Background Blobs */}
@@ -69,11 +71,10 @@ export const Layout: React.FC<LayoutProps> = ({
       <div className="relative z-10 flex">
         {/* Sidebar */}
         <aside
-          className={`fixed top-0 left-0 z-40 h-screen transition-transform duration-300 ${
-            isSidebarOpen
+          className={`fixed top-0 left-0 z-40 h-screen transition-transform duration-300 ${isSidebarOpen
               ? "translate-x-0"
               : "-translate-x-full lg:translate-x-0"
-          } w-72`}
+            } w-72`}
         >
           <div className="h-full glass-card border-r border-slate-200 shadow-xl">
             <div className="p-6 border-b border-slate-200">
@@ -89,11 +90,10 @@ export const Layout: React.FC<LayoutProps> = ({
                   <Link
                     key={item.path}
                     to={item.path}
-                    className={`flex items-center gap-3 px-4 py-3 rounded-2xl transition-all ${
-                      isActive
+                    className={`flex items-center gap-3 px-4 py-3 rounded-2xl transition-all ${isActive
                         ? "bg-gradient-to-r from-primary-500 to-secondary-500 text-white shadow-lg shadow-primary-500/20"
                         : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
-                    }`}
+                      }`}
                   >
                     <span className={isActive ? "text-white" : "text-slate-500"}>{item.icon}</span>
                     <span className="font-medium">{item.label}</span>
@@ -116,9 +116,8 @@ export const Layout: React.FC<LayoutProps> = ({
 
         {/* Main Content */}
         <div
-          className={`flex-1 transition-all duration-300 ${
-            isSidebarOpen ? "lg:ml-72" : "ml-0"
-          }`}
+          className={`flex-1 transition-all duration-300 ${isSidebarOpen ? "lg:ml-72" : "ml-0"
+            }`}
         >
           {/* Header */}
           <header className="flex items-center justify-between sticky top-0 z-30 backdrop-blur-xl bg-white/80 border-b border-slate-200 shadow-sm">
@@ -139,20 +138,20 @@ export const Layout: React.FC<LayoutProps> = ({
 
             <div className="px-6 py-3 flex items-center gap-4">
               {/* User Avatar */}
-            <Link to="/profile" >
-              <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary-500 to-secondary-500 flex items-center justify-center shadow-lg shadow-primary-500/20">
-                <User size={26} className="text-white" />
-              </div>
+              <Link to="/profile" >
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary-500 to-secondary-500 flex items-center justify-center shadow-lg shadow-primary-500/20">
+                    <User size={26} className="text-white" />
+                  </div>
 
-              {/* User Info */}
-              <div>
-                <h1 className="text-lg font-semibold text-slate-900 capitalize">
-                  {patientData ? `${patientData.first_name} ${patientData.last_name}` : user?.name || "User"}
-                </h1>
-              </div>
-              </div>
-            </Link>
+                  {/* User Info */}
+                  <div>
+                    <h1 className="text-lg font-semibold text-slate-900 capitalize">
+                      {patientData ? `${patientData.first_name} ${patientData.last_name}` : user?.name || "User"}
+                    </h1>
+                  </div>
+                </div>
+              </Link>
             </div>
           </header>
 

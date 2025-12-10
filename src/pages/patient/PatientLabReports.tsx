@@ -77,7 +77,7 @@ export const PatientLabReports: React.FC = () => {
       clearError();
 
       const response = await fetch(
-        `http://localhost:8001/api/v1/labs/reports?skip=0&limit=100&patient_id=73b9d154-669f-4628-ad05-dae65207d12e&lang=en`,
+        `http://localhost:8001/api/v1/labs/reports?skip=0&limit=100&patient_id=${user?.entity_id}&lang=en`,
         {
           method: "GET",
           headers: {

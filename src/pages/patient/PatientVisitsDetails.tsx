@@ -16,6 +16,7 @@ import {
 import { formatDate } from "../../utils/formatters";
 import { useError, useLoading } from "../../utils/hooks";
 import { useNavigate, useLocation } from "react-router-dom";
+import type { Symptom, Diagnosis, Prescription, VisitDetails } from "../../types";
 
 const patientNavItems = [
   {
@@ -45,51 +46,12 @@ const patientNavItems = [
   },
 ];
 
-interface Symptom {
-  id: string;
-  visit_id: string;
-  symptom_name: string;
-  severity: number;
-  duration_days: number;
-  notes: string;
-  created_at: string;
-}
 
-interface Diagnosis {
-  diagnosis_id: string;
-  visit_id: string;
-  disease_name: string;
-  diagnosis_date: string;
-  confidence_score: number;
-  ml_model_used: string;
-  status: string;
-  notes: string | null;
-  created_at: string;
-}
 
-interface Prescription {
-  prescription_id: string;
-  visit_id: string;
-  medication_name: string;
-  dosage: string;
-  frequency: string;
-  duration_days: number;
-  instructions: string;
-  created_at: string;
-}
 
-interface VisitDetails {
-  visit_id: string;
-  visit_date: string;
-  visit_type: string;
-  chief_complaint: string;
-  doctor_patient_id: string;
-  patient_id: string;
-  doctor_notes: string;
-  vital_signs: any;
-  created_at: string;
-  updated_at: string;
-}
+
+
+
 
 interface DoctorInfo {
   first_name: string;
@@ -127,11 +89,11 @@ export const PatientVisitDetails: React.FC = () => {
   // Function to fetch visit details
   const fetchVisitDetails = async () => {
     if (!visitId) return;
-    
+
     try {
       setIsLoading(true);
       clearError();
-      
+
       const response = await fetch(
         `http://localhost:8001/api/v1/visits/${visitId}?lang=en`,
         {
@@ -141,17 +103,17 @@ export const PatientVisitDetails: React.FC = () => {
           },
         }
       );
-      
+
       if (!response.ok) {
         throw new Error("Failed to fetch visit details");
       }
-      
+
       const visitData: VisitDetails = await response.json();
       setVisit(visitData);
-      
+
       // Fetch doctor info
       await fetchDoctorInfo(visitData.doctor_patient_id);
-      
+
     } catch (err: unknown) {
       if (err instanceof Error) {
         setError(err.message || "Failed to load visit details");
@@ -190,7 +152,7 @@ export const PatientVisitDetails: React.FC = () => {
   // Function to fetch symptoms
   const fetchSymptoms = async () => {
     if (!visitId) return;
-    
+
     try {
       const response = await fetch(
         `http://localhost:8001/api/v1/visits/${visitId}/symptoms?lang=en`,
@@ -201,11 +163,11 @@ export const PatientVisitDetails: React.FC = () => {
           },
         }
       );
-      
+
       if (!response.ok) {
         throw new Error("Failed to fetch symptoms");
       }
-      
+
       const symptomsData: Symptom[] = await response.json();
       setSymptoms(symptomsData);
     } catch (err: unknown) {
@@ -216,7 +178,7 @@ export const PatientVisitDetails: React.FC = () => {
   // Function to fetch diagnoses
   const fetchDiagnoses = async () => {
     if (!visitId) return;
-    
+
     try {
       const response = await fetch(
         `http://localhost:8001/api/v1/visits/${visitId}/diagnoses?lang=en`,
@@ -227,11 +189,11 @@ export const PatientVisitDetails: React.FC = () => {
           },
         }
       );
-      
+
       if (!response.ok) {
         throw new Error("Failed to fetch diagnoses");
       }
-      
+
       const diagnosesData: Diagnosis[] = await response.json();
       setDiagnoses(diagnosesData);
     } catch (err: unknown) {
@@ -242,7 +204,7 @@ export const PatientVisitDetails: React.FC = () => {
   // Function to fetch prescriptions
   const fetchPrescriptions = async () => {
     if (!visitId) return;
-    
+
     try {
       const response = await fetch(
         `http://localhost:8001/api/v1/visits/${visitId}/prescriptions?lang=en`,
@@ -253,11 +215,11 @@ export const PatientVisitDetails: React.FC = () => {
           },
         }
       );
-      
+
       if (!response.ok) {
         throw new Error("Failed to fetch prescriptions");
       }
-      
+
       const prescriptionsData: Prescription[] = await response.json();
       setPrescriptions(prescriptionsData);
     } catch (err: unknown) {
@@ -484,7 +446,7 @@ export const PatientVisitDetails: React.FC = () => {
                                 {getSeverityLabel(symptom.severity)} ({symptom.severity}/10)
                               </div>
                               <div className="ml-3 w-32 bg-slate-200 rounded-full h-2">
-                                <div 
+                                <div
                                   className="bg-blue-600 h-2 rounded-full"
                                   style={{ width: `${symptom.severity * 10}%` }}
                                 ></div>
@@ -638,7 +600,7 @@ export const PatientVisitDetails: React.FC = () => {
             </div>
           </div>
 
-          
+
         </div>
       </div>
     </Layout>

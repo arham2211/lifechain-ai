@@ -3,6 +3,7 @@ import { Layout } from "../../components/Layout";
 import { ErrorMessage } from "../../components/common/ErrorMessage";
 import { LoadingSpinner } from "../../components/common/LoadingSpinner";
 import { useAuth } from "../../contexts/AuthContext";
+import type { FamilyMember, CompleteFamilyTree } from "../../types";
 import {
   Activity,
   FileText,
@@ -63,388 +64,8 @@ const patientNavItems = [
   },
 ];
 
-interface FamilyMemberDiagnosis {
-  disease_name: string;
-  // diagnosis_date: string;
-  confidence_score: number;
-  ml_model_used: string;
-  // status: string;
-  notes: string | null;
-  // diagnosed_at: string;
-  source: string;
-  progression_stage?: string;
-  assessed_date?: string;
-}
-
-interface FamilyMember {
-  patient_id: string;
-  name: string;
-  cnic: string;
-  date_of_birth: string;
-  gender: string;
-  relationship_path: string[];
-  relationship_to_searched_patient: string;
-  depth: number;
-  relationship_type: string;
-  total_diseases: number;
-  disease_names: string[];
-  diagnoses: FamilyMemberDiagnosis[];
-}
-
-interface CompleteFamilyTree {
-  patient_id: string;
-  patient_name: string;
-  total_blood_relatives: number;
-  max_depth: number;
-  relatives_with_diseases: number;
-  relatives_without_diseases: number;
-  family_tree: FamilyMember[];
-}
-
-// Dummy data (truncated for brevity, use your existing data)
-const dummyFamilyData: CompleteFamilyTree = {
-  "patient_id": "a45f3e18-67ef-4d40-85d1-c132d583e40b",
-  "patient_name": "Ahmed Ali",
-  "total_blood_relatives": 15,
-  "max_depth": 5,
-  "relatives_with_diseases": 5,
-  "relatives_without_diseases": 10,
-  "family_tree": [
-    {
-      "patient_id": "4d330346-71a9-4a4f-ad20-ff5a6d06a3c8",
-      "name": "Maryam Ali",
-      "cnic": "83591-3532385-4",
-      "date_of_birth": "1997-08-14",
-      "gender": "female",
-      "relationship_path": [
-        "child"
-      ],
-      "relationship_to_searched_patient": "child",
-      "depth": 0,
-      "relationship_type": "child",
-      "total_diseases": 0,
-      "disease_names": [],
-      "diagnoses": []
-    },
-    {
-      "patient_id": "e479a295-2d46-4cc1-bcf6-c3c38d4d1f10",
-      "name": "Hira Ali",
-      "cnic": "57661-5595423-8",
-      "date_of_birth": "2022-09-08",
-      "gender": "female",
-      "relationship_path": [
-        "sibling"
-      ],
-      "relationship_to_searched_patient": "sibling",
-      "depth": 0,
-      "relationship_type": "sibling",
-      "total_diseases": 0,
-      "disease_names": [],
-      "diagnoses": []
-    },
-    {
-      "patient_id": "5ed5c449-84a6-4355-a26b-70f3cc75313d",
-      "name": "Ayesha Imran",
-      "cnic": "10636-8918305-7",
-      "date_of_birth": "1975-09-25",
-      "gender": "female",
-      "relationship_path": [
-        "grandchild"
-      ],
-      "relationship_to_searched_patient": "grandchild",
-      "depth": 0,
-      "relationship_type": "grandchild",
-      "total_diseases": 1,
-      "disease_names": [
-        "iron_deficiency_anemia"
-      ],
-      "diagnoses": [
-        {
-          "disease_name": "iron_deficiency_anemia",
-          "progression_stage": "Stable",
-          "assessed_date": "2025-11-09T15:27:53.091108",
-          "confidence_score": 0.92,
-          "ml_model_used": "anemia_progression_lstm",
-          "notes": "Well controlled",
-          "source": "progression"
-        }
-      ]
-    },
-    {
-      "patient_id": "de1cc91f-57b6-407e-8ec7-ad89b0ee252f",
-      "name": "Ali Imran",
-      "cnic": "78721-7284673-1",
-      "date_of_birth": "1995-04-10",
-      "gender": "male",
-      "relationship_path": [
-        "child"
-      ],
-      "relationship_to_searched_patient": "child",
-      "depth": 0,
-      "relationship_type": "child",
-      "total_diseases": 1,
-      "disease_names": [
-        "chronic_kidney_disease"
-      ],
-      "diagnoses": [
-        {
-          "disease_name": "chronic_kidney_disease",
-          "progression_stage": "Stage 2",
-          "assessed_date": "2025-11-09T15:27:53.091108",
-          "confidence_score": 0.89,
-          "ml_model_used": "ckd_progression_lstm",
-          "notes": "Current status - Stage 2 CKD",
-          "source": "progression"
-        }
-      ]
-    },
-    {
-      "patient_id": "b3fc41fb-19b7-4a4d-886d-44efd326a760",
-      "name": "Imran Ahmad",
-      "cnic": "88488-1261147-5",
-      "date_of_birth": "1970-06-12",
-      "gender": "male",
-      "relationship_path": [
-        "grandchild"
-      ],
-      "relationship_to_searched_patient": "grandchild",
-      "depth": 0,
-      "relationship_type": "grandchild",
-      "total_diseases": 1,
-      "disease_names": [
-        "diabetes"
-      ],
-      "diagnoses": [
-        {
-          "disease_name": "diabetes",
-          "progression_stage": "Controlled",
-          "assessed_date": "2025-11-09T15:27:53.091108",
-          "confidence_score": 0.91,
-          "ml_model_used": "diabetes_progression_lstm",
-          "notes": "Well controlled with lifestyle",
-          "source": "progression"
-        }
-      ]
-    },
-    {
-      "patient_id": "a45f3e18-67ef-4d40-85d1-c132d583e40b",
-      "name": "Ahmed Ali",
-      "cnic": "32176-8567210-9",
-      "date_of_birth": "2020-03-15",
-      "gender": "male",
-      "relationship_path": [
-        "child",
-        "parent"
-      ],
-      "relationship_to_searched_patient": "spouse (via child)",
-      "depth": 1,
-      "relationship_type": "parent",
-      "total_diseases": 0,
-      "disease_names": [],
-      "diagnoses": []
-    },
-    {
-      "patient_id": "4cbae5fa-4821-42ae-bb4f-4cc09599dd37",
-      "name": "Khadija Rashid",
-      "cnic": "45434-9026895-6",
-      "date_of_birth": "1947-05-30",
-      "gender": "female",
-      "relationship_path": [
-        "child",
-        "parent",
-        "grandchild",
-        "grandchild"
-      ],
-      "relationship_to_searched_patient": "Child → Parent → Grandchild → Grandchild",
-      "depth": 3,
-      "relationship_type": "grandchild",
-      "total_diseases": 0,
-      "disease_names": [],
-      "diagnoses": []
-    },
-    {
-      "patient_id": "803f58eb-06dc-4696-bd61-01766a8083eb",
-      "name": "Sana Hussain",
-      "cnic": "72397-2555061-8",
-      "date_of_birth": "1978-12-03",
-      "gender": "female",
-      "relationship_path": [
-        "child",
-        "parent",
-        "grandchild",
-        "sibling"
-      ],
-      "relationship_to_searched_patient": "Child → Parent → Grandchild → Sibling",
-      "depth": 3,
-      "relationship_type": "sibling",
-      "total_diseases": 0,
-      "disease_names": [],
-      "diagnoses": []
-    },
-    {
-      "patient_id": "82988805-b6e7-4a78-9e93-e8d6ff2f3f72",
-      "name": "Hassan Imran",
-      "cnic": "14046-7138780-1",
-      "date_of_birth": "1998-01-20",
-      "gender": "male",
-      "relationship_path": [
-        "child",
-        "parent",
-        "grandchild",
-        "parent"
-      ],
-      "relationship_to_searched_patient": "Child → Parent → Grandchild → Parent",
-      "depth": 3,
-      "relationship_type": "parent",
-      "total_diseases": 0,
-      "disease_names": [],
-      "diagnoses": []
-    },
-    {
-      "patient_id": "9c593569-547a-48b0-bbe9-df98932c9fbc",
-      "name": "Abdul Rashid",
-      "cnic": "21497-9668664-3",
-      "date_of_birth": "1943-11-08",
-      "gender": "male",
-      "relationship_path": [
-        "child",
-        "parent",
-        "grandchild",
-        "grandchild"
-      ],
-      "relationship_to_searched_patient": "Child → Parent → Grandchild → Grandchild",
-      "depth": 3,
-      "relationship_type": "grandchild",
-      "total_diseases": 1,
-      "disease_names": [
-        "chronic_kidney_disease"
-      ],
-      "diagnoses": [
-        {
-          "disease_name": "chronic_kidney_disease",
-          "progression_stage": "ESRD",
-          "assessed_date": "2025-11-09T15:27:53.091108",
-          "confidence_score": 0.92,
-          "ml_model_used": "ckd_progression_lstm",
-          "notes": "Ongoing dialysis",
-          "source": "progression"
-        }
-      ]
-    },
-    {
-      "patient_id": "cb3d00f4-f37d-4858-a3f6-84480561e9a8",
-      "name": "Zainab Imran",
-      "cnic": "44890-7582479-4",
-      "date_of_birth": "2000-11-05",
-      "gender": "female",
-      "relationship_path": [
-        "child",
-        "parent",
-        "grandchild",
-        "parent"
-      ],
-      "relationship_to_searched_patient": "Child → Parent → Grandchild → Parent",
-      "depth": 3,
-      "relationship_type": "parent",
-      "total_diseases": 0,
-      "disease_names": [],
-      "diagnoses": []
-    },
-    {
-      "patient_id": "64c9c8b3-6240-4a56-b448-451966a82a25",
-      "name": "Fatima Ahmad",
-      "cnic": "32165-1103519-8",
-      "date_of_birth": "1948-07-22",
-      "gender": "female",
-      "relationship_path": [
-        "child",
-        "parent",
-        "grandchild",
-        "grandchild"
-      ],
-      "relationship_to_searched_patient": "Child → Parent → Grandchild → Grandchild",
-      "depth": 3,
-      "relationship_type": "grandchild",
-      "total_diseases": 0,
-      "disease_names": [],
-      "diagnoses": []
-    },
-    {
-      "patient_id": "a82706f7-5d13-4f4a-8b5d-acc1ce498205",
-      "name": "Usman Ahmad",
-      "cnic": "67663-6746226-8",
-      "date_of_birth": "1968-02-18",
-      "gender": "male",
-      "relationship_path": [
-        "child",
-        "parent",
-        "grandchild",
-        "sibling"
-      ],
-      "relationship_to_searched_patient": "Child → Parent → Grandchild → Sibling",
-      "depth": 3,
-      "relationship_type": "sibling",
-      "total_diseases": 0,
-      "disease_names": [],
-      "diagnoses": []
-    },
-    {
-      "patient_id": "af97f9e6-b725-42bf-9d18-a2b067b5a1e1",
-      "name": "Muhammad Ahmad",
-      "cnic": "53647-4559722-5",
-      "date_of_birth": "1945-03-15",
-      "gender": "male",
-      "relationship_path": [
-        "child",
-        "parent",
-        "grandchild",
-        "grandchild"
-      ],
-      "relationship_to_searched_patient": "Child → Parent → Grandchild → Grandchild",
-      "depth": 3,
-      "relationship_type": "grandchild",
-      "total_diseases": 1,
-      "disease_names": [
-        "diabetes"
-      ],
-      "diagnoses": [
-        {
-          "disease_name": "diabetes",
-          "progression_stage": "Severe",
-          "assessed_date": "2025-11-09T15:27:53.091108",
-          "confidence_score": 0.9,
-          "ml_model_used": "diabetes_progression_lstm",
-          "notes": "Ongoing management",
-          "source": "progression"
-        }
-      ]
-    },
-    {
-      "patient_id": "ea8d8064-6b41-4aa9-877e-1b8175956a7d",
-      "name": "Bilal Usman",
-      "cnic": "23558-7449051-4",
-      "date_of_birth": "1996-07-28",
-      "gender": "male",
-      "relationship_path": [
-        "child",
-        "parent",
-        "grandchild",
-        "grandchild",
-        "grandparent"
-      ],
-      "relationship_to_searched_patient": "Child → Parent → Grandchild → Grandchild → Grandparent",
-      "depth": 4,
-      "relationship_type": "grandparent",
-      "total_diseases": 0,
-      "disease_names": [],
-      "diagnoses": []
-    }
-  ]
-};
-
-// Disease category mapping with icons and colors
 const DISEASE_CATEGORIES = {
-  
+
   Diabetes: {
     diseases: ["diabetes"],
     icon: Thermometer,
@@ -490,6 +111,7 @@ export const PatientFamilyHistory: React.FC = () => {
 
   useEffect(() => {
     fetchFamilyTree();
+    console.log(user?.entity_id)
   }, [user]);
 
   const fetchFamilyTree = async () => {
@@ -501,17 +123,22 @@ export const PatientFamilyHistory: React.FC = () => {
         throw new Error("User not authenticated");
       }
 
-      // Simulate API delay
-      await new Promise((resolve) => setTimeout(resolve, 800));
+      const response = await fetch(
+        `http://0.0.0.0:8001/api/v1/patients/${user.entity_id}/family-disease-history?max_depth=10&lang=en`
+      );
 
-      // Use dummy data instead of API call for now
-      setFamilyTree(dummyFamilyData);
+      if (!response.ok) {
+        throw new Error("Failed to load family history");
+      }
+
+      const data: CompleteFamilyTree = await response.json();
+      setFamilyTree(data);
 
       // Auto-expand the first few members
-      if (dummyFamilyData.family_tree.length > 0) {
+      if (data.family_tree && data.family_tree.length > 0) {
         const initialExpanded = new Set<string>();
         // Expand members with diseases by default
-        dummyFamilyData.family_tree
+        data.family_tree
           .filter((member) => member.total_diseases > 0)
           .slice(0, 3)
           .forEach((member) => {
@@ -520,13 +147,14 @@ export const PatientFamilyHistory: React.FC = () => {
         setExpandedMembers(initialExpanded);
         // Select the first member with diseases, or first member if none
         const firstMemberWithDisease =
-          dummyFamilyData.family_tree.find(
+          data.family_tree.find(
             (member) => member.total_diseases > 0
-          ) || dummyFamilyData.family_tree[0];
+          ) || data.family_tree[0];
         setSelectedMember(firstMemberWithDisease);
       }
     } catch (err: any) {
       setError(err.message || "Failed to load family history");
+      console.error("Error fetching family history:", err);
     } finally {
       setIsLoading(false);
     }
@@ -681,13 +309,13 @@ export const PatientFamilyHistory: React.FC = () => {
 
   const exportFamilyTree = () => {
     if (!familyTree) return;
-    
+
     const data = {
       exportedAt: new Date().toISOString(),
       patient: familyTree.patient_name,
       ...familyTree
     };
-    
+
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -821,11 +449,10 @@ export const PatientFamilyHistory: React.FC = () => {
               <div className="flex flex-wrap gap-2">
                 <button
                   onClick={() => setSelectedDiseaseCategory(null)}
-                  className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all ${
-                    selectedDiseaseCategory === null
-                      ? "bg-slate-800 text-white"
-                      : "bg-slate-100 text-slate-700 hover:bg-slate-200"
-                  }`}
+                  className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all ${selectedDiseaseCategory === null
+                    ? "bg-slate-800 text-white"
+                    : "bg-slate-100 text-slate-700 hover:bg-slate-200"
+                    }`}
                 >
                   All Categories
                 </button>
@@ -835,11 +462,10 @@ export const PatientFamilyHistory: React.FC = () => {
                     onClick={() => setSelectedDiseaseCategory(
                       selectedDiseaseCategory === category ? null : category
                     )}
-                    className={`px-3 py-1.5 rounded-full text-sm font-medium border transition-all flex items-center gap-2 ${
-                      selectedDiseaseCategory === category
-                        ? `${data.color} border-2`
-                        : "border-transparent hover:border-slate-300"
-                    }`}
+                    className={`px-3 py-1.5 rounded-full text-sm font-medium border transition-all flex items-center gap-2 ${selectedDiseaseCategory === category
+                      ? `${data.color} border-2`
+                      : "border-transparent hover:border-slate-300"
+                      }`}
                   >
                     <data.icon size={14} className={data.iconColor} />
                     {category.charAt(0).toUpperCase() + category.slice(1)}
@@ -952,11 +578,10 @@ export const PatientFamilyHistory: React.FC = () => {
                       filteredAndSortedMembers.map((member) => (
                         <div
                           key={member.patient_id}
-                          className={`border rounded-lg transition-all duration-200 hover:shadow-md ${
-                            selectedMember?.patient_id === member.patient_id
-                              ? "border-blue-300 bg-gradient-to-r from-blue-50 to-white ring-2 ring-blue-100"
-                              : "border-gray-200 hover:bg-slate-50"
-                          }`}
+                          className={`border rounded-lg transition-all duration-200 hover:shadow-md ${selectedMember?.patient_id === member.patient_id
+                            ? "border-blue-300 bg-gradient-to-r from-blue-50 to-white ring-2 ring-blue-100"
+                            : "border-gray-200 hover:bg-slate-50"
+                            }`}
                           style={getDepthStyle(member.depth)}
                         >
                           <div
@@ -1057,11 +682,10 @@ export const PatientFamilyHistory: React.FC = () => {
                                   </span>
                                 )}
                                 <ChevronRight
-                                  className={`h-5 w-5 text-slate-400 transition-transform ${
-                                    expandedMembers.has(member.patient_id)
-                                      ? "rotate-90"
-                                      : ""
-                                  }`}
+                                  className={`h-5 w-5 text-slate-400 transition-transform ${expandedMembers.has(member.patient_id)
+                                    ? "rotate-90"
+                                    : ""
+                                    }`}
                                 />
                               </div>
                             </div>
@@ -1083,7 +707,7 @@ export const PatientFamilyHistory: React.FC = () => {
                                       iconColor: "text-slate-600"
                                     };
                                     const IconComponent = categoryData.icon;
-                                    
+
                                     return (
                                       <div
                                         key={idx}
@@ -1310,7 +934,7 @@ export const PatientFamilyHistory: React.FC = () => {
                     <PieChart className="text-slate-600" size={20} />
                     Health Statistics
                   </h3>
-                  
+
                   {/* Disease Distribution */}
                   <div className="mb-6">
                     <h4 className="text-sm font-medium text-slate-700 mb-3">Common Conditions</h4>

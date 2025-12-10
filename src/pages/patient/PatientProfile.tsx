@@ -2,18 +2,19 @@ import React, { useEffect, useState } from 'react';
 import { Layout } from '../../components/Layout';
 import { ErrorMessage } from '../../components/common/ErrorMessage';
 import { LoadingSpinner } from '../../components/common/LoadingSpinner';
-import { 
-  Activity, 
-  FileText, 
-  Calendar, 
-  TrendingUp, 
-  Users, 
-  Heart, 
-  Mail, 
-  Phone, 
-  MapPin, 
-  Droplet, 
-  UserCircle, 
+import { useAuth } from '../../contexts/AuthContext';
+import {
+  Activity,
+  FileText,
+  Calendar,
+  TrendingUp,
+  Users,
+  Heart,
+  Mail,
+  Phone,
+  MapPin,
+  Droplet,
+  UserCircle,
   Edit,
   Shield,
   Fingerprint,
@@ -35,7 +36,7 @@ const patientNavItems = [
 const glassCard = 'glass-card rounded-3xl shadow-lg border border-slate-100 bg-white/80 backdrop-blur-xl';
 
 export const PatientProfile: React.FC = () => {
-//   const { user } = useAuth();
+  const { user } = useAuth();
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
   const [patientData, setPatientData] = useState<Patient | null>(null);
@@ -44,12 +45,17 @@ export const PatientProfile: React.FC = () => {
   useEffect(() => {
     const fetchProfileData = async () => {
       try {
+        if (!user || !user.entity_id) {
+          setError("User session not found");
+          return;
+        }
+
         setIsLoading(true);
         setError('');
 
         // Using the specific URL requested by the user
-        const response = await fetch('http://0.0.0.0:8001/api/v1/patients/4351c0c0-4336-4598-ad0e-0cdf4ef02490');
-        
+        const response = await fetch(`http://0.0.0.0:8001/api/v1/patients/${user.entity_id}`);
+
         if (!response.ok) {
           throw new Error('Failed to fetch patient data');
         }
@@ -93,12 +99,12 @@ export const PatientProfile: React.FC = () => {
 
   const ProfileHeader = () => {
     if (!patientData) return null;
-    
+
     return (
       <section className={`${glassCard} p-6 lg:p-8 relative overflow-hidden`}>
         {/* Background decorative elements */}
         <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-primary-500/5 to-secondary-500/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/4"></div>
-        
+
         <div className="relative flex flex-col lg:flex-row items-start lg:items-center gap-8">
           <div className="group relative">
             <div className="w-28 h-28 lg:w-32 lg:h-32 rounded-full p-1 bg-gradient-to-br from-primary-500 to-secondary-500 shadow-xl shadow-primary-500/20">
@@ -116,7 +122,7 @@ export const PatientProfile: React.FC = () => {
               <Edit size={16} />
             </button>
           </div>
-          
+
           <div className="flex-1 w-full">
             <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
               <div>
@@ -138,7 +144,7 @@ export const PatientProfile: React.FC = () => {
                   )}
                 </div>
               </div>
-              
+
               <div className="flex flex-col items-end gap-2">
                 <div className="px-5 py-3 rounded-2xl bg-slate-900 text-white shadow-lg shadow-slate-900/10">
                   <div className="flex items-center gap-2 mb-1">
@@ -151,7 +157,7 @@ export const PatientProfile: React.FC = () => {
                 </div>
               </div>
             </div>
-            
+
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-8 pt-6 border-t border-slate-100">
               <div className="flex items-center gap-3 group">
                 <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center group-hover:scale-110 transition-transform">
@@ -183,7 +189,7 @@ export const PatientProfile: React.FC = () => {
             </div>
           </div>
         </div>
-        
+
         <div className="mt-8 flex gap-2 overflow-x-auto no-scrollbar pb-2">
           {[
             { id: 'personal', label: 'Personal Information', icon: UserCircle },
@@ -195,11 +201,10 @@ export const PatientProfile: React.FC = () => {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`relative px-6 py-3 rounded-xl flex items-center gap-2 text-sm font-semibold transition-all duration-300 whitespace-nowrap ${
-                  isActive
-                    ? 'bg-slate-900 text-white shadow-lg shadow-slate-900/20'
-                    : 'bg-white text-slate-600 hover:bg-slate-50 border border-slate-200'
-                }`}
+                className={`relative px-6 py-3 rounded-xl flex items-center gap-2 text-sm font-semibold transition-all duration-300 whitespace-nowrap ${isActive
+                  ? 'bg-slate-900 text-white shadow-lg shadow-slate-900/20'
+                  : 'bg-white text-slate-600 hover:bg-slate-50 border border-slate-200'
+                  }`}
               >
                 <tab.icon size={18} className={isActive ? 'text-primary-400' : 'text-slate-400'} />
                 {tab.label}
@@ -210,47 +215,48 @@ export const PatientProfile: React.FC = () => {
       </section>
     );
   };
-  
-  const PersonalInformationTab = () => {
-     if (!patientData) return null;
 
-     return (
-    <div className={`${glassCard} p-6 mt-6`}>
-      <div className="flex justify-between items-center mb-8">
-        <div>
-          <h2 className="text-xl font-bold text-slate-900 flex items-center gap-2">
-            <Sparkles size={18} className="text-amber-500" />
-            Personal Details
-          </h2>
-          <p className="text-slate-500 text-sm mt-1">Manage your personal information</p>
+  const PersonalInformationTab = () => {
+    if (!patientData) return null;
+
+    return (
+      <div className={`${glassCard} p-6 mt-6`}>
+        <div className="flex justify-between items-center mb-8">
+          <div>
+            <h2 className="text-xl font-bold text-slate-900 flex items-center gap-2">
+              <Sparkles size={18} className="text-amber-500" />
+              Personal Details
+            </h2>
+            <p className="text-slate-500 text-sm mt-1">Manage your personal information</p>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8">
+          {[
+            { label: 'Full Name', value: patientData.first_name + ' ' + patientData.last_name },
+            { label: 'Date of Birth', value: `${formatDate(patientData.date_of_birth)} (${getAge(patientData.date_of_birth)} years)` },
+            { label: 'National ID (CNIC)', value: patientData.cnic },
+            { label: 'Gender', value: patientData.gender, capitalize: true },
+            { label: 'Blood Type', value: patientData.blood_group },
+            { label: 'Email', value: patientData.email },
+            { label: 'Phone', value: patientData.phone },
+            { label: 'Address', value: patientData.address },
+            { label: 'Registered Since', value: formatDate(patientData.created_at) },
+            { label: 'Last Updated', value: formatDate(patientData.updated_at) },
+          ].map((item, idx) => (
+            <div key={idx} className="group">
+              <p className="text-xs uppercase tracking-wider text-slate-400 font-semibold mb-2">{item.label}</p>
+              <div className="flex items-center justify-between pb-2 border-b border-slate-100 group-hover:border-primary-100 transition-colors">
+                <p className={`text-slate-900 font-medium ${item.capitalize ? 'capitalize' : ''}`}>
+                  {item.value || 'Not provided'}
+                </p>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
-      
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8">
-        {[
-          { label: 'Full Name', value: patientData.first_name + ' ' + patientData.last_name },
-          { label: 'Date of Birth', value: `${formatDate(patientData.date_of_birth)} (${getAge(patientData.date_of_birth)} years)` },
-          { label: 'National ID (CNIC)', value: patientData.cnic },
-          { label: 'Gender', value: patientData.gender, capitalize: true },
-          { label: 'Blood Type', value: patientData.blood_group },
-          { label: 'Email', value: patientData.email },
-          { label: 'Phone', value: patientData.phone },
-          { label: 'Address', value: patientData.address },
-          { label: 'Registered Since', value: formatDate(patientData.created_at) },
-          { label: 'Last Updated', value: formatDate(patientData.updated_at) },
-        ].map((item, idx) => (
-          <div key={idx} className="group">
-            <p className="text-xs uppercase tracking-wider text-slate-400 font-semibold mb-2">{item.label}</p>
-            <div className="flex items-center justify-between pb-2 border-b border-slate-100 group-hover:border-primary-100 transition-colors">
-              <p className={`text-slate-900 font-medium ${item.capitalize ? 'capitalize' : ''}`}>
-                {item.value || 'Not provided'}
-              </p>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  )};
+    )
+  };
 
   const HealthSnapshotTab = () => (
     <div className="space-y-6 mt-6">
@@ -273,10 +279,10 @@ export const PatientProfile: React.FC = () => {
           ))}
         </div>
       </div>
-      
+
       <div className={`${glassCard} p-6`}>
         <div className="flex justify-between items-center mb-5">
-           <h2 className="text-xl font-bold text-slate-900 flex items-center gap-2">
+          <h2 className="text-xl font-bold text-slate-900 flex items-center gap-2">
             <Heart size={18} className="text-rose-500" />
             Current Medications
           </h2>
@@ -284,7 +290,7 @@ export const PatientProfile: React.FC = () => {
             View History
           </button>
         </div>
-        
+
         <div className="space-y-4">
           {[
             { name: 'Metformin', dosage: '500mg', frequency: 'Twice daily', purpose: 'Diabetes Management' },
@@ -311,44 +317,44 @@ export const PatientProfile: React.FC = () => {
       </div>
     </div>
   );
-  
+
   const AccountSettingsTab = () => (
     <div className="space-y-6 mt-6">
       <div className={`${glassCard} p-6`}>
         <h2 className="text-xl font-bold text-slate-900 mb-6 flex items-center gap-2">
-            <Shield size={18} className="text-slate-600" />
-            Security & Privacy
+          <Shield size={18} className="text-slate-600" />
+          Security & Privacy
         </h2>
-        
+
         <div className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <button className="flex items-center justify-between p-5 rounded-2xl bg-slate-50 border border-slate-200 hover:border-primary-200 hover:shadow-md transition-all group">
-                <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center group-hover:bg-primary-50 transition-colors">
-                        <Lock size={18} className="text-slate-600 group-hover:text-primary-600"/>
-                    </div>
-                    <div className="text-left">
-                        <p className="font-semibold text-slate-900">Change Password</p>
-                        <p className="text-xs text-slate-500">Last changed 30 days ago</p>
-                    </div>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center group-hover:bg-primary-50 transition-colors">
+                  <Lock size={18} className="text-slate-600 group-hover:text-primary-600" />
                 </div>
-                 <ChevronRight size={18} className="text-slate-400 group-hover:translate-x-1 transition-transform" />
+                <div className="text-left">
+                  <p className="font-semibold text-slate-900">Change Password</p>
+                  <p className="text-xs text-slate-500">Last changed 30 days ago</p>
+                </div>
+              </div>
+              <ChevronRight size={18} className="text-slate-400 group-hover:translate-x-1 transition-transform" />
             </button>
-            
-             <button className="flex items-center justify-between p-5 rounded-2xl bg-slate-50 border border-slate-200 hover:border-primary-200 hover:shadow-md transition-all group">
-                <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center group-hover:bg-primary-50 transition-colors">
-                        <Shield size={18} className="text-slate-600 group-hover:text-primary-600"/>
-                    </div>
-                    <div className="text-left">
-                        <p className="font-semibold text-slate-900">2FA Authentication</p>
-                        <p className="text-xs text-slate-500">Enabled</p>
-                    </div>
+
+            <button className="flex items-center justify-between p-5 rounded-2xl bg-slate-50 border border-slate-200 hover:border-primary-200 hover:shadow-md transition-all group">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center group-hover:bg-primary-50 transition-colors">
+                  <Shield size={18} className="text-slate-600 group-hover:text-primary-600" />
                 </div>
-                 <ChevronRight size={18} className="text-slate-400 group-hover:translate-x-1 transition-transform" />
+                <div className="text-left">
+                  <p className="font-semibold text-slate-900">2FA Authentication</p>
+                  <p className="text-xs text-slate-500">Enabled</p>
+                </div>
+              </div>
+              <ChevronRight size={18} className="text-slate-400 group-hover:translate-x-1 transition-transform" />
             </button>
           </div>
-          
+
           <div className="pt-6 border-t border-slate-100">
             <h3 className="text-lg font-bold text-slate-900 mb-4">Notifications</h3>
             <div className="space-y-3">
@@ -373,7 +379,7 @@ export const PatientProfile: React.FC = () => {
       </div>
     </div>
   );
-  
+
 
 
   if (isLoading) {
@@ -388,9 +394,9 @@ export const PatientProfile: React.FC = () => {
     <Layout navItems={patientNavItems} title="Patient Profile">
       <div className="space-y-6">
         {error && <ErrorMessage message={error} onClose={() => setError('')} />}
-        
+
         <ProfileHeader />
-        
+
         {activeTab === 'personal' && <PersonalInformationTab />}
         {activeTab === 'health' && <HealthSnapshotTab />}
         {activeTab === 'settings' && <AccountSettingsTab />}
