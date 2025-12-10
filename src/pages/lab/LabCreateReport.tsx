@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Layout } from "../../components/Layout";
 import { ErrorMessage } from "../../components/common/ErrorMessage";
 import { SearchBar } from "../../components/common/SearchBar";
@@ -7,7 +7,6 @@ import type { Patient } from "../../types";
 import {
   Activity,
   FileText,
-  AlertCircle,
   CheckCircle,
   List,
   Upload,
@@ -19,26 +18,23 @@ import { DataTable, type Column } from "../../components/common/DataTable";
 import { formatDate } from "../../utils/formatters";
 
 const labNavItems = [
-  { path: "/lab/dashboard", label: "Dashboard", icon: <Activity size={20} /> },
-  {
-    path: "/lab/create-report",
-    label: "Create Lab Report",
-    icon: <FileText size={20} />,
-  },
-  {
-    path: "/lab/upload-report",
-    label: "Upload Report",
-    icon: <Upload size={20} />,
-  },
-  { path: "/lab/reports", label: "All Reports", icon: <List size={20} /> },
-  {
-    path: "/lab/abnormal",
-    label: "Abnormal Results",
-    icon: <AlertCircle size={20} />,
-  },
+  { path: '/lab/dashboard', label: 'Dashboard', icon: <Activity size={20} /> },
+  { path: '/lab/create-report', label: 'Create Lab Report', icon: <FileText size={20} /> },
+  { path: '/lab/upload-report', label: 'Upload Report', icon: <Upload size={20} /> },
+  { path: '/lab/reports', label: 'All Reports', icon: <List size={20} /> },
+ 
 ];
 
 type FormStep = "select-patient" | "report-info" | "complete";
+
+interface SupportedTest {
+  test_name: string;
+  unit: string;
+  description: string;
+  reference_range_min: number;
+  reference_range_max: number;
+  gender_specific: boolean;
+}
 
 const glassCard =
   "glass-card rounded-3xl shadow-lg border border-slate-100 bg-white/80 backdrop-blur-md";
@@ -63,8 +59,27 @@ export const LabCreateReport: React.FC = () => {
   );
   const [reportType, setReportType] = useState("blood_test");
   const [reportTitle, setReportTitle] = useState("");
+  const [supportedTests, setSupportedTests] = useState<SupportedTest[]>([]);
 
   const { isLoading, withLoading } = useLoading();
+
+  useEffect(() => {
+    const fetchSupportedTests = async () => {
+      try {
+        const response = await fetch(
+          `${API_BASE_URL}/labs/tests/supported?lang=en`
+        );
+        if (response.ok) {
+          const data = await response.json();
+          setSupportedTests(data.supported_tests || []);
+        }
+      } catch (err) {
+        console.error("Failed to fetch supported tests", err);
+      }
+    };
+    fetchSupportedTests();
+  }, []);
+
   const { error, setError, clearError } = useError();
 
   const handleSearch = async (query?: string) => {
@@ -115,7 +130,7 @@ export const LabCreateReport: React.FC = () => {
     try {
       clearError();
       await withLoading(async () => {
-        
+
         const payload = {
           patient_id: selectedPatient.patient_id,
           lab_id: HARDCODED_LAB_ID,
@@ -216,11 +231,10 @@ export const LabCreateReport: React.FC = () => {
                       <div
                         className={`
                            flex items-center gap-2 px-4 py-2 rounded-lg transition-all
-                           ${
-                             isCurrent
-                               ? "bg-white shadow-sm text-slate-900 font-semibold"
-                               : ""
-                           }
+                           ${isCurrent
+                            ? "bg-white shadow-sm text-slate-900 font-semibold"
+                            : ""
+                          }
                            ${isCompleted ? "text-green-600" : ""}
                            ${!isCurrent && !isCompleted ? "text-slate-400" : ""}
                         `}
@@ -230,11 +244,10 @@ export const LabCreateReport: React.FC = () => {
                              w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold
                              ${isCurrent ? "bg-indigo-600 text-white" : ""}
                              ${isCompleted ? "bg-green-100 text-green-600" : ""}
-                             ${
-                               !isCurrent && !isCompleted
-                                 ? "bg-slate-200 text-slate-500"
-                                 : ""
-                             }
+                             ${!isCurrent && !isCompleted
+                              ? "bg-slate-200 text-slate-500"
+                              : ""
+                            }
                            `}
                         >
                           {isCompleted ? <CheckCircle size={14} /> : index + 1}
@@ -352,15 +365,20 @@ export const LabCreateReport: React.FC = () => {
                 </div>
                 <div className="md:col-span-2">
                   <label className="block text-sm font-medium text-slate-700 mb-2">
-                    Report Title / Test Name
+                    Test Name
                   </label>
-                  <input
-                    type="text"
-                    placeholder="e.g. Complete Blood Count (CBC)"
+                  <select
                     value={reportTitle}
                     onChange={(e) => setReportTitle(e.target.value)}
-                    className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition-all"
-                  />
+                    className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition-all bg-white"
+                  >
+                    <option value="">Select a test...</option>
+                    {supportedTests.map((test) => (
+                      <option key={test.test_name} value={test.test_name}>
+                        {test.test_name.replace(/_/g, " ").toUpperCase()}
+                      </option>
+                    ))}
+                  </select>
                 </div>
               </div>
 

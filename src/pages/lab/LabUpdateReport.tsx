@@ -5,7 +5,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import {
   Activity,
   FileText,
-  AlertCircle,
   List,
   Upload,
   Plus,
@@ -18,23 +17,11 @@ import { useLoading, useError } from "../../utils/hooks";
 import { formatDate } from "../../utils/formatters";
 
 const labNavItems = [
-  { path: "/lab/dashboard", label: "Dashboard", icon: <Activity size={20} /> },
-  {
-    path: "/lab/create-report",
-    label: "Create Lab Report",
-    icon: <FileText size={20} />,
-  },
-  {
-    path: "/lab/upload-report",
-    label: "Upload Report",
-    icon: <Upload size={20} />,
-  },
-  { path: "/lab/reports", label: "All Reports", icon: <List size={20} /> },
-  {
-    path: "/lab/abnormal",
-    label: "Abnormal Results",
-    icon: <AlertCircle size={20} />,
-  },
+  { path: '/lab/dashboard', label: 'Dashboard', icon: <Activity size={20} /> },
+  { path: '/lab/create-report', label: 'Create Lab Report', icon: <FileText size={20} /> },
+  { path: '/lab/upload-report', label: 'Upload Report', icon: <Upload size={20} /> },
+  { path: '/lab/reports', label: 'All Reports', icon: <List size={20} /> },
+ 
 ];
 
 const glassCard =
@@ -81,10 +68,12 @@ interface ReportDetails {
 export const LabUpdateReport: React.FC = () => {
   const navigate = useNavigate();
   const { report_id } = useParams<{ report_id: string }>();
-  
+
   const [reportDetails, setReportDetails] = useState<ReportDetails | null>(null);
   const [testResults, setTestResults] = useState<TestResultForm[]>([]);
   const [supportedTests, setSupportedTests] = useState<SupportedTest[]>([]);
+  const [supportedDiseases, setSupportedDiseases] = useState<string[]>([]);
+  const [selectedDisease, setSelectedDisease] = useState<string>("");
   const [showTestDropdown, setShowTestDropdown] = useState<number | null>(null);
 
   const { isLoading, withLoading } = useLoading();
@@ -92,9 +81,11 @@ export const LabUpdateReport: React.FC = () => {
 
   // Fetch report details and supported tests on mount
   useEffect(() => {
+    console.log("report_id", report_id);
     if (report_id) {
       fetchReportDetails();
       fetchSupportedTests();
+      fetchSupportedDiseases();
     }
   }, [report_id]);
 
@@ -106,7 +97,7 @@ export const LabUpdateReport: React.FC = () => {
         );
         if (!response.ok) throw new Error("Failed to fetch report details");
         const data = await response.json();
-        
+
         // Fetch patient data
         const patientResponse = await fetch(
           `${API_BASE_URL}/patients/${data.patient_id}`
@@ -115,7 +106,7 @@ export const LabUpdateReport: React.FC = () => {
         if (patientResponse.ok) {
           patientData = await patientResponse.json();
         }
-        
+
         setReportDetails({
           ...data,
           patient: patientData ? {
@@ -140,6 +131,18 @@ export const LabUpdateReport: React.FC = () => {
       setSupportedTests(data.supported_tests || []);
     } catch (err) {
       console.error("Error fetching supported tests:", err);
+    }
+  };
+
+  const fetchSupportedDiseases = async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/ml/diseases`);
+      if (response.ok) {
+        const data = await response.json();
+        setSupportedDiseases(data.supported_diseases || []);
+      }
+    } catch (err) {
+      console.error("Error fetching supported diseases:", err);
     }
   };
 
@@ -170,7 +173,7 @@ export const LabUpdateReport: React.FC = () => {
   ) => {
     const newTests = [...testResults];
     newTests[index] = { ...newTests[index], [field]: value };
-    
+
     // If test_name is being updated and matches a supported test, auto-fill other fields
     if (field === "test_name") {
       const matchedTest = supportedTests.find(
@@ -180,7 +183,7 @@ export const LabUpdateReport: React.FC = () => {
         // Get appropriate reference range based on patient gender
         let minRange = matchedTest.reference_range_min;
         let maxRange = matchedTest.reference_range_max;
-        
+
         if (matchedTest.gender_specific && reportDetails?.patient) {
           if (reportDetails.patient.gender === "male" && matchedTest.male_range) {
             minRange = matchedTest.male_range.min;
@@ -190,7 +193,7 @@ export const LabUpdateReport: React.FC = () => {
             maxRange = matchedTest.female_range.max;
           }
         }
-        
+
         newTests[index] = {
           ...newTests[index],
           unit: matchedTest.unit,
@@ -199,7 +202,7 @@ export const LabUpdateReport: React.FC = () => {
         };
       }
     }
-    
+
     setTestResults(newTests);
   };
 
@@ -249,7 +252,27 @@ export const LabUpdateReport: React.FC = () => {
             );
           }
         }
-        
+
+
+        // Save Diagnosis if selected
+        if (selectedDisease && reportDetails?.patient_id) {
+          const diagnosisResponse = await fetch(
+            `${API_BASE_URL}/ml/diagnosis/patient/${reportDetails.patient_id
+            }?disease_name=${encodeURIComponent(
+              selectedDisease
+            )}&auto_save=true&lang=en`,
+            {
+              method: "POST",
+            }
+          );
+
+          if (!diagnosisResponse.ok) {
+            console.warn("Diagnosis API failed");
+            // Optional: throw error if critical
+            // throw new Error("Failed to save diagnosis");
+          }
+        }
+
         // Update report status to completed
         const updatePayload = {
           visit_id: reportDetails.visit_id || "e79f5412-c555-418b-b3f1-7f26f89d3505",
@@ -263,7 +286,9 @@ export const LabUpdateReport: React.FC = () => {
           `${API_BASE_URL}/labs/reports/${report_id}`,
           {
             method: "PUT",
-            headers: { "Content-Type": "application/json" },
+            headers: {
+              "Content-Type": "application/json",
+            },
             body: JSON.stringify(updatePayload),
           }
         );
@@ -274,7 +299,7 @@ export const LabUpdateReport: React.FC = () => {
             errData.detail || "Failed to update report status"
           );
         }
-        
+
         // Navigate back to reports list after successful save
         navigate("/lab/reports");
       });
@@ -286,7 +311,7 @@ export const LabUpdateReport: React.FC = () => {
   // Filter tests based on search query
   const getFilteredTests = (query: string) => {
     if (!query.trim()) return supportedTests.slice(0, 5);
-    
+
     return supportedTests.filter(test =>
       test.test_name.toLowerCase().includes(query.toLowerCase()) ||
       test.description.toLowerCase().includes(query.toLowerCase())
@@ -357,6 +382,33 @@ export const LabUpdateReport: React.FC = () => {
         {error && <ErrorMessage message={error} onClose={clearError} />}
 
         <div className={`${glassCard} p-6 lg:p-8`}>
+          {/* Diagnosis Section */}
+          <div className="mb-8 p-6 bg-indigo-50 border border-indigo-100 rounded-2xl">
+            <h3 className="text-lg font-bold text-indigo-900 mb-2">
+              Diagnosis
+            </h3>
+            <p className="text-sm text-indigo-700 mb-4">
+              Select a diagnosis associated with this report
+            </p>
+            <div className="relative max-w-md">
+              <select
+                value={selectedDisease}
+                onChange={(e) => setSelectedDisease(e.target.value)}
+                className="w-full px-4 py-3 rounded-xl border border-indigo-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition-all bg-white text-slate-800 appearance-none"
+              >
+                <option value="">Select Diagnosis...</option>
+                {supportedDiseases.map((disease) => (
+                  <option key={disease} value={disease}>
+                    {disease.replace(/_/g, " ").toUpperCase()}
+                  </option>
+                ))}
+              </select>
+              <div className="absolute right-4 top-1/2 transform -translate-y-1/2 text-indigo-500 pointer-events-none">
+                <ChevronDown size={20} />
+              </div>
+            </div>
+          </div>
+
           <div className="space-y-6">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-4 border-b border-slate-100">
               <div>
@@ -409,7 +461,7 @@ export const LabUpdateReport: React.FC = () => {
                             <ChevronDown size={16} />
                           </div>
                         </div>
-                        
+
                         {/* Test Dropdown */}
                         {showTestDropdown === index && (
                           <div className="absolute z-10 mt-1 w-full bg-white border border-slate-200 rounded-lg shadow-lg max-h-60 overflow-auto">
@@ -516,14 +568,13 @@ export const LabUpdateReport: React.FC = () => {
                             className="w-4 h-4 text-red-600 rounded focus:ring-red-500"
                           />
                           <span
-                            className={`text-sm font-medium ${
-                              test.is_abnormal ? "text-red-600" : "text-slate-600"
-                            }`}
+                            className={`text-sm font-medium ${test.is_abnormal ? "text-red-600" : "text-slate-600"
+                              }`}
                           >
                             Abnormal Result
                           </span>
                         </label>
-                        
+
                         <button
                           onClick={() => handleRemoveTestResultRow(index)}
                           className="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"

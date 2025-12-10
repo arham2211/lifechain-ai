@@ -344,8 +344,8 @@ export interface CreatePrescriptionForm {
   medication_name: string;
   dosage: string;
   frequency: string;
-  duration: string;
-  notes?: string;
+  duration_days: number;
+  instructions: string;
 }
 
 export interface CreateLabReportForm {

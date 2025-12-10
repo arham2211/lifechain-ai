@@ -14,7 +14,7 @@ const labNavItems = [
   { path: '/lab/create-report', label: 'Create Lab Report', icon: <FileText size={20} /> },
   { path: '/lab/upload-report', label: 'Upload Report', icon: <Upload size={20} /> },
   { path: '/lab/reports', label: 'All Reports', icon: <List size={20} /> },
-  { path: '/lab/abnormal', label: 'Abnormal Results', icon: <AlertCircle size={20} /> },
+ 
 ];
 
 const glassCard = 'glass-card rounded-3xl shadow-lg border border-slate-100 bg-white/80 backdrop-blur-md';

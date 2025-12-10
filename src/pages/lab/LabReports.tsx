@@ -5,7 +5,7 @@ import { ErrorMessage } from '../../components/common/ErrorMessage';
 import { DataTable, type Column } from '../../components/common/DataTable';
 import { SearchBar } from '../../components/common/SearchBar';
 import type { LabReport } from '../../types';
-import { Activity, FileText, AlertCircle, List, Download, Eye, Upload, Edit } from 'lucide-react';
+import { Activity, FileText, List, Download, Eye, Upload, Edit } from 'lucide-react';
 import { formatDate, getStatusColor } from '../../utils/formatters';
 import { useLoading, useError } from '../../utils/hooks';
 
@@ -14,7 +14,7 @@ const labNavItems = [
   { path: '/lab/create-report', label: 'Create Lab Report', icon: <FileText size={20} /> },
   { path: '/lab/upload-report', label: 'Upload Report', icon: <Upload size={20} /> },
   { path: '/lab/reports', label: 'All Reports', icon: <List size={20} /> },
-  { path: '/lab/abnormal', label: 'Abnormal Results', icon: <AlertCircle size={20} /> },
+ 
 ];
 
 // Hardcoded lab ID as specified

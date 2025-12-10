@@ -20,12 +20,12 @@ import { PatientVisitDetails } from "./pages/patient/PatientVisitsDetails";
 import { DoctorDashboard } from "./pages/doctor/DoctorDashboard";
 import { DoctorCreateVisit } from "./pages/doctor/DoctorCreateVisit";
 import { DoctorPatientView } from "./pages/doctor/DoctorPatientView";
+import { DoctorFamilyHistory } from "./pages/doctor/DoctorFamilyHistory";
 
 // Lab Pages
 import { LabDashboard } from "./pages/lab/LabDashboard";
 import { LabCreateReport } from "./pages/lab/LabCreateReport";
 import { LabReports } from "./pages/lab/LabReports";
-import { LabAbnormalResults } from "./pages/lab/LabAbnormalResults";
 import { LabUploadReport } from "./pages/lab/LabUploadReport";
 import { LabUpdateReport } from "./pages/lab/LabUpdateReport";
 
@@ -95,7 +95,7 @@ function App() {
               </ProtectedRoute>
             }
           />
-           <Route
+          <Route
             path="/patient/visits/:visit_id"
             element={
               <ProtectedRoute allowedRoles={["patient"]}>
@@ -119,7 +119,7 @@ function App() {
               </ProtectedRoute>
             }
           />
-      
+
           {/* Doctor Routes */}
           <Route
             path="/doctor/dashboard"
@@ -158,6 +158,14 @@ function App() {
             element={
               <ProtectedRoute allowedRoles={["doctor"]}>
                 <DoctorCreateVisit />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/doctor/patient/:patient_id/family-history"
+            element={
+              <ProtectedRoute allowedRoles={["doctor"]}>
+                <DoctorFamilyHistory />
               </ProtectedRoute>
             }
           />
@@ -200,14 +208,6 @@ function App() {
             element={
               <ProtectedRoute allowedRoles={["lab_staff"]}>
                 <LabUpdateReport />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/lab/abnormal"
-            element={
-              <ProtectedRoute allowedRoles={["lab_staff"]}>
-                <LabAbnormalResults />
               </ProtectedRoute>
             }
           />

@@ -6,16 +6,16 @@ import { useNavigate } from 'react-router-dom';
 import { labService } from '../../services/labService';
 import { patientService } from '../../services/patientService';
 import type { Patient, Lab } from '../../types';
-import { Activity, FileText, AlertCircle, List, Upload, CheckCircle, File } from 'lucide-react';
+import { Activity, FileText, List, Upload, CheckCircle, File } from 'lucide-react';
 import { useLoading, useError } from '../../utils/hooks';
 
 const labNavItems = [
   { path: '/lab/dashboard', label: 'Dashboard', icon: <Activity size={20} /> },
   { path: '/lab/create-report', label: 'Create Lab Report', icon: <FileText size={20} /> },
+  { path: '/lab/upload-report', label: 'Upload Report', icon: <Upload size={20} /> },
   { path: '/lab/reports', label: 'All Reports', icon: <List size={20} /> },
-  { path: '/lab/abnormal', label: 'Abnormal Results', icon: <AlertCircle size={20} /> },
+ 
 ];
-
 export const LabUploadReport: React.FC = () => {
   const navigate = useNavigate();
   const [patients, setPatients] = useState<Patient[]>([]);

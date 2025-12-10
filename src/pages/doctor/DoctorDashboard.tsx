@@ -27,7 +27,7 @@ export const DoctorDashboard: React.FC = () => {
 
   const handleSearch = async (query?: string) => {
     const searchValue = query !== undefined ? query : searchQuery;
-    
+
     if (!searchValue.trim()) {
       setPatients([]);
       setSelectedPatient(null);
@@ -45,7 +45,7 @@ export const DoctorDashboard: React.FC = () => {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
-        
+
         return data.map((patient: any) => ({
           ...patient,
           name: `${patient.first_name} ${patient.last_name}`,
@@ -59,10 +59,10 @@ export const DoctorDashboard: React.FC = () => {
           phone: patient.phone || '',
         }));
       });
-      
+
       setPatients(results);
       setShowSearchResults(true);
-      
+
       // Auto-select the first patient if available
       if (results.length > 0) {
         const firstPatient = results[0];
@@ -92,8 +92,8 @@ export const DoctorDashboard: React.FC = () => {
   };
 
   const columns: Column<Patient>[] = [
-    { 
-      key: 'name', 
+    {
+      key: 'name',
       label: 'Name',
       render: (patient) => (
         <div className="flex items-center gap-3">
@@ -160,7 +160,7 @@ export const DoctorDashboard: React.FC = () => {
             <div className="flex flex-wrap items-center justify-between gap-6">
               <div className="flex items-start gap-4">
                 <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary-500 to-blue-600 flex items-center justify-center text-white shadow-lg shadow-primary-500/20">
-                    <UserCircle size={32} />
+                  <UserCircle size={32} />
                 </div>
                 <div>
                   <p className="text-xs uppercase tracking-[0.3em] text-slate-500 font-semibold">Selected Patient</p>
@@ -183,7 +183,7 @@ export const DoctorDashboard: React.FC = () => {
                   </div>
                 </div>
               </div>
-              
+
               <div className="flex flex-col sm:flex-row gap-3">
                 <button
                   onClick={() => navigate('/doctor/create-visit')}
@@ -209,15 +209,15 @@ export const DoctorDashboard: React.FC = () => {
         <section className={`${glassCard} p-6`}>
           <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4">
             <div>
-               <h3 className="text-xl font-bold text-slate-900">Patient Search</h3>
-               <p className="text-slate-500 text-sm mt-1">Found {patients.length} patient{patients.length !== 1 ? 's' : ''}</p>
+              <h3 className="text-xl font-bold text-slate-900">Patient Search</h3>
+              <p className="text-slate-500 text-sm mt-1">Found {patients.length} patient{patients.length !== 1 ? 's' : ''}</p>
             </div>
           </div>
-          
+
           <div className="flex flex-col sm:flex-row gap-3 mb-6">
             <div className="flex-1">
-              <SearchBar 
-                placeholder="Search by name, CNIC, or phone..." 
+              <SearchBar
+                placeholder="Search by name, CNIC, or phone..."
                 onSearch={handleInputChange}
                 loading={isLoading}
               />
@@ -231,13 +231,13 @@ export const DoctorDashboard: React.FC = () => {
               Search
             </button>
           </div>
-          
+
           {error && (
             <div className="mb-6">
               <ErrorMessage message={error} onClose={clearError} />
             </div>
           )}
-          
+
           {showSearchResults && patients.length > 0 ? (
             <div className="rounded-2xl border border-slate-200 overflow-hidden">
               <DataTable
@@ -261,9 +261,9 @@ export const DoctorDashboard: React.FC = () => {
             </div>
           ) : (
             <div className="text-center py-12 bg-slate-50 rounded-2xl border border-slate-100 border-dashed">
-                <div className="w-16 h-16 rounded-full bg-slate-100 flex items-center justify-center mx-auto mb-4">
-                    <Users size={32} className="text-slate-400" />
-                </div>
+              <div className="w-16 h-16 rounded-full bg-slate-100 flex items-center justify-center mx-auto mb-4">
+                <Users size={32} className="text-slate-400" />
+              </div>
               <p className="text-slate-900 font-medium">Patient Search</p>
               <p className="text-sm text-slate-500 mt-1 mb-2">Enter search criteria above to find patient records</p>
               <p className="text-xs text-slate-400 bg-white inline-block px-3 py-1 rounded-full border border-slate-200">Example: Kenneth, 42103-2282167-4</p>
@@ -301,7 +301,7 @@ export const DoctorDashboard: React.FC = () => {
                 title: 'Patient Family Tree',
                 description: 'View genetic history analysis',
                 icon: <FileText size={24} />,
-                action: () => selectedPatient?.patient_id && navigate(`/doctor/patient/${selectedPatient.patient_id}/records`),
+                action: () => selectedPatient?.patient_id && navigate(`/doctor/patient/${selectedPatient.patient_id}/family-history`),
                 color: 'from-purple-500 to-violet-600'
               },
             ].map((item) => (
